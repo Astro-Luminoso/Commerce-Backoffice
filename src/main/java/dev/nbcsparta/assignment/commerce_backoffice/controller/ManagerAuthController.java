@@ -39,4 +39,17 @@ public class ManagerAuthController {
         session.setMaxInactiveInterval(60 * 60 * 24);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+            Cookie cookie = new Cookie("JSESSIONID", null);
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
