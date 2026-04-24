@@ -4,6 +4,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.LoginRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.SessionManager;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.AlreadyLoginException;
 import dev.nbcsparta.assignment.commerce_backoffice.service.ManagerAuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,23 +33,30 @@ public class ManagerAuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest request, HttpServletRequest httpRequest) {
-        SessionManager sessionManager = managerAuthService.login(request);
-        HttpSession session = httpRequest.getSession(true);
+    public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest req, HttpServletRequest httpReq) {
+        SessionManager sessionManager = managerAuthService.login(req);
+
+        HttpSession session = httpReq.getSession(false);
+        if (session != null && session.getAttribute("LOGIN_MANAGER") != null) {
+            throw new AlreadyLoginException("이미 로그인된 상태입니다.");
+        }
+
+        session = httpReq.getSession(true);
         session.setAttribute("LOGIN_MANAGER", sessionManager);
         session.setMaxInactiveInterval(60 * 60 * 24);
+
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession(false);
+    public ResponseEntity<Void> logout(HttpServletRequest req, HttpServletResponse res) {
+        HttpSession session = req.getSession(false);
         if (session != null) {
             session.invalidate();
             Cookie cookie = new Cookie("JSESSIONID", null);
             cookie.setPath("/");
             cookie.setMaxAge(0);
-            response.addCookie(cookie);
+            res.addCookie(cookie);
         }
         return ResponseEntity.status(HttpStatus.OK).build();
     }
