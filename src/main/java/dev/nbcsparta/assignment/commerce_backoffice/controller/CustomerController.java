@@ -22,20 +22,37 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    /**
+     * 필터에 따라 고객의 전체 정보를 조회합니다.
+     *
+     * @param keyword  이름 검색시 필요한 단어
+     * @param pageable 이메일 검색시 필요한 정보
+     * @param status   상태 필터링 시 필요한 정보
+     * @return 필터링된 고객의 정보, 페이징 정보
+     */
     @GetMapping()
     public ResponseEntity<CustomerResponse.ListCustomerResponse> getAllCustomer(
             @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String email,
             @PageableDefault(
                     sort = "id", direction = Sort.Direction.DESC
             ) Pageable pageable,
-            @RequestParam(required = false) AccountStatus status
+            @RequestParam(required = false) String status
     ) {
+        AccountStatus requestStatus = AccountStatus.getEnum(status);
+
         CustomerResponse.ListCustomerResponse responsePage =
-                customerService.findAllCustomer(keyword, pageable, status);
+                customerService.findAllCustomer(keyword, email, pageable, requestStatus);
 
         return new ResponseEntity<>(responsePage, HttpStatus.OK);
     }
 
+    /**
+     * 고유 번호에 해당하는 고객 정보 조회
+     *
+     * @param customerId 조회하고 싶은 고객 고유 번호
+     * @return 조회한 고객 정보
+     */
     @GetMapping("/{customerId}")
     public ResponseEntity<CustomerResponse.CustomerInfo> getOneCustomer(
             @PathVariable Long customerId

@@ -29,11 +29,23 @@ class CustomerRepositoryTest {
         customerRepository.save(new Customer("홍길남","asdf4@naver.com","010-2222-2222",AccountStatus.INACTIVE));
 
         Pageable pageable = PageRequest.of(0, 10);
-        Page<Customer> result = customerRepository.findAllByNameContainingAndStatus("남", pageable, AccountStatus.INACTIVE);
-
-        System.out.println(result.getContent().getFirst().getName());
+        Page<Customer> result = customerRepository.findAllByFilters(null, "4", pageable, AccountStatus.INACTIVE);
 
         assertEquals(1, result.getContent().size());
         assertEquals("홍길남", result.getContent().getFirst().getName());
+    }
+
+    @Test
+    @DisplayName("검색 조건, 페이징을 이용한 다수 고객 목록 조회 실패")
+    void findAllCustomer_Failure() {
+        customerRepository.save(new Customer("홍길동","asdf@naver.com","010-0000-0000", AccountStatus.ACTIVE));
+        customerRepository.save(new Customer("홍길서","asdf2@naver.com","010-1111-1111",AccountStatus.ACTIVE));
+        customerRepository.save(new Customer("홍갈동","asdf3@naver.com","010-2222-1111",AccountStatus.ACTIVE));
+        customerRepository.save(new Customer("홍길남","asdf4@naver.com","010-2222-2222",AccountStatus.INACTIVE));
+
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Customer> result = customerRepository.findAllByFilters(null, "3", pageable, AccountStatus.INACTIVE);
+
+        assertEquals("홍갈동", result.getContent().getFirst().getName());
     }
 }
