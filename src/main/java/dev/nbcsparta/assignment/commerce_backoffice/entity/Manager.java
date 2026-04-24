@@ -55,4 +55,24 @@ public class Manager {
     public Manager(String name, String email, String password, String phoneNumber) {
         this(name, email, password, phoneNumber, AccountStatus.PENDING);
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public String getPhoneNumber() {
+        return this.phoneNumber;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
 }
