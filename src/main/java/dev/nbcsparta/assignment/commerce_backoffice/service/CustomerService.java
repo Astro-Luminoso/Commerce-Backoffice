@@ -3,6 +3,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,7 +48,7 @@ public class CustomerService {
     @Transactional(readOnly = true)
     public CustomerResponse.CustomerInfo findOneCustomer(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(
-                () -> new IllegalStateException("존재하지 않는 고객입니다.")
+                () -> new CustomerNotFoundException("존재하지 않는 고객입니다.")
         );
 
         return CustomerResponse.CustomerInfo.from(customer);

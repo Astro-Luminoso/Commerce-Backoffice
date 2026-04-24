@@ -41,10 +41,10 @@ public class CustomerController {
     ) {
         AccountStatus requestStatus = AccountStatus.getEnum(status);
 
-        CustomerResponse.ListCustomerResponse responsePage =
+        CustomerResponse.ListCustomerResponse customerResponse =
                 customerService.findAllCustomer(keyword, email, pageable, requestStatus);
 
-        return new ResponseEntity<>(responsePage, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(customerResponse);
     }
 
     /**
@@ -60,6 +60,6 @@ public class CustomerController {
         CustomerResponse.CustomerInfo customerResponse =
                 customerService.findOneCustomer(customerId);
 
-        return new ResponseEntity<>(customerResponse, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(customerResponse);
     }
 }

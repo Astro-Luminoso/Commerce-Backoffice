@@ -4,6 +4,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.CustomerRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -54,7 +55,7 @@ class CustomerServiceTest {
         given(customerRepository.findById(anyLong())).willReturn(Optional.empty());
 
         // IllegalStateException = 999번 고객은 없다고 생각하고 찾아봤을때 뜨는 에러
-        assertThrows(IllegalStateException.class,
+        assertThrows(CustomerNotFoundException.class,
                 () -> customerService.findOneCustomer(999L));
     }
 }
