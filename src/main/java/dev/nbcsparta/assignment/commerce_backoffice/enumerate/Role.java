@@ -16,4 +16,8 @@ public enum Role {
     public int getAccessLevel() {
         return this.accessLevel;
     }
+
+    public String getRoleName() {
+        return this.roleName;
+    }
 }
