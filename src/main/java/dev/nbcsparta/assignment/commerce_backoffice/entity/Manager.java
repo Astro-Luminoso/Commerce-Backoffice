@@ -79,4 +79,12 @@ public class Manager {
     public AccountStatus getStatus() {
         return status;
     }
+
+    public LocalDateTime getRegistrationDate() {
+        return this.registrationDate;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return this.updatedDate;
+    }
 }
