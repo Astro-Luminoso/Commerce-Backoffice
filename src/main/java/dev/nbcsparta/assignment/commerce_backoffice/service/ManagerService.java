@@ -29,6 +29,6 @@ public class ManagerService {
             Pageable pageable
     ) {
         Page<Manager> managerList = managerRepository.findAll(name, email, role, status, pageable);
-        return ManagerListDetail.form(managerList);
+        return ManagerListDetail.from(managerList);
     }
 }

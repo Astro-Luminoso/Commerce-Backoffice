@@ -8,7 +8,7 @@ import java.util.List;
 public record ManagerListDetail(List<ManagerDetail> managerList, int page, int size, int total, int totalPage) {
 
 
-    public static ManagerListDetail form(Page<Manager> managers) {
+    public static ManagerListDetail from(Page<Manager> managers) {
         Page<ManagerDetail> managerListPage = managers.map(ManagerDetail::from);
         List<ManagerDetail> managerList = managerListPage.getContent();
         return new ManagerListDetail(managerList,
