@@ -4,6 +4,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.config.PasswordEncoder;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.ConflictUserException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerAuthRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class ManagerAuthService {
     @Transactional
     public CreateManagerResponse register(CreateManagerRequest req) {
         if (managerAuthRepository.existsByEmail(req.email())) {
-            throw new IllegalArgumentException("이미 존재하는 사용자입니다.");
+            throw new ConflictUserException("이미 존재하는 사용자입니다.");
         }
 
         String encodedPassword = passwordEncoder.encode(req.password());

@@ -2,6 +2,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.enumerate;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.RoleNotFoundException;
 
 import java.util.Arrays;
 
@@ -32,6 +33,6 @@ public enum Role {
         return Arrays.stream(values())
                 .filter(type -> type.roleName.equals(roleName))
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Invalid role: " + roleName));
+                .orElseThrow(() -> new RoleNotFoundException("Invalid role: " + roleName));
     }
 }
