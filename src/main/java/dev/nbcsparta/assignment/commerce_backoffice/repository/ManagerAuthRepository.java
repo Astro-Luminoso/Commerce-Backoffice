@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
-import dev.nbcsparta.assignment.commerce_backoffice.entity.Managers;
+import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ManagerAuthRepository extends JpaRepository<Managers, Long> {
+public interface ManagerAuthRepository extends JpaRepository<Manager, Long> {
 }
