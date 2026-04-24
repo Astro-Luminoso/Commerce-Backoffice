@@ -1,5 +1,11 @@
 package dev.nbcsparta.assignment.commerce_backoffice.enumerate;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.RoleNotFoundException;
+
+import java.util.Arrays;
+
 public enum Role {
     CS_MANAGER("CS_Manager", 1),
     Ops_MANAGER("Ops_Manager", 2),
@@ -13,11 +19,20 @@ public enum Role {
         this.accessLevel = accessLevel;
     }
 
+    @JsonValue
+    public String getRoleName() {
+        return this.roleName;
+    }
+
     public int getAccessLevel() {
         return this.accessLevel;
     }
 
-    public String getRoleName() {
-        return this.roleName;
+    @JsonCreator
+    public static Role from(String roleName) {
+        return Arrays.stream(values())
+                .filter(type -> type.roleName.equals(roleName))
+                .findFirst()
+                .orElseThrow(() -> new RoleNotFoundException("Invalid role: " + roleName));
     }
 }
