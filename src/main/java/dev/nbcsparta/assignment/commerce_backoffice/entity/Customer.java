@@ -1,6 +1,6 @@
-package dev.nbcsparta.assignment.commerce_backoffice.entity_yang;
+package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
-import dev.nbcsparta.assignment.commerce_backoffice.enum_yang.CustomerStatus;
+import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -16,7 +16,7 @@ public class Customer {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 255)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false, length = 16)
@@ -24,7 +24,7 @@ public class Customer {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private CustomerStatus status;
+    private AccountStatus status;
 
     @Column(name = "registration_date", nullable = false, updatable = false)
     private LocalDateTime registrationDate;
@@ -32,7 +32,7 @@ public class Customer {
     protected Customer() {
     }
 
-    public Customer(String name, String email, String phone, CustomerStatus status) {
+    public Customer(String name, String email, String phone, AccountStatus status) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -56,7 +56,7 @@ public class Customer {
         return phone;
     }
 
-    public CustomerStatus getStatus() {
+    public AccountStatus getStatus() {
         return status;
     }
 

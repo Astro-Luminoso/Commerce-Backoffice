@@ -1,19 +1,15 @@
-package dev.nbcsparta.assignment.commerce_backoffice.controller_yang;
+package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto_yang.CustomerResponse;
-import dev.nbcsparta.assignment.commerce_backoffice.enum_yang.CustomerStatus;
-import dev.nbcsparta.assignment.commerce_backoffice.service_yang.CustomerService;
-import org.hibernate.boot.model.source.spi.IdentifierSourceAggregatedComposite;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerResponse;
+import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
+import dev.nbcsparta.assignment.commerce_backoffice.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/customers")
@@ -30,9 +26,9 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse.ListCustomerResponse> getAllCustomer(
             @RequestParam(required = false) String keyword,
             @PageableDefault(
-                    page = 0, sort = "id", direction = Sort.Direction.DESC
+                    sort = "id", direction = Sort.Direction.DESC
             ) Pageable pageable,
-            @RequestParam(required = false) CustomerStatus status
+            @RequestParam(required = false) AccountStatus status
     ) {
         CustomerResponse.ListCustomerResponse responsePage =
                 customerService.findAllCustomer(keyword, pageable, status);
@@ -44,7 +40,8 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse.CustomerInfo> getOneCustomer(
             @PathVariable Long customerId
     ) {
-        CustomerResponse.CustomerInfo customerResponse = customerService.findOneCustomer(customerId);
+        CustomerResponse.CustomerInfo customerResponse =
+                customerService.findOneCustomer(customerId);
 
         return new ResponseEntity<>(customerResponse, HttpStatus.OK);
     }

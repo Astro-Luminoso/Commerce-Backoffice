@@ -1,6 +1,7 @@
-package dev.nbcsparta.assignment.commerce_backoffice.dto_yang;
+package dev.nbcsparta.assignment.commerce_backoffice.dto;
 
-import dev.nbcsparta.assignment.commerce_backoffice.entity_yang.Customer;
+import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
+import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
@@ -21,12 +22,12 @@ public class CustomerResponse {
 
     public record CustomerInfo(
             Long id, String name, String email, String phone,
-            String status, LocalDateTime registrationDate
+            AccountStatus status, LocalDateTime registrationDate
     ) {
         public static CustomerInfo from(Customer customer) {
             return new CustomerInfo(
                     customer.getId(), customer.getName(), customer.getEmail(),
-                    customer.getPhone(), customer.getStatus().getDescription(),
+                    customer.getPhone(), customer.getStatus(),
                     customer.getRegistrationDate()
             );
         }
