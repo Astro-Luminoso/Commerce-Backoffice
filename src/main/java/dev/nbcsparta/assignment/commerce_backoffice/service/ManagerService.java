@@ -1,6 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerList;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerListDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
@@ -21,7 +21,7 @@ public class ManagerService {
     }
 
 
-    public ManagerList listAllManager(
+    public ManagerListDetail listAllManager(
             String name,
             String email,
             Role role,
@@ -29,6 +29,6 @@ public class ManagerService {
             Pageable pageable
     ) {
         Page<Manager> managerList = managerRepository.findAll(name, email, role, status, pageable);
-        return ManagerList.form(managerList);
+        return ManagerListDetail.form(managerList);
     }
 }
