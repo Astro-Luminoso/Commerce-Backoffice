@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.request.CreateManagerRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.response.CreateManagerResponse;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.service.ManagerAuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

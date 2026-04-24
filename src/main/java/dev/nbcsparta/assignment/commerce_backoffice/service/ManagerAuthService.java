@@ -1,8 +1,8 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.config.PasswordEncoder;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.request.CreateManagerRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.response.CreateManagerResponse;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerAuthRepository;
 import org.springframework.stereotype.Service;

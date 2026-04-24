@@ -1,4 +1,4 @@
-package dev.nbcsparta.assignment.commerce_backoffice.dto.request;
+package dev.nbcsparta.assignment.commerce_backoffice.dto;
 
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import jakarta.validation.constraints.Email;
@@ -17,7 +17,7 @@ public record CreateManagerRequest (
         String password,
 
         @NotBlank
-        String phone,
+        String phoneNumber,
 
         @NotBlank
         Role role

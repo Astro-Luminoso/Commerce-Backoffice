@@ -1,5 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import jakarta.persistence.*;
@@ -77,5 +78,39 @@ public class Manager {
      */
     public Manager(String name, String email, String password, String phoneNumber, Role role) {
         this(name, email, password, phoneNumber, role, AccountStatus.PENDING);
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public String getPhoneNumber() {
+        return this.phoneNumber;
+    }
+
+    public Role getRole() {
+        return this.role;
+    }
+
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public static Manager to(CreateManagerRequest req, String encodedPassword) {
+        return new Manager(
+                req.name(),
+                req.email(),
+                encodedPassword,
+                req.phoneNumber(),
+                req.role()
+        );
     }
 }
