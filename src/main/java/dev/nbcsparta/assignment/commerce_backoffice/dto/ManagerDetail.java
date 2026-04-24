@@ -18,8 +18,8 @@ public record ManagerDetail(
                 manager.getName(),
                 manager.getEmail(),
                 manager.getPhoneNumber(),
-                manager.getRole().name(),
-                manager.getStatus().name(),
+                manager.getRole().getRoleName(),
+                manager.getStatus().getDescription(),
                 manager.getRegistrationDate().toString(),
                 manager.getUpdatedDate().toString()
         );
