@@ -56,6 +56,10 @@ public class Manager {
         this(name, email, password, phoneNumber, AccountStatus.PENDING);
     }
 
+    public long getId(){
+        return this.id;
+    }
+
     public String getName() {
         return this.name;
     }
