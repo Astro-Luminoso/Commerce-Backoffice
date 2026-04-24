@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerResponse;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerInfo;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.ListCustomerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
@@ -24,19 +25,19 @@ public class CustomerService {
     /**
      * DB에서 필터링 된 고객 정보 DTO에 담아 반환해준다.
      *
-     * @param keyword  고객 이름 필터용
+     * @param name  고객 이름 필터용
      * @param email    고객 이메일 필터용
      * @param pageable 페이징 정보
      * @param status   고객 상태 필터용
      * @return 필터링 된 고객 정보 DTO 리스트를 담은 DTO
      */
     @Transactional(readOnly = true)
-    public CustomerResponse.ListCustomerResponse findAllCustomer(
-            String keyword, String email, Pageable pageable, AccountStatus status
+    public ListCustomerResponse findAllCustomer(
+            String name, String email, Pageable pageable, AccountStatus status
     ) {
-        Page<Customer> customerPage = customerRepository.findAllByFilters(keyword, email, pageable, status);
+        Page<Customer> customerPage = customerRepository.findAllByFilters(name, email, pageable, status);
 
-        return CustomerResponse.ListCustomerResponse.from(customerPage);
+        return ListCustomerResponse.from(customerPage);
     }
 
     /**
@@ -46,11 +47,11 @@ public class CustomerService {
      * @return 찾은 고객 정보 DTO
      */
     @Transactional(readOnly = true)
-    public CustomerResponse.CustomerInfo findOneCustomer(Long customerId) {
+    public CustomerInfo findOneCustomer(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(
                 () -> new CustomerNotFoundException("존재하지 않는 고객입니다.")
         );
 
-        return CustomerResponse.CustomerInfo.from(customer);
+        return CustomerInfo.from(customer);
     }
 }

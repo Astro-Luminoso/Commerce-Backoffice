@@ -28,7 +28,7 @@ class CustomerRepositoryTest {
         customerRepository.save(new Customer("홍갈동","asdf3@naver.com","010-2222-1111",AccountStatus.ACTIVE));
         customerRepository.save(new Customer("홍길남","asdf4@naver.com","010-2222-2222",AccountStatus.INACTIVE));
 
-        Pageable pageable = PageRequest.of(0, 10);
+        Pageable pageable = PageRequest.of(0, 3);
         Page<Customer> result = customerRepository.findAllByFilters(null, "4", pageable, AccountStatus.INACTIVE);
 
         assertEquals(1, result.getContent().size());

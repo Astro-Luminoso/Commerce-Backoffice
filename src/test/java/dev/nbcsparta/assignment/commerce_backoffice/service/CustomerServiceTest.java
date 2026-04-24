@@ -1,8 +1,8 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerInfo;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.CustomerRepository;
@@ -41,7 +41,7 @@ class CustomerServiceTest {
 
         given(customerRepository.findById(customerId)).willReturn(Optional.of(customer));
 
-        CustomerResponse.CustomerInfo response = customerService.findOneCustomer(customerId);
+        CustomerInfo response = customerService.findOneCustomer(customerId);
 
         assertEquals("홍길동", response.name());
         assertEquals("asdf@naver.com", response.email());
