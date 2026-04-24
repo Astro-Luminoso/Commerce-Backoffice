@@ -44,15 +44,16 @@ public class Manager {
     protected Manager() {
     }
 
-    public Manager(String name, String email, String password, String phoneNumber, AccountStatus status) {
+    public Manager(String name, String email, String password, String phoneNumber,Role role, AccountStatus status) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.role = role;
         this.status = status;
     }
 
-    public Manager(String name, String email, String password, String phoneNumber) {
-        this(name, email, password, phoneNumber, AccountStatus.PENDING);
+    public Manager(String name, String email, String password, String phoneNumber, Role role) {
+        this(name, email, password, phoneNumber, role, AccountStatus.PENDING);
     }
 }
