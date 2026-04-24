@@ -2,6 +2,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.Product.Entity;
 
 import dev.nbcsparta.assignment.commerce_backoffice.Manager.Entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.Product.Dto.CreateProductRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.config.BaseEntity;
 import dev.nbcsparta.assignment.commerce_backoffice.config.ProductStatus;
 import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -9,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "products")
 @EntityListeners(AuditingEntityListener.class)
-public class Product {
+public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,15 +34,10 @@ public class Product {
         this.manager = manager;
     }
 
-    public static Product of(CreateProductRequest req, Manager manager) {
-        return new Product(
-                req.name(),
-                req.category(),
-                req.price(),
-                req.quantity(),
-                req.status(),
-                manager
-        );
+    public void update(String name, String category, Long price) {
+        this.name = name;
+        this.category = category;
+        this.price = price;
     }
 
     public Product() {
@@ -74,5 +70,9 @@ public class Product {
 
     public Manager getManager() {
         return manager;
+    }
+
+    public void setStatus(ProductStatus status) {
+        this.status = status;
     }
 }

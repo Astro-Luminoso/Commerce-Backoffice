@@ -4,7 +4,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.config.ProductStatus;
 
 import java.time.LocalDateTime;
 
-public record CreateProductResponse(
+public record GetProductResponse(
         Long id,
         String name,
         String category,
@@ -12,7 +12,7 @@ public record CreateProductResponse(
         Long quantity,
         ProductStatus status,
         LocalDateTime createdAt,
-        Long managerId
+        Long managerId,
+        String managerEmail
 ) {
-
 }
