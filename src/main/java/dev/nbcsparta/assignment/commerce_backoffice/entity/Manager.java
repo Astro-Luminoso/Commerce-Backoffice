@@ -92,8 +92,16 @@ public class Manager {
         return this.email;
     }
 
+    public String getPassword() {
+        return this.password;
+    }
+
     public String getPhoneNumber() {
         return this.phoneNumber;
+    }
+
+    public AccountStatus getStatus() {
+        return this.status;
     }
 
     public Role getRole() {
