@@ -22,9 +22,7 @@ public class CustomerService {
 
     @Transactional
     public Customer validateCustomer(Long customerId) {
-        return customerRepository.findById(customerId).orElseThrow(
-                () -> new CustomerNotFoundException("존재하지 않는 고객입니다.")
-        );
+        return customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
     }
 
     /**

@@ -1,5 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
+import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerListDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.SessionManager;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
@@ -44,7 +45,7 @@ public class ManagerController {
      * @return 응답 엔티티에 관리자 목록과 HTTP 상태 코드 200 반환
      */
     @GetMapping
-    public ResponseEntity<ManagerListDetail> listAllManager(
+    public ResponseEntity<ManagerListDetail> responseManagerListDetail(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email,
             @RequestParam(required = false, defaultValue = "1") int page,
@@ -60,5 +61,23 @@ public class ManagerController {
         ManagerListDetail managerList = managerService.listAllManager(name, email, role, status, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(managerList);
+    }
+
+    /**
+     * 관리자 고유번호를 이용한 관리자 상세 조회
+     *
+     * @param id 관리자 고유번호 path 값으로 가져옴
+     * @param sessionManager 세션에서 로그인한 관리자 정보
+     * @return 응답 엔티티에 관리자 상세 정보와 HTTP 상태 코드 200 반환
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<ManagerDetail> responseManagerDetail(
+            @PathVariable Long id,
+            @SessionAttribute(name = "LOGIN_MANAGER") SessionManager sessionManager
+    ){
+        logger.info("GET /managers/{}: Get manager detail", id);
+        ManagerDetail managerDetail = managerService.findOneManager(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(managerDetail);
     }
 }
