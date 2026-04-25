@@ -43,7 +43,7 @@ public class ManagerAuthService {
         Manager manager = managerAuthRepository.findByEmail(req.email())
                 .orElseThrow(() -> new NotMatchException("이메일 또는 비밀번호가 일치하지 않습니다."));
 
-        boolean isMatch = passwordEncoder.matches(req.password(), manager.getPassword());
+        boolean isMatch = manager.isPasswordMatch(passwordEncoder, req.password());
         if (!isMatch) {
             throw new NotMatchException("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
