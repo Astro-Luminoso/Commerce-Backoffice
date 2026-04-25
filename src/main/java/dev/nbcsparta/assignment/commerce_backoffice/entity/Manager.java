@@ -1,5 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
+import dev.nbcsparta.assignment.commerce_backoffice.config.PasswordEncoder;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
@@ -120,5 +121,9 @@ public class Manager {
 
     public LocalDateTime getUpdatedDate() {
         return this.updatedDate;
+    }
+
+    public boolean isPasswordMatch(PasswordEncoder passwordEncoder, String password) {
+        return passwordEncoder.matches(password, this.password);
     }
 }
