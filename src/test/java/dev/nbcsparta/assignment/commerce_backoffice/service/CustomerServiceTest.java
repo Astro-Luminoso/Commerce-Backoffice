@@ -103,14 +103,14 @@ class CustomerServiceTest {
 
         // 여기서 요청은 주소창에 적는 String 타입
         UpdateCustomerStatusRequest request =
-                new UpdateCustomerStatusRequest("INACTIVE");
+                new UpdateCustomerStatusRequest("비활성");
 
         // String 타입을 Enum으로 변경하여 업데이트 진행후 응답으로는 String으로 돌려줌
         CustomerStatusResponse response = customerService.updateStatus(customerId, request);
 
         // String으로 돌려줬기 때문에 Enum으로 변경하고 비교 진행
         assertEquals(AccountStatus.INACTIVE, AccountStatus.getEnum(response.status()));
-        assertEquals("INACTIVE", response.status());
+        assertEquals("비활성", response.status());
     }
 
 }
