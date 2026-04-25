@@ -1,6 +1,5 @@
 package dev.nbcsparta.assignment.commerce_backoffice.dto;
 
-import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import org.springframework.data.domain.Page;
 
 /**
@@ -12,7 +11,7 @@ import org.springframework.data.domain.Page;
  * @param totalPages    전체 페이지 수
  */
 public record PageInfo(int currentPage, int pageSize, long totalElements, long totalPages) {
-    public static PageInfo from(Page<Customer> page) {
+    public static PageInfo from(Page<?> page) {
         return new PageInfo(
                 page.getNumber() + 1, page.getSize(),
                 page.getTotalElements(), page.getTotalPages()

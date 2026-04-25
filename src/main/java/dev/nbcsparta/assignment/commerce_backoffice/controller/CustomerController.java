@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerInfo;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.ListCustomerResponse;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerListDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.service.CustomerService;
 import org.springframework.data.domain.PageRequest;
@@ -30,7 +30,7 @@ public class CustomerController {
      * @return 필터링된 고객의 정보, 페이징 정보
      */
     @GetMapping()
-    public ResponseEntity<ListCustomerResponse> getAllCustomer(
+    public ResponseEntity<CustomerListDetail> getAllCustomer(
             @RequestParam(required = false)
             String name,
 
@@ -55,7 +55,7 @@ public class CustomerController {
                 pageable.getSort()
         );
 
-        ListCustomerResponse customerResponse =
+        CustomerListDetail customerResponse =
                 customerService.findAllCustomer(name, email, customPageable, requestStatus);
 
         return ResponseEntity.status(HttpStatus.OK).body(customerResponse);
@@ -68,10 +68,10 @@ public class CustomerController {
      * @return 조회한 고객 정보
      */
     @GetMapping("/{customerId}")
-    public ResponseEntity<CustomerInfo> getOneCustomer(
+    public ResponseEntity<CustomerDetail> getOneCustomer(
             @PathVariable Long customerId
     ) {
-        CustomerInfo customerResponse =
+        CustomerDetail customerResponse =
                 customerService.findOneCustomer(customerId);
 
         return ResponseEntity.status(HttpStatus.OK).body(customerResponse);

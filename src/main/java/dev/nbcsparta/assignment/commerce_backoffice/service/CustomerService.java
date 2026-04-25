@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerInfo;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.ListCustomerResponse;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerListDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
@@ -30,12 +30,12 @@ public class CustomerService {
      * @return 필터링 된 고객 정보 DTO 리스트를 담은 DTO
      */
     @Transactional(readOnly = true)
-    public ListCustomerResponse findAllCustomer(
+    public CustomerListDetail findAllCustomer(
             String name, String email, Pageable pageable, AccountStatus status
     ) {
         Page<Customer> customerPage = customerRepository.findAllByFilters(name, email, pageable, status);
 
-        return ListCustomerResponse.from(customerPage);
+        return CustomerListDetail.from(customerPage);
     }
 
     /**
@@ -45,11 +45,11 @@ public class CustomerService {
      * @return 찾은 고객 정보 DTO
      */
     @Transactional(readOnly = true)
-    public CustomerInfo findOneCustomer(Long customerId) {
+    public CustomerDetail findOneCustomer(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(
                 () -> new CustomerNotFoundException("존재하지 않는 고객입니다.")
         );
 
-        return CustomerInfo.from(customer);
+        return CustomerDetail.from(customer);
     }
 }

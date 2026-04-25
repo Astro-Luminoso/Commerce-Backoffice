@@ -11,13 +11,13 @@ import java.util.List;
  * @param customers 고객들의 정보를 담은 리스트
  * @param pageInfo  페이징 정보가 담긴 객체
  */
-public record ListCustomerResponse(
-        List<CustomerInfo> customers,
+public record CustomerListDetail(
+        List<CustomerDetail> customers,
         PageInfo pageInfo
 ) {
-    public static ListCustomerResponse from(Page<Customer> page) {
-        List<CustomerInfo> customerInfoList = page.getContent().stream()
-                .map(CustomerInfo::from).toList();
-        return new ListCustomerResponse(customerInfoList, PageInfo.from(page));
+    public static CustomerListDetail from(Page<Customer> page) {
+        List<CustomerDetail> customerDetailList = page.getContent().stream()
+                .map(CustomerDetail::from).toList();
+        return new CustomerListDetail(customerDetailList, PageInfo.from(page));
     }
 }

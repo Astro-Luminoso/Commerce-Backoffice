@@ -15,12 +15,12 @@ import java.time.LocalDateTime;
  * @param status           고객 상태
  * @param registrationDate 고객 가입일
  */
-public record CustomerInfo(
+public record CustomerDetail(
         Long id, String name, String email, String phone,
         AccountStatus status, LocalDateTime registrationDate
 ) {
-    public static CustomerInfo from(Customer customer) {
-        return new CustomerInfo(
+    public static CustomerDetail from(Customer customer) {
+        return new CustomerDetail(
                 customer.getId(), customer.getName(), customer.getEmail(),
                 customer.getPhone(), customer.getStatus(),
                 customer.getRegistrationDate()
