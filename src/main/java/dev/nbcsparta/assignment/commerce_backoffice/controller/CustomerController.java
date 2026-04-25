@@ -4,7 +4,6 @@ import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerInfo;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ListCustomerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.service.CustomerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -18,7 +17,6 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    @Autowired
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }

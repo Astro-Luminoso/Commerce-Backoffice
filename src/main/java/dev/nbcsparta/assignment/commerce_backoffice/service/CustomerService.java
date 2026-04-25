@@ -6,7 +6,6 @@ import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,6 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    @Autowired
     public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
