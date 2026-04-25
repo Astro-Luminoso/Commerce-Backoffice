@@ -69,7 +69,7 @@ public class ManagerService {
      */
     public void updateManagerStatus(Long managerId, ManagerStatusUpdate reqBody) {
         // 거부시에는 승인일 때와 달리 이유를 입력해야 합니다.
-        if (reqBody.status() == AccountStatus.DENIED || reqBody.reason() == null) {
+        if (reqBody.status() == AccountStatus.DENIED && reqBody.reason() == null) {
             throw new NullValueException();
         }
         Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
