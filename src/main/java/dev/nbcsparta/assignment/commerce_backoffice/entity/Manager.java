@@ -80,38 +80,6 @@ public class Manager {
         this(name, email, password, phoneNumber, role, AccountStatus.PENDING);
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public String getPhoneNumber() {
-        return this.phoneNumber;
-    }
-
-    public AccountStatus getStatus() {
-        return this.status;
-    }
-
-    public Role getRole() {
-        return this.role;
-    }
-
-    public LocalDateTime getRegistrationDate() {
-        return registrationDate;
-    }
-
     public static Manager to(CreateManagerRequest req, String encodedPassword) {
         return new Manager(
                 req.name(),
