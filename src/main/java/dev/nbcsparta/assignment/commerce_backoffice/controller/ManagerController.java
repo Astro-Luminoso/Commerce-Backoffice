@@ -1,5 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
+import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerListDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.SessionManager;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
@@ -44,7 +45,7 @@ public class ManagerController {
      * @return 응답 엔티티에 관리자 목록과 HTTP 상태 코드 200 반환
      */
     @GetMapping
-    public ResponseEntity<ManagerListDetail> listAllManager(
+    public ResponseEntity<ManagerListDetail> responseManagerListDetail(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email,
             @RequestParam(required = false, defaultValue = "1") int page,
@@ -60,5 +61,16 @@ public class ManagerController {
         ManagerListDetail managerList = managerService.listAllManager(name, email, role, status, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(managerList);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ManagerDetail> responseManagerDetail(
+            @PathVariable Long id,
+            @SessionAttribute(name = "LOGIN_MANAGER") SessionManager sessionManager
+    ){
+        logger.info("GET /managers/{}: Get manager detail", id);
+        ManagerDetail managerDetail = managerService.findOneManager(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(managerDetail);
     }
 }

@@ -1,9 +1,11 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
+import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerListDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.ManagerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,7 @@ public class ManagerService {
     }
 
 
+    @Transactional(readOnly = true)
     public ManagerListDetail listAllManager(
             String name,
             String email,
@@ -30,5 +33,11 @@ public class ManagerService {
     ) {
         Page<Manager> managerList = managerRepository.findAll(name, email, role, status, pageable);
         return ManagerListDetail.from(managerList);
+    }
+
+    @Transactional(readOnly = true)
+    public ManagerDetail findOneManager(Long managerId) {
+        Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
+        return ManagerDetail.from(manager);
     }
 }
