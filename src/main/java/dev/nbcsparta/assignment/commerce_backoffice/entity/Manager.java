@@ -113,4 +113,36 @@ public class Manager {
                 req.role()
         );
     }
+
+    public long getId(){
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public String getPhoneNumber() {
+        return this.phoneNumber;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getRegistrationDate() {
+        return this.registrationDate;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return this.updatedDate;
+    }
 }
