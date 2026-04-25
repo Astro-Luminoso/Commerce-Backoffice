@@ -2,10 +2,12 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerListDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerStatusUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ManagerNotFoundException;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.NullValueException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,5 +59,20 @@ public class ManagerService {
     public ManagerDetail findOneManager(Long managerId) {
         Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
         return ManagerDetail.from(manager);
+    }
+
+    /**
+     * 관리자 계정 상태 업데이트 서비스
+     *
+     * @param managerId 업데이트할 관리자 고유 번호
+     * @param reqBody 업데이트정보가 담긴 DTO ManagerStatusUpdate
+     */
+    public void updateManagerStatus(Long managerId, ManagerStatusUpdate reqBody) {
+        // 거부시에는 승인일 때와 달리 이유를 입력해야 합니다.
+        if (reqBody.status() == AccountStatus.DENIED && reqBody.reason() == null) {
+            throw new NullValueException();
+        }
+        Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
+        manager.setStatus(reqBody.status());
     }
 }
