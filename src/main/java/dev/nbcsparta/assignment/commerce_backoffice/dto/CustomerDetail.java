@@ -22,7 +22,7 @@ public record CustomerDetail(
     public static CustomerDetail from(Customer customer) {
         return new CustomerDetail(
                 customer.getId(), customer.getName(), customer.getEmail(),
-                customer.getPhone(), customer.getStatus(),
+                customer.getPhoneNumber(), customer.getStatus(),
                 customer.getRegistrationDate()
         );
     }

@@ -20,7 +20,7 @@ public class Customer {
     private String email;
 
     @Column(nullable = false, length = 16)
-    private String phone;
+    private String phoneNumber;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -32,12 +32,22 @@ public class Customer {
     protected Customer() {
     }
 
-    public Customer(String name, String email, String phone, AccountStatus status) {
+    public Customer(String name, String email, String phoneNumber, AccountStatus status) {
         this.name = name;
         this.email = email;
-        this.phone = phone;
+        this.phoneNumber = phoneNumber;
         this.status = status;
         this.registrationDate = LocalDateTime.now();
+    }
+
+    public void updateCustomerDetail(String name, String email, String phoneNumber) {
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void updateCustomerStatus(AccountStatus status) {
+        this.status = status;
     }
 
     public Long getId() {
@@ -52,8 +62,8 @@ public class Customer {
         return email;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public AccountStatus getStatus() {

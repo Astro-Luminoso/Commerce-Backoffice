@@ -1,11 +1,11 @@
 package dev.nbcsparta.assignment.commerce_backoffice.enumerate;
 
 public enum AccountStatus {
-    ACTIVE("active"),
-    INACTIVE("inactive"),
-    SUSPENDED("suspended"),
-    PENDING("pending"),
-    DENIED("denied");
+    ACTIVE("활성"),
+    INACTIVE("비활성"),
+    SUSPENDED("정지"),
+    PENDING("승인대기"),
+    DENIED("정지");
 
     private final String description;
 

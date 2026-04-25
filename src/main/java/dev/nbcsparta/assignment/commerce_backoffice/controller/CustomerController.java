@@ -1,9 +1,9 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerDetail;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerListDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.service.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -76,4 +76,25 @@ public class CustomerController {
 
         return ResponseEntity.status(HttpStatus.OK).body(customerResponse);
     }
+
+    @PutMapping("/{customerId}")
+    public ResponseEntity<CustomerDetail> updateCustomerDetails(
+            @PathVariable Long customerId,
+            @Valid @RequestBody UpdateCustomerDetailRequest request
+    ) {
+        CustomerDetail response = customerService.updateDetail(customerId, request);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PatchMapping("/{customerId}")
+    public ResponseEntity<CustomerStatusResponse> updateCustomerStatus(
+            @PathVariable Long customerId,
+            @Valid @RequestBody UpdateCustomerStatusRequest request
+    ) {
+        CustomerStatusResponse response = customerService.updateStatus(customerId, request);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }
