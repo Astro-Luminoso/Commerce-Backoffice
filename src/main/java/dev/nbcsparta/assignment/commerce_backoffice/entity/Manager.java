@@ -126,4 +126,8 @@ public class Manager {
     public boolean isPasswordMatch(PasswordEncoder passwordEncoder, String password) {
         return passwordEncoder.matches(password, this.password);
     }
+
+    public void setStatus(AccountStatus status) {
+        this.status = status;
+    }
 }
