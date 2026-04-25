@@ -1,5 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
+import dev.nbcsparta.assignment.commerce_backoffice.config.Authentication;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.LoginRequest;
@@ -21,9 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ManagerAuthController {
 
     private final ManagerAuthService managerAuthService;
+    private final Authentication authentication;
 
-    public ManagerAuthController(ManagerAuthService managerAuthService) {
+    public ManagerAuthController(ManagerAuthService managerAuthService,
+                                 Authentication authentication) {
         this.managerAuthService = managerAuthService;
+        this.authentication = authentication;
     }
 
     @PostMapping("/register")
@@ -33,31 +37,21 @@ public class ManagerAuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest req, HttpServletRequest httpReq) {
+    public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest req) {
         SessionManager sessionManager = managerAuthService.login(req);
-
-        HttpSession session = httpReq.getSession(false);
-        if (session != null && session.getAttribute("LOGIN_MANAGER") != null) {
-            throw new AlreadyLoginException("이미 로그인된 상태입니다.");
-        }
-
-        session = httpReq.getSession(true);
-        session.setAttribute("LOGIN_MANAGER", sessionManager);
-        session.setMaxInactiveInterval(60 * 60 * 24);
-
+        authentication.login(sessionManager);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest req, HttpServletResponse res) {
-        HttpSession session = req.getSession(false);
-        if (session != null) {
-            session.invalidate();
-            Cookie cookie = new Cookie("JSESSIONID", null);
-            cookie.setPath("/");
-            cookie.setMaxAge(0);
-            res.addCookie(cookie);
-        }
+    public ResponseEntity<Void> logout(HttpServletResponse res) {
+        authentication.logout();
+
+        Cookie cookie = new Cookie("JSESSIONID", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        res.addCookie(cookie);
+
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
