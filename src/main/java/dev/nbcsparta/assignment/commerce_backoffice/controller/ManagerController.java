@@ -63,6 +63,13 @@ public class ManagerController {
         return ResponseEntity.status(HttpStatus.OK).body(managerList);
     }
 
+    /**
+     * 관리자 고유번호를 이용한 관리자 상세 조회
+     *
+     * @param id 관리자 고유번호 path 값으로 가져옴
+     * @param sessionManager 세션에서 로그인한 관리자 정보
+     * @return 응답 엔티티에 관리자 상세 정보와 HTTP 상태 코드 200 반환
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ManagerDetail> responseManagerDetail(
             @PathVariable Long id,
