@@ -13,12 +13,23 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-
     @Query("""
-    SELECT p FROM Product p
-    WHERE (:name IS NULL OR p.name LIKE %:name%)
-      AND (:category IS NULL OR p.category = :category)
-      AND (:status IS NULL OR p.status = :status)
+SELECT new dev.nbcsparta.assignment.commerce_backoffice.Product.Dto.GetProductResponse(
+    p.id,
+    p.name,
+    p.category,
+    p.price,
+    p.quantity,
+    p.status,
+    p.createdAt,
+    m.id,
+    m.email
+)
+FROM Product p
+LEFT JOIN p.manager m
+WHERE (:name IS NULL OR p.name LIKE CONCAT('%', :name, '%'))
+  AND (:category IS NULL OR p.category = :category)
+  AND (:status IS NULL OR p.status = :status)
 """)
     Page<GetProductResponse> searchProducts(
             @Param("name") String name,
@@ -26,6 +37,4 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             @Param("status") ProductStatus status,
             Pageable pageable
     );
-
-
 }

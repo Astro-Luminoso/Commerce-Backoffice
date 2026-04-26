@@ -1,6 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.Product.Entity;
 
-import dev.nbcsparta.assignment.commerce_backoffice.Manager.Entity.Manager;
+import dev.nbcsparta.assignment.commerce_backoffice.Manager.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.Product.Dto.CreateProductRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.config.BaseEntity;
 import dev.nbcsparta.assignment.commerce_backoffice.config.ProductStatus;
@@ -19,6 +19,9 @@ public class Product extends BaseEntity {
     private String category;
     private Long price;
     private Long quantity;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ProductStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

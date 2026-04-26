@@ -1,10 +1,12 @@
 package dev.nbcsparta.assignment.commerce_backoffice.Product.Service;
 
-import dev.nbcsparta.assignment.commerce_backoffice.Manager.Entity.Manager;
-import dev.nbcsparta.assignment.commerce_backoffice.Manager.Repository.ManagerRepository;
+
+import dev.nbcsparta.assignment.commerce_backoffice.Manager.entity.Manager;
+import dev.nbcsparta.assignment.commerce_backoffice.Manager.repository.ManagerAuthRepository;
 import dev.nbcsparta.assignment.commerce_backoffice.Product.Dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.Product.Entity.Product;
 import dev.nbcsparta.assignment.commerce_backoffice.Product.Repository.ProductRepository;
+import dev.nbcsparta.assignment.commerce_backoffice.config.SortFailException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,12 +14,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ManagerRepository managerRepository;
-    public ProductService(ProductRepository productRepository, ManagerRepository managerRepository) {
+    private final ManagerAuthRepository managerRepository;
+    public ProductService(ProductRepository productRepository, ManagerAuthRepository managerRepository) {
         this.productRepository = productRepository;
         this.managerRepository = managerRepository;
     }
@@ -55,14 +58,31 @@ public class ProductService {
     @Transactional(readOnly = true)
     public GetPageProductResponse<GetProductResponse> getPageProducts(GetPageProductRequest req) {
 
-        int page = (req.page() <= 0) ? 1 : req.page() - 1;
+        int page = (req.page() <= 0) ? 0 : req.page() - 1;
         int size = (req.size() <= 0) ? 10 : req.size();
 
-        Pageable pageable = PageRequest.of(page, size);
+        String sortBy = (req.sortBy() == null || req.sortBy().isBlank()) ? "createdAt" : req.sortBy();
+        String sortDir = (req.sortValue() == null || req.sortValue().isBlank()) ? "DESC" : req.sortValue();
+
+        String searchName = (req.name() != null && req.name().isBlank()) ? null : req.name();
+        String searchCategory = (req.category() != null && req.category().isBlank()) ? null : req.category();
+
+        /**
+         * 위의 코드들은 정렬기준이 지정되지 않았거나 빈칸으로 왔을 때의 기본값 설정입니다
+         *
+         */
+
+        Sort sort;
+        try{
+            sort = Sort.by(Sort.Direction.fromString(sortDir), sortBy);
+        }catch (Exception e) {
+            throw new SortFailException("정렬 기준이 잘못되었습니다.");
+        }
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<GetProductResponse> pageResult = productRepository.searchProducts(
-                req.name(),
-                req.category(),
+                searchName,
+                searchCategory,
                 req.productStatus(),
                 pageable
         );
@@ -75,8 +95,6 @@ public class ProductService {
                 pageResult.getTotalPages()
         );
     }
-
-
 
     @Transactional(readOnly = true)
     public GetProductResponse getOne(Long id) {
@@ -120,14 +138,13 @@ public class ProductService {
         );
 
         product.setStatus(request.status());
-
     }
 
     @Transactional
     public void delete(Long id) {
         boolean existence = productRepository.existsById(id);
         if(!existence) {
-            throw new IllegalStateException("검색된 스케쥴이 없습니다.");
+            throw new IllegalStateException("검색된 상품이 없습니다.");
         }
         productRepository.deleteById(id);
     }

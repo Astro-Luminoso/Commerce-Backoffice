@@ -26,11 +26,11 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.create(request));
     }
 
-    @GetMapping("/schedules")
-    ResponseEntity<GetPageProductResponse<GetProductResponse>> getPageProducts(
-            @RequestBody GetPageProductRequest request
+    @GetMapping("/products")
+    public ResponseEntity<GetPageProductResponse<GetProductResponse>> getPageProducts(
+            GetPageProductRequest request
     ){
-        return ResponseEntity.status(HttpStatus.OK).body(productService.getPageProducts(request));
+        return ResponseEntity.ok(productService.getPageProducts(request));
     }
 
 
@@ -63,12 +63,5 @@ public class ProductController {
         productService.delete(productId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-
-
-
-
-
-
 
 }
