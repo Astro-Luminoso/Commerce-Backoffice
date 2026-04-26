@@ -1,12 +1,14 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
+import dev.nbcsparta.assignment.commerce_backoffice.config.Authentication;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerListDetail;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.SessionManager;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerStatusUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import dev.nbcsparta.assignment.commerce_backoffice.service.ManagerService;
 
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -21,11 +23,13 @@ import org.springframework.web.bind.annotation.*;
 public class ManagerController {
 
     private final ManagerService managerService;
+    private final Authentication authentication;
 
     private final Logger logger = LoggerFactory.getLogger(ManagerController.class);
 
-    public ManagerController(ManagerService managerRepository) {
+    public ManagerController(ManagerService managerRepository, Authentication authentication) {
         this.managerService = managerRepository;
+        this.authentication = authentication;
     }
 
     /**
@@ -41,7 +45,6 @@ public class ManagerController {
      * @param orderBy 정렬 순서 (asc, desc)
      * @param role 관리자 권한
      * @param status 관리자 계정 상태
-     * @param sessionManager 세션에서 로그인한 관리자 정보
      * @return 응답 엔티티에 관리자 목록과 HTTP 상태 코드 200 반환
      */
     @GetMapping
@@ -53,10 +56,10 @@ public class ManagerController {
             @RequestParam(required = false, defaultValue = "registrationDate") String sortBy,
             @RequestParam(required = false, defaultValue = "desc") String orderBy,
             @RequestParam(required = false) Role role,
-            @RequestParam(required = false) AccountStatus status,
-            @SessionAttribute(name = "LOGIN_MANAGER") SessionManager sessionManager) {
-
+            @RequestParam(required = false) AccountStatus status
+    ) {
         logger.info("GET /managers: Get all managers");
+        authentication.hasAuthority(Role.Super_MANAGER);
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(orderBy), sortBy));
         ManagerListDetail managerList = managerService.listAllManager(name, email, role, status, pageable);
 
@@ -67,17 +70,35 @@ public class ManagerController {
      * 관리자 고유번호를 이용한 관리자 상세 조회
      *
      * @param id 관리자 고유번호 path 값으로 가져옴
-     * @param sessionManager 세션에서 로그인한 관리자 정보
      * @return 응답 엔티티에 관리자 상세 정보와 HTTP 상태 코드 200 반환
      */
     @GetMapping("/{id}")
     public ResponseEntity<ManagerDetail> responseManagerDetail(
-            @PathVariable Long id,
-            @SessionAttribute(name = "LOGIN_MANAGER") SessionManager sessionManager
+            @PathVariable Long id
     ){
         logger.info("GET /managers/{}: Get manager detail", id);
+        authentication.hasAuthority(Role.Super_MANAGER);
         ManagerDetail managerDetail = managerService.findOneManager(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(managerDetail);
     }
+
+    /**
+     * 관리자 고유번호를 이용한 관리자 계정 상태 업데이트
+     *
+     * @param managerId 메니저 고유번호 path 값으로 가져옴
+     * @param reqBody 상태 업데이트에 필요한 정보가 담긴 DTO ManagerStatusUpdate 형태로 요청 바디에서 가져옴
+     * @return 응답 엔티티에 HTTP 상태 코드 200 반환
+     */
+    @PatchMapping("/{managerId}/status")
+    public ResponseEntity<Void> upDateManagerStatus(
+            @PathVariable Long managerId,
+            @Valid @RequestBody ManagerStatusUpdate reqBody) {
+        logger.info("PATCH /managers/{}/status: Update manager status", managerId);
+        authentication.hasAuthority(Role.Super_MANAGER);
+        managerService.updateManagerStatus(managerId, reqBody);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }
