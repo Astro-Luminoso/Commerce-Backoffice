@@ -1,4 +1,4 @@
-package dev.nbcsparta.assignment.commerce_backoffice.Product.Dto;
+package dev.nbcsparta.assignment.commerce_backoffice.dto;
 
 import java.util.List;
 

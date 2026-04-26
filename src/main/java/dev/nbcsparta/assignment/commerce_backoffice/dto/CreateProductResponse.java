@@ -1,7 +1,7 @@
-package dev.nbcsparta.assignment.commerce_backoffice.Product.Dto;
+package dev.nbcsparta.assignment.commerce_backoffice.dto;
 
-import dev.nbcsparta.assignment.commerce_backoffice.config.ProductStatus;
 
+import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import java.time.LocalDateTime;
 
 public record CreateProductResponse(

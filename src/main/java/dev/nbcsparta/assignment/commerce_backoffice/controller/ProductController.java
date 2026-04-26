@@ -1,15 +1,11 @@
-package dev.nbcsparta.assignment.commerce_backoffice.Product.Controller;
+package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
 
-import dev.nbcsparta.assignment.commerce_backoffice.Product.Dto.*;
-import dev.nbcsparta.assignment.commerce_backoffice.Product.Entity.Product;
-import dev.nbcsparta.assignment.commerce_backoffice.Product.Service.ProductService;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 
 @RestController
 public class ProductController {

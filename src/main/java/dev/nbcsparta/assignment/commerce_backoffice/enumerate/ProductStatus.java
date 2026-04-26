@@ -1,4 +1,4 @@
-package dev.nbcsparta.assignment.commerce_backoffice.config;
+package dev.nbcsparta.assignment.commerce_backoffice.enumerate;
 
 public enum ProductStatus {
 

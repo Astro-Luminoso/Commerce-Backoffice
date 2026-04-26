@@ -1,9 +1,8 @@
-package dev.nbcsparta.assignment.commerce_backoffice.Product.Entity;
+package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
-import dev.nbcsparta.assignment.commerce_backoffice.Manager.entity.Manager;
-import dev.nbcsparta.assignment.commerce_backoffice.Product.Dto.CreateProductRequest;
+
 import dev.nbcsparta.assignment.commerce_backoffice.config.BaseEntity;
-import dev.nbcsparta.assignment.commerce_backoffice.config.ProductStatus;
+import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

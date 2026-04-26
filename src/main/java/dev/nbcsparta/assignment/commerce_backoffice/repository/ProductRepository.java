@@ -1,20 +1,19 @@
-package dev.nbcsparta.assignment.commerce_backoffice.Product.Repository;
+package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
-import dev.nbcsparta.assignment.commerce_backoffice.Product.Dto.GetProductResponse;
-import dev.nbcsparta.assignment.commerce_backoffice.Product.Entity.Product;
-import dev.nbcsparta.assignment.commerce_backoffice.config.ProductStatus;
+
+import dev.nbcsparta.assignment.commerce_backoffice.dto.GetProductResponse;
+import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
+import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Optional;
-
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("""
-SELECT new dev.nbcsparta.assignment.commerce_backoffice.Product.Dto.GetProductResponse(
+SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.GetProductResponse(
     p.id,
     p.name,
     p.category,

@@ -1,19 +1,19 @@
-package dev.nbcsparta.assignment.commerce_backoffice.Product.Service;
+package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 
-import dev.nbcsparta.assignment.commerce_backoffice.Manager.entity.Manager;
-import dev.nbcsparta.assignment.commerce_backoffice.Manager.repository.ManagerAuthRepository;
-import dev.nbcsparta.assignment.commerce_backoffice.Product.Dto.*;
-import dev.nbcsparta.assignment.commerce_backoffice.Product.Entity.Product;
-import dev.nbcsparta.assignment.commerce_backoffice.Product.Repository.ProductRepository;
-import dev.nbcsparta.assignment.commerce_backoffice.config.SortFailException;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
+import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.SortFailException;
+import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerAuthRepository;
+import dev.nbcsparta.assignment.commerce_backoffice.repository.ProductRepository;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 public class ProductService {
@@ -96,7 +96,7 @@ public class ProductService {
         );
     }
 
-    @Transactional(readOnly = true)
+    @Transactional()
     public GetProductResponse getOne(Long id) {
 
         Product product = productRepository.findById(id).orElseThrow(
