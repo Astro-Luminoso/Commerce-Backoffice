@@ -44,16 +44,7 @@ public class ProductService {
                 )
         );
 
-        return new CreateProductResponse(
-                product.getId(),
-                product.getName(),
-                product.getCategory(),
-                product.getPrice(),
-                product.getQuantity(),
-                product.getStatus(),
-                product.getCreatedAt(),
-                product.getManager().getId()
-        );
+        return CreateProductResponse.from(product);
     }
 
 
@@ -101,13 +92,7 @@ public class ProductService {
                 pageable
         );
 
-        return new GetPageProductResponse<>(
-                pageResult.getContent(),
-                pageResult.getNumber() + 1,
-                pageResult.getSize(),
-                pageResult.getTotalElements(),
-                pageResult.getTotalPages()
-        );
+        return GetPageProductResponse.from(pageResult);
     }
 
 
@@ -118,17 +103,7 @@ public class ProductService {
                 ProductNotFoundException::new
         );
 
-        return new GetProductResponse(
-                product.getId(),
-                product.getName(),
-                product.getCategory(),
-                product.getPrice(),
-                product.getQuantity(),
-                product.getStatus(),
-                product.getCreatedAt(),
-                product.getManager().getId(),
-                product.getManager().getEmail()
-        );
+        return GetProductResponse.from(product);
     }
 
 
@@ -147,11 +122,7 @@ public class ProductService {
         );
 
         product.update(request.name(), request.category(), request.price());
-        return new UpdateProductResponse(
-                product.getName(),
-                product.getCategory(),
-                product.getPrice()
-        );
+        return UpdateProductResponse.from(product);
 
     }
 

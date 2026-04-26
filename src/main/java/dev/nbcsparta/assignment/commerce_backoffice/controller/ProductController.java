@@ -19,15 +19,20 @@ public class ProductController {
     ResponseEntity<CreateProductResponse> createProduct(
             @RequestBody CreateProductRequest request
             ) {
-        return ResponseEntity.status(HttpStatus.CREATED).
-                body(productService.create(request));
+        CreateProductResponse response = productService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @GetMapping("/products")
     public ResponseEntity<GetPageProductResponse<GetProductResponse>> getPageProducts(
             GetPageProductRequest request
     ){
-        return ResponseEntity.ok(productService.getPageProducts(request));
+        GetPageProductResponse<GetProductResponse> page
+                = productService.getPageProducts(request);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(page);
     }
 
 
@@ -35,7 +40,9 @@ public class ProductController {
     ResponseEntity<GetProductResponse> getOneProduct(
             @PathVariable Long productId
     ){
-        return ResponseEntity.status(HttpStatus.OK).body(productService.getOne(productId));
+        GetProductResponse response = productService.getOne(productId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(response);
     }
 
     @PutMapping("/products/{productId}")
@@ -43,7 +50,8 @@ public class ProductController {
             @PathVariable Long productId,
             @RequestBody UpdateProductRequest request
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.update(productId, request));
+        UpdateProductResponse response = productService.update(productId, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PatchMapping("/products/{productId}/status")

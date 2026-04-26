@@ -1,5 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.dto;
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 public class GetPageProductResponse<T> {
@@ -22,6 +24,16 @@ public class GetPageProductResponse<T> {
         this.size = size;
         this.totalElements = totalElements;
         this.totalPages = totalPages;
+    }
+
+    public static GetPageProductResponse<GetProductResponse> from(Page<GetProductResponse> pageResult) {
+        return new GetPageProductResponse<>(
+                pageResult.getContent(),
+                pageResult.getNumber() + 1,
+                pageResult.getSize(),
+                pageResult.getTotalElements(),
+                pageResult.getTotalPages()
+        );
     }
 
     public List<T> getContent() {
