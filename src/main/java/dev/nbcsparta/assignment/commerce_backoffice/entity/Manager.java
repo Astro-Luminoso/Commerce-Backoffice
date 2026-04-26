@@ -2,6 +2,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
 import dev.nbcsparta.assignment.commerce_backoffice.config.PasswordEncoder;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerStatusUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import jakarta.persistence.*;
@@ -36,6 +37,8 @@ public class Manager {
 
     @Column(nullable = false)
     private Role role;
+
+    private String statusReason;
 
     @CreatedDate
     private LocalDateTime registrationDate;
@@ -112,7 +115,11 @@ public class Manager {
     }
 
     public AccountStatus getStatus() {
-        return status;
+        return this.status;
+    }
+
+    public String getStatusReason() {
+        return this.statusReason;
     }
 
     public LocalDateTime getRegistrationDate() {
@@ -127,7 +134,8 @@ public class Manager {
         return passwordEncoder.matches(password, this.password);
     }
 
-    public void setStatus(AccountStatus status) {
-        this.status = status;
+    public void updateStatus(ManagerStatusUpdate reqBody) {
+        this.status = reqBody.status();
+        this.statusReason = reqBody.reason();
     }
 }

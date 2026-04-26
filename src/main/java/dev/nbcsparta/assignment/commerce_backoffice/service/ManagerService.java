@@ -73,6 +73,6 @@ public class ManagerService {
             throw new NullValueException();
         }
         Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
-        manager.setStatus(reqBody.status());
+        manager.updateStatus(reqBody);
     }
 }
