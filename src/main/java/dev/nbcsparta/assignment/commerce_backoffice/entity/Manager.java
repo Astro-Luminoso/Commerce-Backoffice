@@ -136,6 +136,6 @@ public class Manager {
 
     public void updateStatus(ManagerStatusUpdate reqBody) {
         this.status = reqBody.status();
-        this.statusReason = reqBody.reason();
+        this.statusReason = (this.status == AccountStatus.ACTIVE) ? null : reqBody.reason();
     }
 }
