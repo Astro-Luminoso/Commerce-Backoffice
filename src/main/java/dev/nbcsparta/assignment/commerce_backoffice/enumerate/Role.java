@@ -4,15 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.RoleNotFoundException;
 
-import java.util.Arrays;
-
 public enum Role {
-    CS_MANAGER("CS_Manager", 1),
-    Ops_MANAGER("Ops_Manager", 2),
-    Super_MANAGER("Super_Manager", 3);
+    CS_MANAGER("CS 관리자", 1),
+    Ops_MANAGER("운영 관리자", 2),
+    Super_MANAGER("슈퍼 관리자", 3);
 
     private final String roleName;
-    private int accessLevel;
+    private final int accessLevel;
 
     Role(String roleName, int accessLevel) {
         this.roleName = roleName;
@@ -29,10 +27,16 @@ public enum Role {
     }
 
     @JsonCreator
-    public static Role from(String roleName) {
-        return Arrays.stream(values())
-                .filter(type -> type.roleName.equals(roleName))
-                .findFirst()
-                .orElseThrow(() -> new RoleNotFoundException("Invalid role: " + roleName));
+    public static Role getEnum(String roleName) {
+        for (Role role : values()) {
+            if (role.getRoleName().equals(roleName)) {
+                return role;
+            }
+
+            if (role.name().equalsIgnoreCase(roleName)) {
+                return role;
+            }
+        }
+        throw new RoleNotFoundException("Invalid role: " + roleName);
     }
 }
