@@ -36,10 +36,4 @@ public class MyPageController {
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
-    @PatchMapping
-    public ResponseEntity<Void> updateMyPassword(@Valid @RequestBody UpdateMyProfileRequest req) {
-
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
 }
