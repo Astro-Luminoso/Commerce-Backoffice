@@ -3,6 +3,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.controller;
 import dev.nbcsparta.assignment.commerce_backoffice.config.Authentication;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerListDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerRoleUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerStatusUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
@@ -90,17 +91,6 @@ public class ManagerController {
      * @param reqBody 상태 업데이트에 필요한 정보가 담긴 DTO ManagerStatusUpdate 형태로 요청 바디에서 가져옴
      * @return 응답 엔티티에 HTTP 상태 코드 200 반환
      */
-    @PatchMapping("/{managerId}/access")
-    public ResponseEntity<Void> approveManagerStatus(
-            @PathVariable Long managerId,
-            @Valid @RequestBody ManagerStatusUpdate reqBody) {
-        logger.info("PATCH /managers/{}/status: Approve or Deny manager account", managerId);
-        authentication.hasAuthority(Role.Super_MANAGER);
-        managerService.updateManagerStatus(managerId, reqBody);
-
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
     @PatchMapping("/{managerId}/status")
     public ResponseEntity<Void> updateManagerStatus(
             @PathVariable Long managerId,
@@ -108,6 +98,25 @@ public class ManagerController {
         logger.info("PATCH /managers/{}/status: Update manager status", managerId);
         authentication.hasAuthority(Role.Super_MANAGER);
         managerService.updateManagerStatus(managerId, reqBody);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    /**
+     * 관리자 고유번호를 이용한 관리자 권한 업데이트
+     *
+     * @param managerId 메니저 고유번호 path 값으로 가져옴
+     * @param reqBody 상태 업데이트에 필요한 정보가 담긴 DTO ManagerRoleUpdate 형태로 요청 바디에서 가져옴
+     * @return 응답 엔티티에 HTTP 상태 코드 200 반환
+     */
+    @PatchMapping("/{managerId}/role")
+    public ResponseEntity<Void> updateManagerRole(
+            @PathVariable Long managerId,
+            @Valid @RequestBody ManagerRoleUpdate reqBody
+    ) {
+        logger.info("PATCH /managers/{}/role: Update manager role", managerId);
+        authentication.hasAuthority(Role.Super_MANAGER);
+        managerService.updateManagerRole(managerId, reqBody);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

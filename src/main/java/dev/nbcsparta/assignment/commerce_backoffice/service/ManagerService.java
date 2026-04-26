@@ -2,6 +2,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerListDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerRoleUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerStatusUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
@@ -74,5 +75,10 @@ public class ManagerService {
         }
         Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
         manager.updateStatus(reqBody);
+    }
+
+    public void updateManagerRole(Long managerId, ManagerRoleUpdate reqBody) {
+        Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
+        manager.updateRole(reqBody);
     }
 }
