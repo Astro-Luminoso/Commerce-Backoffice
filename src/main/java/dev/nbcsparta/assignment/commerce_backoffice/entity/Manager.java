@@ -2,6 +2,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
 import dev.nbcsparta.assignment.commerce_backoffice.config.PasswordEncoder;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerRoleUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerStatusUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
@@ -136,6 +137,10 @@ public class Manager {
 
     public void updateStatus(ManagerStatusUpdate reqBody) {
         this.status = reqBody.status();
-        this.statusReason = reqBody.reason();
+        this.statusReason = (this.status == AccountStatus.ACTIVE) ? null : reqBody.reason();
+    }
+
+    public void updateRole(ManagerRoleUpdate reqBody) {
+        this.role = reqBody.role();
     }
 }
