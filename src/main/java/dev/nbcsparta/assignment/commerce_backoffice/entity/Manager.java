@@ -3,6 +3,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.entity;
 import dev.nbcsparta.assignment.commerce_backoffice.config.PasswordEncoder;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerStatusUpdate;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyProfileRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import jakarta.persistence.*;
@@ -137,5 +138,11 @@ public class Manager {
     public void updateStatus(ManagerStatusUpdate reqBody) {
         this.status = reqBody.status();
         this.statusReason = reqBody.reason();
+    }
+
+    public void updateProfile(UpdateMyProfileRequest reqBody) {
+        this.name = reqBody.name();
+        this.email = reqBody.email();
+        this.phoneNumber = reqBody.phoneNumber();
     }
 }
