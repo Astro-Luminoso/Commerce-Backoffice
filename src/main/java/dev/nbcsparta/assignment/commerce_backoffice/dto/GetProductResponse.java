@@ -1,9 +1,12 @@
 package dev.nbcsparta.assignment.commerce_backoffice.dto;
 
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 public record GetProductResponse(
+
         Long id,
         String name,
         String category,
