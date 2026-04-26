@@ -3,6 +3,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.config;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.SessionManager;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.AccessForbiddenException;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.AlreadyLoginException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
 
@@ -20,5 +21,17 @@ public class Authentication {
         if (manager.role().getAccessLevel() < requiredRole.getAccessLevel()) {
             throw new AccessForbiddenException();
         }
+    }
+
+    public void login(SessionManager sessionManager) {
+        if (session.getAttribute("LOGIN_MANAGER") != null) {
+            throw new AlreadyLoginException("이미 로그인된 상태입니다.");
+        }
+        session.setAttribute("LOGIN_MANAGER", sessionManager);
+        session.setMaxInactiveInterval(60 * 60 * 24);
+    }
+
+    public void logout() {
+        session.invalidate();
     }
 }
