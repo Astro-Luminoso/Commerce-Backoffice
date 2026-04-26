@@ -90,17 +90,6 @@ public class ManagerController {
      * @param reqBody 상태 업데이트에 필요한 정보가 담긴 DTO ManagerStatusUpdate 형태로 요청 바디에서 가져옴
      * @return 응답 엔티티에 HTTP 상태 코드 200 반환
      */
-    @PatchMapping("/{managerId}/access")
-    public ResponseEntity<Void> approveManagerStatus(
-            @PathVariable Long managerId,
-            @Valid @RequestBody ManagerStatusUpdate reqBody) {
-        logger.info("PATCH /managers/{}/status: Approve or Deny manager account", managerId);
-        authentication.hasAuthority(Role.Super_MANAGER);
-        managerService.updateManagerStatus(managerId, reqBody);
-
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
     @PatchMapping("/{managerId}/status")
     public ResponseEntity<Void> updateManagerStatus(
             @PathVariable Long managerId,
