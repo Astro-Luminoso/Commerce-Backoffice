@@ -150,4 +150,8 @@ public class Manager {
         this.email = reqBody.email();
         this.phoneNumber = reqBody.phoneNumber();
     }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }
