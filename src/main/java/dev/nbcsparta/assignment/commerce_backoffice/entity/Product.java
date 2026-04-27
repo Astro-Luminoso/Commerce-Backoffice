@@ -65,10 +65,15 @@ public class Product {
         if(this.quantity<quantity){
             throw new OutOfStockException();
         }
-        this.quantity = quantity;
+        this.quantity -= quantity;
         if(this.quantity == 0) {
             this.status = ProductStatus.SOLD_OUT;
         }
+    }
+
+    public void cancelProduct(int quantity) {
+        this.quantity += quantity;
+        this.status = ProductStatus.SALE;
     }
 
     public Product() {
