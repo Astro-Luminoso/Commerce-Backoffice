@@ -41,10 +41,8 @@ public class CustomerController {
             Pageable pageable,
 
             @RequestParam(required = false)
-            String status
+            AccountStatus status
     ) {
-        AccountStatus requestStatus = AccountStatus.getEnum(status);
-
         // 입력받은 페이지 넘버가 1이라면 백엔드 인덱스에서는 0을 검색해야 하기때문에 -1을 해줍니다.
         int fixedPageNumber = Math.max(0, pageable.getPageNumber() - 1);
 
@@ -56,7 +54,7 @@ public class CustomerController {
         );
 
         CustomerListDetail customerResponse =
-                customerService.findAllCustomer(name, email, customPageable, requestStatus);
+                customerService.findAllCustomer(name, email, customPageable, status);
 
         return ResponseEntity.status(HttpStatus.OK).body(customerResponse);
     }

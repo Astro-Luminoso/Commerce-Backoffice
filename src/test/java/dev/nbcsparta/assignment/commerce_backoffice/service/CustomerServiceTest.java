@@ -48,7 +48,7 @@ class CustomerServiceTest {
 
         assertEquals("홍길동", response.name());
         assertEquals("asdf@naver.com", response.email());
-        assertEquals("010-0000-0000", response.phone());
+        assertEquals("010-0000-0000", response.phoneNumber());
         assertEquals(AccountStatus.ACTIVE, response.status());
     }
 
@@ -77,13 +77,13 @@ class CustomerServiceTest {
         given(customerRepository.findById(customerId)).willReturn(Optional.of(customer));
 
         UpdateCustomerDetailRequest request =
-                new UpdateCustomerDetailRequest("양성훈", "qwer@naver.com", "010-4444-4444");
+                new UpdateCustomerDetailRequest("양성훈", "asdf@naver.com", "010-4444-4444");
 
         CustomerDetail response = customerService.updateDetail(customerId, request);
 
         assertEquals("양성훈", response.name());
-        assertEquals("qwer@naver.com", response.email());
-        assertEquals("010-4444-4444", response.phone());
+        assertEquals("asdf@naver.com", response.email());
+        assertEquals("010-4444-4444", response.phoneNumber());
         assertEquals(AccountStatus.ACTIVE, response.status());
     }
 
@@ -103,7 +103,7 @@ class CustomerServiceTest {
 
         // 여기서 요청은 주소창에 적는 String 타입
         UpdateCustomerStatusRequest request =
-                new UpdateCustomerStatusRequest("비활성");
+                new UpdateCustomerStatusRequest(AccountStatus.INACTIVE);
 
         // String 타입을 Enum으로 변경하여 업데이트 진행후 응답으로는 String으로 돌려줌
         CustomerStatusResponse response = customerService.updateStatus(customerId, request);

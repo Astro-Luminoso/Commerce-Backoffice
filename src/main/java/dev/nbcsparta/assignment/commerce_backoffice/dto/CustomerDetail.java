@@ -11,12 +11,12 @@ import java.time.LocalDateTime;
  * @param id               고객 고유 번호
  * @param name             고객 이름
  * @param email            고객 이메일
- * @param phone            고객 폰 번호
+ * @param phoneNumber            고객 폰 번호
  * @param status           고객 상태
  * @param registrationDate 고객 가입일
  */
 public record CustomerDetail(
-        Long id, String name, String email, String phone,
+        Long id, String name, String email, String phoneNumber,
         AccountStatus status, LocalDateTime registrationDate
 ) {
     public static CustomerDetail from(Customer customer) {

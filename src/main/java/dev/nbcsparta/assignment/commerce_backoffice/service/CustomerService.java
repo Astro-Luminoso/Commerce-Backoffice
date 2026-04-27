@@ -3,6 +3,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.ConflictUserException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.CustomerRepository;
 import jakarta.validation.Valid;
@@ -60,6 +61,12 @@ public class CustomerService {
     public CustomerDetail updateDetail(Long customerId, UpdateCustomerDetailRequest request) {
         Customer customer = validateCustomer(customerId);
 
+        boolean isExistEmail = customerRepository.existsByEmail(request.email());
+
+        if (isExistEmail) {
+            throw new ConflictUserException("이미 존재하는 사용자입니다.");
+        }
+
         customer.updateCustomerDetail(request.name(), request.email(), request.phoneNumber());
 
         return CustomerDetail.from(customer);
@@ -69,10 +76,15 @@ public class CustomerService {
     public CustomerStatusResponse updateStatus(Long customerId, @Valid UpdateCustomerStatusRequest request) {
         Customer customer = validateCustomer(customerId);
 
-        AccountStatus status = AccountStatus.getEnum(request.status());
+        AccountStatus status = request.status();
 
         customer.updateCustomerStatus(status);
 
         return CustomerStatusResponse.from(customer);
+    }
+
+    @Transactional
+    public void deleteCustomer(Long customerId) {
+
     }
 }
