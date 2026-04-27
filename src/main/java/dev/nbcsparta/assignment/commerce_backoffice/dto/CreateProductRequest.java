@@ -1,0 +1,27 @@
+package dev.nbcsparta.assignment.commerce_backoffice.dto;
+
+import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record CreateProductRequest(
+
+        @NotBlank
+        String name,
+
+        @NotBlank
+        String category,
+
+        @NotNull
+        Long price,
+
+        @NotNull
+        Long quantity,
+
+        @NotNull
+        ProductStatus status,
+
+        @NotNull
+        Long managerId
+) {
+}
