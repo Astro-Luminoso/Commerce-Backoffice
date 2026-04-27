@@ -4,6 +4,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
+import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ManagerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ProductNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.SortFailException;
@@ -48,51 +49,23 @@ public class ProductService {
     }
 
 
-    /**
-     * name             상품 이름
-     * page
-     * size
-     * sortValue        생성일
-     * sortBy           내림차순, 오름차순
-     * category         상품 카테고리
-     * ProductStatus    상품상태 ( 판매중, 품절, 단종 )
-     *
-     * @return GetPageProductResponse()
-     */
 
     @Transactional(readOnly = true)
-    public GetPageProductResponse<GetProductResponse> getPageProducts(GetPageProductRequest req) {
+    public GetListProductResponse<GetPageProductResponse> getAllProduct(String name, int page, int size, String sortName, String sortBy, String category, ProductStatus status) {
 
-        int page = req.page() != null ? req.page() : 0;
-        int size = req.size() != null ? req.size() : 10;
-
-        String sortBy = (req.sortBy() == null || req.sortBy().isBlank()) ? "createdAt" : req.sortBy();
-        String sortValue = (req.sortValue() == null || req.sortValue().isBlank()) ? "DESC" : req.sortValue();
-
-        String searchName = (req.name() != null && req.name().isBlank()) ? null : req.name();
-        String searchCategory = (req.category() != null && req.category().isBlank()) ? null : req.category();
-
-        /**
-         * 위의 코드들은 정렬기준이 지정되지 않았거나 빈칸으로 왔을 때의 기본값 설정입니다
-         *
-         */
-
-        Sort sort;
-        try{
-            sort = Sort.by(Sort.Direction.fromString(sortValue), sortBy);
-        }catch (Exception e) {
-            throw new SortFailException("정렬 기준이 잘못되었습니다.");
+        Pageable pageable;
+        try {
+            pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(sortBy), sortName));
+        } catch (Exception e) {
+            throw new SortFailException("정렬에 실패했습니다");
         }
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Product> productPage =
+                productRepository.findAll(name, category, status, pageable);
 
-        Page<GetProductResponse> pageResult = productRepository.searchProducts(
-                searchName,
-                searchCategory,
-                req.productStatus(),
-                pageable
-        );
+        Page<GetPageProductResponse> dtoPage =
+                productPage.map(GetPageProductResponse::from);
 
-        return GetPageProductResponse.from(pageResult);
+        return GetListProductResponse.from(dtoPage);
     }
 
 
@@ -150,4 +123,6 @@ public class ProductService {
         }
         productRepository.deleteById(id);
     }
+
+
 }
