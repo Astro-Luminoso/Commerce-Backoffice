@@ -1,7 +1,9 @@
 package dev.nbcsparta.assignment.commerce_backoffice.exception;
 
-public class RoleNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class RoleNotFoundException extends ServiceException {
     public RoleNotFoundException(String message) {
-        super(message);
+        super(HttpStatus.NOT_FOUND, message);
     }
 }

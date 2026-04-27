@@ -1,7 +1,9 @@
 package dev.nbcsparta.assignment.commerce_backoffice.exception;
 
-public class NotMatchException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class NotMatchException extends ServiceException {
     public NotMatchException(String message) {
-        super(message);
+        super(HttpStatus.UNAUTHORIZED, message);
     }
 }

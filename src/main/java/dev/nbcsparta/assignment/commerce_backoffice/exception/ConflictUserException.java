@@ -1,7 +1,9 @@
 package dev.nbcsparta.assignment.commerce_backoffice.exception;
 
-public class ConflictUserException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class ConflictUserException extends ServiceException {
     public ConflictUserException(String message) {
-        super(message);
+        super(HttpStatus.CONFLICT, message);
     }
 }
