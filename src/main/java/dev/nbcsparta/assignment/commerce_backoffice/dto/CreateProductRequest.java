@@ -13,7 +13,7 @@ public record CreateProductRequest(
         String category,
 
         @NotNull
-        Long price,
+        int price,
 
         @NotNull
         int quantity,

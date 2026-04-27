@@ -4,7 +4,7 @@ public record UpdateProductRequest(
 
         String name,
         String category,
-        Long price
+        int price
 
 ) {
 }
