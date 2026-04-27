@@ -3,6 +3,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.AleadyDeletedUserException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ConflictUserException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.CustomerRepository;
@@ -86,7 +87,10 @@ public class CustomerService {
     @Transactional
     public void deleteCustomer(Long customerId) {
         Customer customer = validateCustomer(customerId);
-        if (!customer.isDeleted())
-            customer.setAccountDeletion();
+
+        if (customer.isDeleted())
+            throw new AleadyDeletedUserException("이미 삭제 상태입니다.");
+
+        customer.setAccountDeletion();
     }
 }
