@@ -110,4 +110,26 @@ class CustomerServiceTest {
         assertEquals("비활성", response.status());
     }
 
+    @Test
+    @DisplayName("유저 소프트 삭제 성공")
+    void deleteCustomer_Success() {
+        Long customerId = 1L;
+
+        Customer customer = new Customer(
+                "홍길동",
+                "asdf@naver.com",
+                "010-0000-0000",
+                AccountStatus.ACTIVE
+        );
+
+        given(customerRepository.findById(customerId)).willReturn(Optional.of(customer));
+
+        // String 타입을 Enum으로 변경하여 업데이트 진행후 응답으로는 String으로 돌려줌
+        customerService.deleteCustomer(customerId);
+
+        Customer findCustomer = customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
+
+        assertTrue(findCustomer.isDeleted());
+    }
+
 }
