@@ -1,8 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
-import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
-import dev.nbcsparta.assignment.commerce_backoffice.service.CustomerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ class CustomerRepositoryTest {
 
     @Autowired
     private CustomerRepository customerRepository;
+
     @Test
     @DisplayName("검색 조건, 페이징을 이용한 다수 고객 목록 조회 성공")
     void findAllCustomer_Success() {
@@ -48,6 +47,4 @@ class CustomerRepositoryTest {
 
         assertEquals("홍갈동", result.getContent().getFirst().getName());
     }
-
-
 }
