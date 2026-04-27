@@ -43,6 +43,7 @@ public class User {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.status = status;
+        this.isDeleted = false;
     }
 
     public String getName() {
