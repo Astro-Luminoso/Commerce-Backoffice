@@ -16,7 +16,7 @@ public record CreateProductRequest(
         Long price,
 
         @NotNull
-        Long quantity,
+        int quantity,
 
         @NotNull
         ProductStatus status,
