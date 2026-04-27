@@ -85,6 +85,8 @@ public class CustomerService {
 
     @Transactional
     public void deleteCustomer(Long customerId) {
-
+        Customer customer = validateCustomer(customerId);
+        if (!customer.isDeleted())
+            customer.setAccountDeletion();
     }
 }
