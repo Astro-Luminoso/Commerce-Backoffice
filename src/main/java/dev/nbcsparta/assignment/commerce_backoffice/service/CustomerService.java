@@ -58,7 +58,7 @@ public class CustomerService {
     }
 
     @Transactional
-    public CustomerDetail updateDetail(Long customerId, UpdateCustomerDetailRequest request) {
+    public CustomerDetail updateDetail(Long customerId, UpdateMyProfileRequest request) {
         Customer customer = validateCustomer(customerId);
 
         boolean isExistEmail = customerRepository.existsByEmail(request.email());
@@ -67,7 +67,7 @@ public class CustomerService {
             throw new ConflictUserException("이미 존재하는 사용자입니다.");
         }
 
-        customer.updateCustomerDetail(request.name(), request.email(), request.phoneNumber());
+        customer.updateProfile(request);
 
         return CustomerDetail.from(customer);
     }
@@ -78,7 +78,7 @@ public class CustomerService {
 
         AccountStatus status = request.status();
 
-        customer.updateCustomerStatus(status);
+        customer.updateStatus(status);
 
         return CustomerStatusResponse.from(customer);
     }
