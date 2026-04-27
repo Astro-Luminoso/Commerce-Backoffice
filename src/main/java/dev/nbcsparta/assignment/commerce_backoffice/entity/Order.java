@@ -54,7 +54,7 @@ public class Order {
         this.product = product;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
