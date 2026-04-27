@@ -63,7 +63,7 @@ public class CustomerService {
 
         boolean isExistEmail = customerRepository.existsByEmail(request.email());
 
-        if (!customer.getEmail().equals(request.email()) && isExistEmail) {
+        if (isExistEmail) {
             throw new ConflictUserException("이미 존재하는 사용자입니다.");
         }
 
@@ -81,5 +81,10 @@ public class CustomerService {
         customer.updateCustomerStatus(status);
 
         return CustomerStatusResponse.from(customer);
+    }
+
+    @Transactional
+    public void deleteCustomer(Long customerId) {
+
     }
 }
