@@ -1,7 +1,9 @@
 package dev.nbcsparta.assignment.commerce_backoffice.exception;
 
-public class AccessForbiddenException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class AccessForbiddenException extends ServiceException {
     public AccessForbiddenException() {
-        super("해당 관리자는 접근권한이 없습니다.");
+        super(HttpStatus.FORBIDDEN, "해당 관리자는 접근권한이 없습니다.");
     }
 }

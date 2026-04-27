@@ -1,10 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
 import dev.nbcsparta.assignment.commerce_backoffice.config.Authentication;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerDetail;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerListDetail;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerRoleUpdate;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerStatusUpdate;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import dev.nbcsparta.assignment.commerce_backoffice.service.ManagerService;
@@ -60,7 +57,7 @@ public class ManagerController {
             @RequestParam(required = false) AccountStatus status
     ) {
         logger.info("GET /managers: Get all managers");
-        authentication.hasAuthority(Role.Super_MANAGER);
+        authentication.checkAuthority(Role.Super_MANAGER);
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(orderBy), sortBy));
         ManagerListDetail managerList = managerService.listAllManager(name, email, role, status, pageable);
 
@@ -78,7 +75,7 @@ public class ManagerController {
             @PathVariable Long id
     ){
         logger.info("GET /managers/{}: Get manager detail", id);
-        authentication.hasAuthority(Role.Super_MANAGER);
+        authentication.checkAuthority(Role.Super_MANAGER);
         ManagerDetail managerDetail = managerService.findOneManager(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(managerDetail);
@@ -96,7 +93,7 @@ public class ManagerController {
             @PathVariable Long managerId,
             @Valid @RequestBody ManagerStatusUpdate reqBody) {
         logger.info("PATCH /managers/{}/status: Update manager status", managerId);
-        authentication.hasAuthority(Role.Super_MANAGER);
+        authentication.checkAuthority(Role.Super_MANAGER);
         managerService.updateManagerStatus(managerId, reqBody);
 
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -115,10 +112,32 @@ public class ManagerController {
             @Valid @RequestBody ManagerRoleUpdate reqBody
     ) {
         logger.info("PATCH /managers/{}/role: Update manager role", managerId);
-        authentication.hasAuthority(Role.Super_MANAGER);
+        authentication.checkAuthority(Role.Super_MANAGER);
         managerService.updateManagerRole(managerId, reqBody);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @PutMapping("/{managerId}")
+    public ResponseEntity<ManagerDetail> updateMangerDetail(
+            @PathVariable Long managerId,
+            @RequestBody UpdateMyProfileRequest reqBody
+    ) {
+        logger.info("PUT /managers/{}: Update manager detail", managerId);
+        authentication.checkAuthority(Role.Super_MANAGER);
+        ManagerDetail managerDetail = managerService.updateManagerDetail(managerId, reqBody);
+
+        return ResponseEntity.status(HttpStatus.OK).body(managerDetail);
+    }
+
+    @DeleteMapping("/{managerId}")
+    public ResponseEntity<Void> deleteManager(
+            @PathVariable Long managerId
+    ) {
+        logger.info("DELETE /managers/{}: Delete manager", managerId);
+        authentication.checkAuthority(Role.Super_MANAGER);
+        managerService.deleteManager(managerId);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

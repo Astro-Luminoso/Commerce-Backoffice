@@ -17,8 +17,15 @@ public class Authentication {
         this.session = session;
     }
 
-    public void hasAuthority(Role requiredRole) {
-        SessionManager manager = (SessionManager) session.getAttribute("LOGIN_MANAGER");
+    /**
+     * 현재 세션 유저 정보를 받아온 후 관계자의 접근권한을 확인한다.
+     *
+     * @param requiredRole 최소 접근 권한을 나타내는 Role 열거형 값
+     * @throws UnauthorizedException 로그인되어 있지 않은 경우 (세션 없음)
+     * @throws AccessForbiddenException 로그인된 사용자의 권한이 requiredRole보다 낮은
+     */
+    public void checkAuthority(Role requiredRole) {
+        SessionManager manager = this.getCurrentManager();
         if (manager.role().getAccessLevel() < requiredRole.getAccessLevel()) {
             throw new AccessForbiddenException();
         }

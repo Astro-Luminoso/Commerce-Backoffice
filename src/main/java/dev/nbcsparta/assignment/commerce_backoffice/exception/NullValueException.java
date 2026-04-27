@@ -1,7 +1,9 @@
 package dev.nbcsparta.assignment.commerce_backoffice.exception;
 
-public class NullValueException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class NullValueException extends ServiceException {
     public NullValueException() {
-        super("DENIED 상태로 변경하려면 이유를 입력해야 합니다.");
+        super(HttpStatus.BAD_REQUEST, "DENIED 상태로 변경하려면 이유를 입력해야 합니다.");
     }
 }
