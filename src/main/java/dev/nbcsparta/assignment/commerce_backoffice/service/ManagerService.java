@@ -84,4 +84,10 @@ public class ManagerService {
         manager.updateProfile(reqBody);
         return ManagerDetail.from(manager);
     }
+
+    public void deleteManager(Long managerId) {
+        Manager manager = managerRepository. findById(managerId).orElseThrow(ManagerNotFoundException::new);
+        manager.setAccountDeletion();
+        manager.updateStatus(AccountStatus.INACTIVE);
+    }
 }

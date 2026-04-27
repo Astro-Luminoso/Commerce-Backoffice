@@ -129,4 +129,15 @@ public class ManagerController {
 
         return ResponseEntity.status(HttpStatus.OK).body(managerDetail);
     }
+
+    @DeleteMapping("/{managerId}")
+    public ResponseEntity<Void> deleteManager(
+            @PathVariable Long managerId
+    ) {
+        logger.info("DELETE /managers/{}: Delete manager", managerId);
+        authentication.checkAuthority(Role.Super_MANAGER);
+        managerService.deleteManager(managerId);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
