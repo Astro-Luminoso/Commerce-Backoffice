@@ -7,7 +7,6 @@ import dev.nbcsparta.assignment.commerce_backoffice.exception.AleadyDeletedUserE
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ConflictUserException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.CustomerRepository;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,6 +24,14 @@ public class CustomerService {
     @Transactional
     public Customer validateCustomer(Long customerId) {
         return customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
+    }
+
+    @Transactional
+    public CustomerDetail createCustomer(CreateCustomerRequest request) {
+        Customer customer = new Customer(request.name(),request.email(), request.phoneNumber(), request.status());
+        Customer savedCustomer = customerRepository.save(customer);
+
+        return CustomerDetail.from(savedCustomer);
     }
 
     /**
@@ -74,7 +81,7 @@ public class CustomerService {
     }
 
     @Transactional
-    public CustomerStatusResponse updateStatus(Long customerId, @Valid UpdateCustomerStatusRequest request) {
+    public CustomerStatusResponse updateStatus(Long customerId, UpdateCustomerStatusRequest request) {
         Customer customer = validateCustomer(customerId);
 
         AccountStatus status = request.status();

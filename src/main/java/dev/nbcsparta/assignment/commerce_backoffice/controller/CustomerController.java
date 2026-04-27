@@ -21,6 +21,13 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    @PostMapping
+    public ResponseEntity<CustomerDetail> createCustomer(@RequestBody CreateCustomerRequest request) {
+        CustomerDetail response = customerService.createCustomer(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+
     /**
      * 필터에 따라 고객의 전체 정보를 조회합니다.
      *
