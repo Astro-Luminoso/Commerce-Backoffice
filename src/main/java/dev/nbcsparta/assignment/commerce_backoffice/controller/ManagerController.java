@@ -57,7 +57,7 @@ public class ManagerController {
             @RequestParam(required = false) AccountStatus status
     ) {
         logger.info("GET /managers: Get all managers");
-        authentication.hasAuthority(Role.Super_MANAGER);
+        authentication.checkAuthority(Role.Super_MANAGER);
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(orderBy), sortBy));
         ManagerListDetail managerList = managerService.listAllManager(name, email, role, status, pageable);
 
@@ -75,7 +75,7 @@ public class ManagerController {
             @PathVariable Long id
     ){
         logger.info("GET /managers/{}: Get manager detail", id);
-        authentication.hasAuthority(Role.Super_MANAGER);
+        authentication.checkAuthority(Role.Super_MANAGER);
         ManagerDetail managerDetail = managerService.findOneManager(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(managerDetail);
@@ -93,7 +93,7 @@ public class ManagerController {
             @PathVariable Long managerId,
             @Valid @RequestBody ManagerStatusUpdate reqBody) {
         logger.info("PATCH /managers/{}/status: Update manager status", managerId);
-        authentication.hasAuthority(Role.Super_MANAGER);
+        authentication.checkAuthority(Role.Super_MANAGER);
         managerService.updateManagerStatus(managerId, reqBody);
 
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -112,7 +112,7 @@ public class ManagerController {
             @Valid @RequestBody ManagerRoleUpdate reqBody
     ) {
         logger.info("PATCH /managers/{}/role: Update manager role", managerId);
-        authentication.hasAuthority(Role.Super_MANAGER);
+        authentication.checkAuthority(Role.Super_MANAGER);
         managerService.updateManagerRole(managerId, reqBody);
 
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -124,7 +124,7 @@ public class ManagerController {
             @RequestBody UpdateMyProfileRequest reqBody
     ) {
         logger.info("PUT /managers/{}: Update manager detail", managerId);
-        authentication.hasAuthority(Role.Super_MANAGER);
+        authentication.checkAuthority(Role.Super_MANAGER);
         ManagerDetail managerDetail = managerService.updateManagerDetail(managerId, reqBody);
 
         return ResponseEntity.status(HttpStatus.OK).body(managerDetail);
