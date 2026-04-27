@@ -78,7 +78,7 @@ public class CustomerController {
     @PutMapping("/{customerId}")
     public ResponseEntity<CustomerDetail> updateCustomerDetails(
             @PathVariable Long customerId,
-            @Valid @RequestBody UpdateCustomerDetailRequest request
+            @Valid @RequestBody UpdateMyProfileRequest request
     ) {
         CustomerDetail response = customerService.updateDetail(customerId, request);
 

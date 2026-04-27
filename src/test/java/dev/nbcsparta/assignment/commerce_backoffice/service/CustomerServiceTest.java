@@ -1,9 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerDetail;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerStatusResponse;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateCustomerDetailRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateCustomerStatusRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
@@ -76,8 +73,8 @@ class CustomerServiceTest {
 
         given(customerRepository.findById(customerId)).willReturn(Optional.of(customer));
 
-        UpdateCustomerDetailRequest request =
-                new UpdateCustomerDetailRequest("양성훈", "asdf@naver.com", "010-4444-4444");
+        UpdateMyProfileRequest request =
+                new UpdateMyProfileRequest("양성훈", "asdf@naver.com", "010-4444-4444");
 
         CustomerDetail response = customerService.updateDetail(customerId, request);
 
