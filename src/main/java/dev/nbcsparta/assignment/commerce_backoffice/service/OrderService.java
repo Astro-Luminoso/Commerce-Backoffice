@@ -49,7 +49,8 @@ public class OrderService {
         if (managerId != null)
             manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
 
-
+        // 재고 차감 진행
+        product.buyProduct(request.quantity());
         long totalPrice = product.getPrice() * request.quantity();
 
         Order order = new Order(
