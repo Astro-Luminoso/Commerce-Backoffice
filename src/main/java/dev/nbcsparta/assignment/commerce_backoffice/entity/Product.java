@@ -1,33 +1,51 @@
 package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
-
-import dev.nbcsparta.assignment.commerce_backoffice.config.BaseEntity;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "products")
 @EntityListeners(AuditingEntityListener.class)
-public class Product extends BaseEntity {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank
     private String name;
     private String category;
-    private Long price;
-    private Long quantity;
+
+    @NotNull
+    private long price;
+
+    @NotNull
+    private int quantity;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ProductStatus status;
 
+    @CreatedDate
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "manager_id", nullable = false)
     private Manager manager;
 
-    public Product(String name, String category, Long price, Long quantity, ProductStatus status, Manager manager) {
+    public Product(String name, String category, Long price, int quantity, ProductStatus status, Manager manager) {
         this.name = name;
         this.category = category;
         this.price = price;
@@ -62,7 +80,7 @@ public class Product extends BaseEntity {
         return price;
     }
 
-    public Long getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
@@ -74,7 +92,12 @@ public class Product extends BaseEntity {
         return manager;
     }
 
+    public LocalDateTime getCreatedAt() { return createdAt; }
+
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+
     public void setStatus(ProductStatus status) {
         this.status = status;
     }
+
 }

@@ -3,6 +3,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.controller;
 import dev.nbcsparta.assignment.commerce_backoffice.config.Authentication;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.MyProfileResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.SessionManager;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyPasswordRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyProfileRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.service.MyPageService;
 import jakarta.validation.Valid;
@@ -34,6 +35,13 @@ public class MyPageController {
         SessionManager sessionManager = authentication.getCurrentManager();
         MyProfileResponse res = myPageService.updateMyProfile(sessionManager.id(), req);
         return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
+    @PatchMapping
+    public ResponseEntity<Void> updateMyPassword(@Valid @RequestBody UpdateMyPasswordRequest req) {
+        SessionManager sessionManager = authentication.getCurrentManager();
+        myPageService.updateMyPassword(sessionManager.id(), req);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

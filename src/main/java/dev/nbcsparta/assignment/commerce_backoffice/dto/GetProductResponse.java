@@ -11,7 +11,7 @@ public record GetProductResponse(
         String name,
         String category,
         Long price,
-        Long quantity,
+        int quantity,
         ProductStatus status,
         LocalDateTime createdAt,
         Long managerId,

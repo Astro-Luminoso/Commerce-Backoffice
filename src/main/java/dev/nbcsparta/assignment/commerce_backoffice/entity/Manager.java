@@ -4,15 +4,9 @@ import dev.nbcsparta.assignment.commerce_backoffice.config.PasswordEncoder;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateManagerRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerRoleUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerStatusUpdate;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyProfileRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "managers")
@@ -51,22 +45,6 @@ public class Manager extends User{
 
     }
 
-//    /**
-//     * Manager 엔티티 생성자
-//     * Manager 엔티티를 생성할 때 필요한 필드들을 매개변수로 받아 초기화하는 생성자입니다.
-//     * Manager 계정 생성시 기본적으로 승인 대기중인 상태여야 하므로 자동으로 AccountStatus.PENDING으로 설정될 것입니다.
-//     * 따라서 편의상 AccountStatus가 필수가 아닌 생성자를 따로 만들어서 Manager 생성을 하기위해 만든 생성자입니다.
-//     *
-//     * @param name 관리자 이름
-//     * @param email 관리자 이메일, 고유성이 보장되어야 합니다.
-//     * @param password 관리자 비밀번호, 보낭을 위해 해싱 한 형태로 저장되어야 합니다.
-//     * @param phoneNumber 관리자 전화번호
-//     * @param role 관리자 직책
-//     */
-//    public Manager(String name, String email, String password, String phoneNumber, Role role) {
-//        this(name, email, password, phoneNumber, role, AccountStatus.PENDING);
-//    }
-
     public static Manager to(CreateManagerRequest req, String encodedPassword) {
         return new Manager(
                 req.name(),
@@ -101,5 +79,9 @@ public class Manager extends User{
 
     public void updateRole(ManagerRoleUpdate reqBody) {
         this.role = reqBody.role();
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 }
