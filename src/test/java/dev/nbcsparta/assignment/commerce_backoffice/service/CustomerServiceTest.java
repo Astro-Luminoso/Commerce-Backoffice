@@ -1,9 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerDetail;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerStatusResponse;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateCustomerDetailRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateCustomerStatusRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
@@ -76,8 +73,8 @@ class CustomerServiceTest {
 
         given(customerRepository.findById(customerId)).willReturn(Optional.of(customer));
 
-        UpdateCustomerDetailRequest request =
-                new UpdateCustomerDetailRequest("양성훈", "asdf@naver.com", "010-4444-4444");
+        UpdateMyProfileRequest request =
+                new UpdateMyProfileRequest("양성훈", "asdf@naver.com", "010-4444-4444");
 
         CustomerDetail response = customerService.updateDetail(customerId, request);
 
@@ -111,6 +108,28 @@ class CustomerServiceTest {
         // String으로 돌려줬기 때문에 Enum으로 변경하고 비교 진행
         assertEquals(AccountStatus.INACTIVE, AccountStatus.getEnum(response.status()));
         assertEquals("비활성", response.status());
+    }
+
+    @Test
+    @DisplayName("유저 소프트 삭제 성공")
+    void deleteCustomer_Success() {
+        Long customerId = 1L;
+
+        Customer customer = new Customer(
+                "홍길동",
+                "asdf@naver.com",
+                "010-0000-0000",
+                AccountStatus.ACTIVE
+        );
+
+        given(customerRepository.findById(customerId)).willReturn(Optional.of(customer));
+
+        // String 타입을 Enum으로 변경하여 업데이트 진행후 응답으로는 String으로 돌려줌
+        customerService.deleteCustomer(customerId);
+
+        Customer findCustomer = customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
+
+        assertTrue(findCustomer.isDeleted());
     }
 
 }

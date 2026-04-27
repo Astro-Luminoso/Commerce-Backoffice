@@ -1,10 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
 import dev.nbcsparta.assignment.commerce_backoffice.config.Authentication;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerDetail;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerListDetail;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerRoleUpdate;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.ManagerStatusUpdate;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import dev.nbcsparta.assignment.commerce_backoffice.service.ManagerService;
@@ -121,4 +118,15 @@ public class ManagerController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @PutMapping("/{managerId}")
+    public ResponseEntity<ManagerDetail> updateMangerDetail(
+            @PathVariable Long managerId,
+            @RequestBody UpdateMyProfileRequest reqBody
+    ) {
+        logger.info("PUT /managers/{}: Update manager detail", managerId);
+        authentication.hasAuthority(Role.Super_MANAGER);
+        ManagerDetail managerDetail = managerService.updateManagerDetail(managerId, reqBody);
+
+        return ResponseEntity.status(HttpStatus.OK).body(managerDetail);
+    }
 }

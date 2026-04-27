@@ -78,7 +78,7 @@ public class CustomerController {
     @PutMapping("/{customerId}")
     public ResponseEntity<CustomerDetail> updateCustomerDetails(
             @PathVariable Long customerId,
-            @Valid @RequestBody UpdateCustomerDetailRequest request
+            @Valid @RequestBody UpdateMyProfileRequest request
     ) {
         CustomerDetail response = customerService.updateDetail(customerId, request);
 
@@ -93,6 +93,12 @@ public class CustomerController {
         CustomerStatusResponse response = customerService.updateStatus(customerId, request);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @DeleteMapping("/{customerId}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable Long customerId) {
+        customerService.deleteCustomer(customerId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
