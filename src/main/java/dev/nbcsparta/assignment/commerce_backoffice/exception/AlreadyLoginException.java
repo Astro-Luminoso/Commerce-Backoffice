@@ -1,7 +1,9 @@
 package dev.nbcsparta.assignment.commerce_backoffice.exception;
 
-public class AlreadyLoginException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class AlreadyLoginException extends ServiceException {
     public AlreadyLoginException(String message) {
-        super(message);
+        super(HttpStatus.CONFLICT, message);
     }
 }

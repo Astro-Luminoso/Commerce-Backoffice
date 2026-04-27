@@ -1,7 +1,9 @@
 package dev.nbcsparta.assignment.commerce_backoffice.exception;
 
-public class SortFailException extends RuntimeException{
+import org.springframework.http.HttpStatus;
+
+public class SortFailException extends ServiceException{
     public SortFailException(String message) {
-        super(message);
+        super(HttpStatus.BAD_REQUEST, message);
     }
 }

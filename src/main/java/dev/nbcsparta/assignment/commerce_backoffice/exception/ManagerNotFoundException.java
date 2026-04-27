@@ -1,7 +1,9 @@
 package dev.nbcsparta.assignment.commerce_backoffice.exception;
 
-public class ManagerNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class ManagerNotFoundException extends ServiceException {
     public ManagerNotFoundException() {
-        super("존재하지 않는 관리자입니다.");
+        super(HttpStatus.NOT_FOUND, "존재하지 않는 관리자입니다.");
     }
 }
