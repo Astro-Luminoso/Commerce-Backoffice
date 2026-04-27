@@ -24,7 +24,7 @@ public class Product {
     private String category;
 
     @NotNull
-    private long price;
+    private int price;
 
     @NotNull
     private int quantity;
@@ -45,7 +45,7 @@ public class Product {
     @JoinColumn(name = "manager_id", nullable = false)
     private Manager manager;
 
-    public Product(String name, String category, Long price, int quantity, ProductStatus status, Manager manager) {
+    public Product(String name, String category, int price, int quantity, ProductStatus status, Manager manager) {
         this.name = name;
         this.category = category;
         this.price = price;
@@ -54,7 +54,7 @@ public class Product {
         this.manager = manager;
     }
 
-    public void update(String name, String category, Long price) {
+    public void update(String name, String category, int price) {
         this.name = name;
         this.category = category;
         this.price = price;
@@ -76,7 +76,7 @@ public class Product {
         return category;
     }
 
-    public Long getPrice() {
+    public int getPrice() {
         return price;
     }
 
