@@ -1,6 +1,10 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerListDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerRoleUpdate;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerStatusUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
