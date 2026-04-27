@@ -1,10 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
 import dev.nbcsparta.assignment.commerce_backoffice.config.Authentication;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.MyProfileResponse;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.SessionManager;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyPasswordRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyProfileRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.service.MyPageService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,21 +21,21 @@ public class MyPageController {
     }
 
     @GetMapping
-    public ResponseEntity<MyProfileResponse> getMyProfile() {
+    public ResponseEntity<CommonResponse<MyProfileResponse>> getMyProfile() {
         SessionManager sessionManager = authentication.getCurrentManager();
         MyProfileResponse res = myPageService.getMyProfile(sessionManager.id());
-        return ResponseEntity.status(HttpStatus.OK).body(res);
+        return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.success(HttpStatus.OK, "프로필 조회 완료", res));
     }
 
     @PutMapping
-    public ResponseEntity<MyProfileResponse> updateMyProfile(@Valid @RequestBody UpdateMyProfileRequest req) {
+    public ResponseEntity<CommonResponse<MyProfileResponse>> updateMyProfile(@Valid @RequestBody UpdateMyProfileRequest req) {
         SessionManager sessionManager = authentication.getCurrentManager();
         MyProfileResponse res = myPageService.updateMyProfile(sessionManager.id(), req);
-        return ResponseEntity.status(HttpStatus.OK).body(res);
+        return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.success(HttpStatus.OK, "프로필 수정 완료", res));
     }
 
     @PatchMapping
-    public ResponseEntity<Void> updateMyPassword(@Valid @RequestBody UpdateMyPasswordRequest req) {
+    public ResponseEntity<CommonResponse<Void>> updateMyPassword(@Valid @RequestBody UpdateMyPasswordRequest req) {
         SessionManager sessionManager = authentication.getCurrentManager();
         myPageService.updateMyPassword(sessionManager.id(), req);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
