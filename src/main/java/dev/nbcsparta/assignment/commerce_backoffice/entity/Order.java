@@ -17,10 +17,10 @@ public class Order {
     private Long id;
 
     @Column(nullable = false)
-    private int quantity;
+    private Integer quantity;
 
     @Column(nullable = false)
-    private long totalPrice;
+    private Long totalPrice;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -34,7 +34,7 @@ public class Order {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id")
     private Manager manager;
 
