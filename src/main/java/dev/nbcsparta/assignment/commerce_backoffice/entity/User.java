@@ -79,4 +79,12 @@ public class User {
         this.status = status;
     }
 
+    public boolean isDeleted() {
+        return this.isDeleted;
+    }
+
+    public void setAccountDeletion() {
+        this.isDeleted = !this.isDeleted;
+    }
+
 }
