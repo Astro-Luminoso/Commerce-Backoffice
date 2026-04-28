@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateCustomerRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.GetCustomerPageFilter;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyProfileRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
@@ -67,10 +68,10 @@ class CustomerRepositoryTest {
         Pageable pageable = PageRequest.of(0, 3);
         // 이메일에 4가 들어가는 사람 필터링
         GetCustomerPageFilter filter = new GetCustomerPageFilter(null, "4", AccountStatus.ACTIVE);
-        Page<Customer> result = customerRepository.findAllByFilters(filter, pageable);
+        Page<CustomerDetail> result = customerRepository.findAllCustomerByFilters(filter, pageable);
         // 1사람만 나옴, 이름은 홍길남
         assertEquals(1, result.getContent().size());
-        assertEquals("홍길남", result.getContent().getFirst().getName());
+        assertEquals("홍길남", result.getContent().getFirst().name());
     }
 
     @Test
@@ -107,9 +108,9 @@ class CustomerRepositoryTest {
 
         Pageable pageable = PageRequest.of(0, 10);
         GetCustomerPageFilter filter = new GetCustomerPageFilter(null, "3", AccountStatus.INACTIVE);
-        Page<Customer> result = customerRepository.findAllByFilters(filter, pageable);
+        Page<CustomerDetail> result = customerRepository.findAllCustomerByFilters(filter, pageable);
 
-        assertEquals("홍갈동", result.getContent().getFirst().getName());
+        assertEquals("홍갈동", result.getContent().getFirst().name());
     }
 
     @Test
