@@ -57,7 +57,7 @@ public class CustomerController {
                 pageable.getSort()
         );
 
-        PageFilter filter = new PageFilter(name, email, status);
+        GetCustomerPageFilter filter = new GetCustomerPageFilter(name, email, status);
         CustomerListDetail response = customerService.findAllCustomer(filter, customPageable);
 
         return CommonResponse

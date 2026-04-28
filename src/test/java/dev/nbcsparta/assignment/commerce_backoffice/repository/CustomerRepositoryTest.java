@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateCustomerRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.PageFilter;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.GetCustomerPageFilter;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyProfileRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
@@ -66,7 +66,7 @@ class CustomerRepositoryTest {
 
         Pageable pageable = PageRequest.of(0, 3);
         // 이메일에 4가 들어가는 사람 필터링
-        PageFilter filter = new PageFilter(null, "4", AccountStatus.ACTIVE);
+        GetCustomerPageFilter filter = new GetCustomerPageFilter(null, "4", AccountStatus.ACTIVE);
         Page<Customer> result = customerRepository.findAllByFilters(filter, pageable);
         // 1사람만 나옴, 이름은 홍길남
         assertEquals(1, result.getContent().size());
@@ -106,7 +106,7 @@ class CustomerRepositoryTest {
         customerRepository.save(Customer.from(createCustomerRequest4));
 
         Pageable pageable = PageRequest.of(0, 10);
-        PageFilter filter = new PageFilter(null, "3", AccountStatus.INACTIVE);
+        GetCustomerPageFilter filter = new GetCustomerPageFilter(null, "3", AccountStatus.INACTIVE);
         Page<Customer> result = customerRepository.findAllByFilters(filter, pageable);
 
         assertEquals("홍갈동", result.getContent().getFirst().getName());

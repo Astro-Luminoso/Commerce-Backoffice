@@ -53,7 +53,7 @@ public class CustomerService {
      * @return 필터링 된 고객 정보 DTO 리스트를 담은 DTO
      */
     @Transactional(readOnly = true)
-    public CustomerListDetail findAllCustomer(PageFilter filter, Pageable pageable) {
+    public CustomerListDetail findAllCustomer(GetCustomerPageFilter filter, Pageable pageable) {
         Page<Customer> customerPage = customerRepository.findAllByFilters(filter, pageable);
 
         return CustomerListDetail.from(customerPage);
