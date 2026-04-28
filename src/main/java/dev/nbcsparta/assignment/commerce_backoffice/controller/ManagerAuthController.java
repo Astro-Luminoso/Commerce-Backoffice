@@ -1,13 +1,13 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
 import dev.nbcsparta.assignment.commerce_backoffice.config.Authentication;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.CreateManagerRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.CreateManagerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.AlreadyLoginException;
 import dev.nbcsparta.assignment.commerce_backoffice.service.ManagerAuthService;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
