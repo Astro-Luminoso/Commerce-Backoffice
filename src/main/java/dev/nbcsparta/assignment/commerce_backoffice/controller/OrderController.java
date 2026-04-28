@@ -66,7 +66,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("{orderId}")
+    @GetMapping("/{orderId}")
     public ResponseEntity<OrderDetail> getOneOrder(
             @PathVariable
             Long orderId
@@ -88,7 +88,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping("{orderId}")
+    @DeleteMapping("/{orderId}")
     public ResponseEntity<Void> deleteOrder(
             @PathVariable Long orderId) {
         orderService.delete(orderId);
