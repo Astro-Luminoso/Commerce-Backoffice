@@ -20,7 +20,7 @@ public class Order {
     private Integer quantity;
 
     @Column(nullable = false)
-    private Long totalPrice;
+    private Integer totalPrice;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -45,7 +45,7 @@ public class Order {
     protected Order() {
     }
 
-    public Order(int quantity, long totalPrice, DeliveryStatus deliveryStatus, Customer customer, Manager manager, Product product) {
+    public Order(int quantity, int totalPrice, DeliveryStatus deliveryStatus, Customer customer, Manager manager, Product product) {
         this.quantity = quantity;
         this.totalPrice = totalPrice;
         this.deliveryStatus = deliveryStatus;
@@ -66,7 +66,7 @@ public class Order {
         return quantity;
     }
 
-    public long getTotalPrice() {
+    public int getTotalPrice() {
         return totalPrice;
     }
 

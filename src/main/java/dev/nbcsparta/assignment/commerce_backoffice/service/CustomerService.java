@@ -7,7 +7,6 @@ import dev.nbcsparta.assignment.commerce_backoffice.exception.AleadyDeletedUserE
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ConflictUserException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.CustomerRepository;
-import dev.nbcsparta.assignment.commerce_backoffice.repository.OrderRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,11 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final OrderRepository orderRepository;
 
-    public CustomerService(CustomerRepository customerRepository, OrderRepository orderRepository) {
+    public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-        this.orderRepository = orderRepository;
     }
 
     @Transactional
@@ -47,11 +44,9 @@ public class CustomerService {
      * @return 필터링 된 고객 정보 DTO 리스트를 담은 DTO
      */
     @Transactional(readOnly = true)
-    public CustomerListDetail findAllCustomer(
-            String name, String email, Pageable pageable, AccountStatus status
-    ) {
+    public CustomerListDetail findAllCustomer(String name, String email, Pageable pageable, AccountStatus status) {
         Page<Customer> customerPage = customerRepository.findAllByFilters(name, email, pageable, status);
-        // orderRepository.findByCustomerId()
+
         return CustomerListDetail.from(customerPage);
     }
 
@@ -71,13 +66,10 @@ public class CustomerService {
     @Transactional
     public CustomerDetail updateDetail(Long customerId, UpdateMyProfileRequest request) {
         Customer customer = validateCustomer(customerId);
-
         boolean isExistEmail = customerRepository.existsByEmail(request.email());
-
         if (isExistEmail) {
             throw new ConflictUserException("이미 존재하는 사용자입니다.");
         }
-
         customer.updateProfile(request);
 
         return CustomerDetail.from(customer);
@@ -86,9 +78,7 @@ public class CustomerService {
     @Transactional
     public CustomerStatusResponse updateStatus(Long customerId, UpdateCustomerStatusRequest request) {
         Customer customer = validateCustomer(customerId);
-
         AccountStatus status = request.status();
-
         customer.updateStatus(status);
 
         return CustomerStatusResponse.from(customer);
@@ -97,7 +87,6 @@ public class CustomerService {
     @Transactional
     public void deleteCustomer(Long customerId) {
         Customer customer = validateCustomer(customerId);
-
         if (customer.isDeleted())
             throw new AleadyDeletedUserException("이미 삭제 상태입니다.");
 

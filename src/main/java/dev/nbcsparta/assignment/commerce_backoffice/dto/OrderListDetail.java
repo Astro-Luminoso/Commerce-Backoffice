@@ -12,6 +12,7 @@ public record OrderListDetail(
     public static OrderListDetail from(Page<Order> page) {
         List<OrderDetail> orderDetailList = page.getContent().stream()
                 .map(OrderDetail::from).toList();
+
         return new OrderListDetail(orderDetailList, PageInfo.from(page));
     }
 
