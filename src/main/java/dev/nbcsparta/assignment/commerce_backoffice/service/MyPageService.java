@@ -26,16 +26,20 @@ public class MyPageService {
     @Transactional
     public MyProfileResponse getMyProfile(Long managerId) {
         Manager manager = managerAuthRepository.getReferenceById(managerId);
+
         return MyProfileResponse.from(manager);
     }
 
     @Transactional
     public MyProfileResponse updateMyProfile(Long managerId, UpdateMyProfileRequest req) {
         Manager manager = managerAuthRepository.getReferenceById(managerId);
+
         if (!manager.getEmail().equals(req.email()) && managerAuthRepository.existsByEmail(req.email())) {
             throw new ConflictUserException("이미 존재하는 사용자입니다.");
         }
+
         manager.updateProfile(req);
+
         return MyProfileResponse.from(manager);
     }
 

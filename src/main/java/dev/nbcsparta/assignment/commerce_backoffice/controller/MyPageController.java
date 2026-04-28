@@ -24,21 +24,34 @@ public class MyPageController {
     public ResponseEntity<CommonResponse<MyProfileResponse>> getMyProfile() {
         SessionManager sessionManager = authentication.getCurrentManager();
         MyProfileResponse res = myPageService.getMyProfile(sessionManager.id());
-        return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.success(HttpStatus.OK, "프로필 조회 완료", res));
+
+        return CommonResponse
+                .success(HttpStatus.OK, "프로필 조회 완료", res)
+                .toResponseEntity();
     }
 
     @PutMapping
-    public ResponseEntity<CommonResponse<MyProfileResponse>> updateMyProfile(@Valid @RequestBody UpdateMyProfileRequest req) {
+    public ResponseEntity<CommonResponse<MyProfileResponse>> updateMyProfile(
+            @Valid @RequestBody UpdateMyProfileRequest req
+    ) {
         SessionManager sessionManager = authentication.getCurrentManager();
         MyProfileResponse res = myPageService.updateMyProfile(sessionManager.id(), req);
-        return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.success(HttpStatus.OK, "프로필 수정 완료", res));
+
+        return CommonResponse
+                .success(HttpStatus.OK, "프로필 수정 완료", res)
+                .toResponseEntity();
     }
 
     @PatchMapping
-    public ResponseEntity<CommonResponse<Void>> updateMyPassword(@Valid @RequestBody UpdateMyPasswordRequest req) {
+    public ResponseEntity<CommonResponse<Void>> updateMyPassword(
+            @Valid @RequestBody UpdateMyPasswordRequest req
+    ) {
         SessionManager sessionManager = authentication.getCurrentManager();
         myPageService.updateMyPassword(sessionManager.id(), req);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+        return CommonResponse
+                .success(HttpStatus.NO_CONTENT, "프로필 비밀번호 변경 완료")
+                .toResponseEntity();
     }
 
 }

@@ -22,29 +22,31 @@ public class Product {
 
     @NotBlank
     private String name;
+
     private String category;
 
     @NotNull
-    private int price;
+    private Integer price;
 
     @NotNull
-    private int quantity;
+    private Integer quantity;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ProductStatus status;
 
     @CreatedDate
-    @Column(name = "created_at", updatable = false)
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "manager_id", nullable = false)
     private Manager manager;
+
+    public Product() {}
 
     public Product(String name, String category, int price, int quantity, ProductStatus status, Manager manager) {
         this.name = name;
@@ -61,7 +63,7 @@ public class Product {
         this.price = price;
     }
 
-    public void buyProduct(int quantity) {
+    public void buy(int quantity) {
         if(this.quantity<quantity){
             throw new OutOfStockException();
         }
@@ -71,49 +73,29 @@ public class Product {
         }
     }
 
-    public void cancelProduct(int quantity) {
+    public void addQuantity(int quantity) {
         this.quantity += quantity;
         this.status = ProductStatus.SALE;
     }
 
-    public Product() {
+    public Long getId() { return id; }
 
-    }
+    public String getName() { return name; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getCategory() { return category; }
 
-    public String getName() {
-        return name;
-    }
+    public int getPrice() { return price; }
 
-    public String getCategory() {
-        return category;
-    }
+    public int getQuantity() { return quantity; }
 
-    public int getPrice() {
-        return price;
-    }
+    public ProductStatus getStatus() { return status; }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public ProductStatus getStatus() {
-        return status;
-    }
-
-    public Manager getManager() {
-        return manager;
-    }
+    public Manager getManager() { return manager; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 
-    public void setStatus(ProductStatus status) {
-        this.status = status;
-    }
+    public void setStatus(ProductStatus status) { this.status = status; }
 
 }

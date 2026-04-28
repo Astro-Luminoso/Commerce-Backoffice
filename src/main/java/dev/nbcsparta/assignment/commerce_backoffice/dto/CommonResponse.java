@@ -9,11 +9,11 @@ public record CommonResponse<T>(int statusCode, String message, T data) {
         return new CommonResponse<>(statusCode.value(), message, data);
     }
 
-    public static <T> CommonResponse<T> success(HttpStatus statusCode, String message) {
+    public static CommonResponse<Void> success(HttpStatus statusCode, String message) {
         return new CommonResponse<>(statusCode.value(), message, null);
     }
 
-    public static <T> CommonResponse<T> fail(HttpStatus statusCode, String message) {
+    public static CommonResponse<Void> fail(HttpStatus statusCode, String message) {
         return new CommonResponse<>(statusCode.value(), message, null);
     }
 

@@ -53,7 +53,7 @@ public class OrderService {
         Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
 
         // 재고 차감 진행
-        product.buyProduct(request.quantity());
+        product.buy(request.quantity());
 
         int totalPrice = product.getPrice() * request.quantity();
 
@@ -101,7 +101,7 @@ public class OrderService {
     public void delete(Long orderId) {
         Order order = validateOrder(orderId);
         int canceledQuantity = order.getQuantity();
-        order.getProduct().cancelProduct(canceledQuantity);
+        order.getProduct().addQuantity(canceledQuantity);
 
         orderRepository.deleteById(orderId);
     }
