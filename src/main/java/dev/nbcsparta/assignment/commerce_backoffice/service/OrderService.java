@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.RecentOrderItem;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.OrderDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
@@ -13,12 +14,14 @@ import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerRepository
 import dev.nbcsparta.assignment.commerce_backoffice.repository.OrderRepository;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ProductRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -105,5 +108,10 @@ public class OrderService {
         LocalDateTime end = now.plusDays(1).atStartOfDay().minusNanos(1);
 
         return orderRepository.getStatistics(start, end);
+    }
+
+    @Transactional
+    public List<RecentOrderItem> getRecentOrder() {
+        return orderRepository.getRecentOrder(PageRequest.of(0,10));
     }
 }

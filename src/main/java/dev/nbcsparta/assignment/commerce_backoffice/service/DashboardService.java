@@ -1,6 +1,10 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.DashboardResponse;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.DashboardSummary;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.DashboardWidgets;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.DashboardCharts;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +32,46 @@ public class DashboardService {
 
     @Transactional(readOnly = true)
     public DashboardResponse getDashboard() {
+        ManagerDashboard managerDashboard = managerService.getStatistics();
+        CustomerDashboard customerDashboard = customerService.getStatistics();
+        ProductDashboard productDashboard = productService.getStatistics();
+        OrderDashboard orderDashboard = orderService.getStatistics();
+        ReviewDashboard reviewDashboard = reviewService.getStatistics();
 
-        return new DashboardResponse();
+        DashboardSummary dashboardSummary = new DashboardSummary(
+                managerDashboard.totalManagers(),
+                managerDashboard.activeManagers(),
+                customerDashboard.totalCustomers(),
+                customerDashboard.activeCustomers(),
+                productDashboard.totalProducts(),
+                productDashboard.outOfStockProducts(),
+                orderDashboard.totalOrders(),
+                orderDashboard.todayOrders(),
+                reviewDashboard.totalReviews(),
+                reviewDashboard.averageRating()
+        );
+
+        DashboardWidgets dashboardWidgets = new DashboardWidgets(
+                orderDashboard.totalRevenue(),
+                orderDashboard.todayRevenue(),
+                orderDashboard.preparingOrders(),
+                orderDashboard.shippingOrders(),
+                orderDashboard.completedOrders(),
+                productDashboard.lowStockProducts(),
+                productDashboard.outOfStockProducts()
+        );
+
+        DashboardCharts dashboardCharts = new DashboardCharts(
+                reviewService.getRatingCount(),
+                customerService.getStatusCount(),
+                productService.getCategoryCount()
+        );
+
+        return new DashboardResponse(
+                dashboardSummary,
+                dashboardWidgets,
+                dashboardCharts,
+                orderService.getRecentOrder()
+        );
     }
 }

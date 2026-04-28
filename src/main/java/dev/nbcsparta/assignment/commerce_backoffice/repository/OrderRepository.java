@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.GetOrderPageFilter;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.RecentOrderItem;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.OrderDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Order;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
@@ -36,4 +38,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             @Param("start")LocalDateTime start,
             @Param("end") LocalDateTime end
     );
+
+    @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.RecentOrderItem(" +
+            "o.id, c.name, p.name, o.totalPrice, o.deliveryStatus) " +
+            "FROM Order o " +
+            "JOIN o.customer c " +
+            "JOIN o.product p " +
+            "ORDER BY o.orderDate DESC, o.id DESC ")
+    List<RecentOrderItem> getRecentOrder(Pageable pageable);
 }

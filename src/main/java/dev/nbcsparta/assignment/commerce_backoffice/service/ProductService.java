@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ProductCategoryCount;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ProductDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ProductService {
@@ -110,5 +113,10 @@ public class ProductService {
     @Transactional
     public ProductDashboard getStatistics() {
         return productRepository.getStatistics();
+    }
+
+    @Transactional
+    public List<ProductCategoryCount> getCategoryCount() {
+        return productRepository.getCategoryCount();
     }
 }

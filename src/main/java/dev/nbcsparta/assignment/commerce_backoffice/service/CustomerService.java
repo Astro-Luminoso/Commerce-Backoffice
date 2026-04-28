@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.CustomerStatusCount;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.CustomerDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.AlreadyDeletedUserException;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CustomerService {
@@ -128,5 +131,10 @@ public class CustomerService {
     @Transactional
     public CustomerDashboard getStatistics() {
         return customerRepository.getStatistics();
+    }
+
+    @Transactional
+    public List<CustomerStatusCount> getStatusCount() {
+        return customerRepository.getStatusCount();
     }
 }
