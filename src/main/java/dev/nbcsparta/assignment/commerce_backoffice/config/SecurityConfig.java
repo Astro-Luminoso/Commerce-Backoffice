@@ -1,5 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.config;
 
+import dev.nbcsparta.assignment.commerce_backoffice.config.handler.CustomAccessDeniedHandler;
 import dev.nbcsparta.assignment.commerce_backoffice.config.jwt.JwtAuthenticationFilter;
 import dev.nbcsparta.assignment.commerce_backoffice.config.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,12 +22,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
+    private final CustomAccessDeniedHandler deniedHandler;
 
     @Value("${encoder.strenth}")
     private int strength;
 
-    public SecurityConfig(JwtProvider jwtProvider) {
+    public SecurityConfig(
+            JwtProvider jwtProvider,
+            CustomAccessDeniedHandler deniedHandler
+    ) {
         this.jwtProvider = jwtProvider;
+        this.deniedHandler = deniedHandler;
     }
 
     /**
@@ -50,16 +56,19 @@ public class SecurityConfig {
                 .sessionManagement(
                         session ->
                                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(
+                        exception -> exception
+                                .accessDeniedHandler(this.deniedHandler))
                 .authorizeHttpRequests(
                         auth ->
-                                auth.
-                                        requestMatchers("/api/v1/login", "/api/v1/register")
-                                        .permitAll()
-                                        .requestMatchers("/api/v1/register/**")
+                                auth
+                                        .requestMatchers("/managers/**")
                                         .hasRole("SUPER")
-                                        .requestMatchers("/api/v1/products/**")
+                                        .requestMatchers("/products/**")
                                         .hasRole("OPS")
-                                        .requestMatchers("/api/v1/**")
+                                        .requestMatchers("/login", "/register")
+                                        .permitAll()
+                                        .requestMatchers("/**")
                                         .authenticated()
                                         .anyRequest()
                                         .permitAll()

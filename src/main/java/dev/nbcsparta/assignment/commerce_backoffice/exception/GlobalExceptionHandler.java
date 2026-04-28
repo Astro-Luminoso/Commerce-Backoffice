@@ -4,6 +4,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.dto.CommonResponse;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -26,4 +27,15 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
+
+    // ====================================================================================
+    //                                  기타 예외 핸들링
+    // ====================================================================================
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<CommonResponse<Void>> handleAccessDeniedException(AccessDeniedException ex) {
+        return CommonResponse.fail(HttpStatus.FORBIDDEN, "접근 권한이 없습니다.").toResponseEntity();
+    }
+
+
 }
