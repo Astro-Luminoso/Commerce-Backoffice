@@ -1,6 +1,5 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
-
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
@@ -71,7 +70,6 @@ public class ProductService {
 
     @Transactional()
     public GetProductResponse getOne(Long id) {
-
         Product product = productRepository.findById(id).orElseThrow(
                 ProductNotFoundException::new
         );
@@ -86,6 +84,7 @@ public class ProductService {
      * @param request   name 상품이름,
      *                  Category 상품 카테고리,
      *                  Price 가격
+     *
      * @return UpdateProductResponse
      */
     @Transactional
@@ -93,12 +92,10 @@ public class ProductService {
         Product product = productRepository.findById(id).orElseThrow(
                 ProductNotFoundException::new
         );
-
         product.update(request.name(), request.category(), request.price());
+
         return UpdateProductResponse.from(product);
-
     }
-
 
     /**
      *
@@ -110,7 +107,6 @@ public class ProductService {
         Product product = productRepository.findById(id).orElseThrow(
                 ProductNotFoundException::new
         );
-
         product.setStatus(request.status());
     }
 
@@ -123,6 +119,4 @@ public class ProductService {
         }
         productRepository.deleteById(id);
     }
-
-
 }

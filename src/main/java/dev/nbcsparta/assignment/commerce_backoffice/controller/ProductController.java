@@ -25,8 +25,8 @@ public class ProductController {
             @RequestBody CreateProductRequest request
             ) {
         CreateProductResponse response = productService.create(request);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(response);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     /**
@@ -63,8 +63,8 @@ public class ProductController {
             @PathVariable Long productId
     ){
         GetProductResponse response = productService.getOne(productId);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(response);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/products/{productId}")
@@ -73,6 +73,7 @@ public class ProductController {
             @RequestBody UpdateProductRequest request
     ) {
         UpdateProductResponse response = productService.update(productId, request);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -82,13 +83,16 @@ public class ProductController {
             @RequestBody UpdateProductStatusRequest request
     ) {
         productService.updateStatus(productId, request);
+
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/products/{productId}")
-    ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+    ResponseEntity<Void> deleteProduct(
+            @PathVariable Long productId
+    ) {
         productService.delete(productId);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }
