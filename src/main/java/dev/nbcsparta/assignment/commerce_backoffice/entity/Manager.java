@@ -1,12 +1,14 @@
 package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
-import dev.nbcsparta.assignment.commerce_backoffice.config.PasswordEncoder;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.CreateManagerRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerRoleUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerStatusUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import jakarta.persistence.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
 
 @Entity
 @Table(name = "managers")
@@ -20,7 +22,7 @@ public class Manager extends User{
     private String password;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)          /* comment this property out for apply new validation rule */
     private Role role;
 
     private String statusReason;

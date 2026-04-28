@@ -9,7 +9,6 @@ import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
-import dev.nbcsparta.assignment.commerce_backoffice.repository.CustomerRepository;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerRepository;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.OrderRepository;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ProductRepository;
@@ -61,7 +60,7 @@ class OrderServiceTest {
                 "qwer@gmail.com",
                 "asdf",
                 "010-4444-4444",
-                Role.Super_MANAGER,
+                Role.SUPER,
                 AccountStatus.ACTIVE
         );
 

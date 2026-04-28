@@ -35,7 +35,7 @@ class OrderRepositoryTest {
 
         // 상품을 만들려면 관리자가 필요하므로 임의의 관리자 생성 후 상품 저장
         Manager productManager = managerRepository.save(new Manager(
-                "상품관리자", "admin@gmail.com", "password", "010-2222-2222", Role.Super_MANAGER, AccountStatus.ACTIVE
+                "상품관리자", "admin@gmail.com", "password", "010-2222-2222", Role.SUPER, AccountStatus.ACTIVE
         ));
         Product product = productRepository.save(new Product(
                 "폰", "전자제품", 5000, 50, ProductStatus.SALE, productManager

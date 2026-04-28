@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.RoleNotFoundException;
 
 public enum Role {
-    CS_MANAGER("CS 관리자", 1),
-    Ops_MANAGER("운영 관리자", 2),
-    Super_MANAGER("슈퍼 관리자", 3);
+    CS("CS 관리자", 1),
+    OPS("운영 관리자", 2),
+    SUPER("슈퍼 관리자", 3);
 
     private final String roleName;
     private final int accessLevel;

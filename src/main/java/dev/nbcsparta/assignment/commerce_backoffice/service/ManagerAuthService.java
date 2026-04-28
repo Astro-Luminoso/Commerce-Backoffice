@@ -1,6 +1,5 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
-import dev.nbcsparta.assignment.commerce_backoffice.config.PasswordEncoder;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.CreateManagerRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.CreateManagerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.LoginRequest;
@@ -10,6 +9,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.exception.ConflictUserExcept
 import dev.nbcsparta.assignment.commerce_backoffice.exception.LoginNotAllowedException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.NotMatchException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerAuthRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
