@@ -25,60 +25,73 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDetail> createOrder(
+    public ResponseEntity<CommonResponse<OrderDetail>> createOrder(
             @Valid @RequestBody CreateOrderRequest request
     ) {
         SessionManager sessionManager = authentication.getCurrentManager();
         OrderDetail response = orderService.createOrder(request, sessionManager.id());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return CommonResponse
+                .success(HttpStatus.CREATED, "주문 생성 성공", response)
+                .toResponseEntity();
     }
 
     @GetMapping
-    public ResponseEntity<OrderListDetail> getAllOrder(
+    public ResponseEntity<CommonResponse<OrderListDetail>> getAllOrder(
             @RequestParam(required = false) Long orderId,
             @RequestParam(required = false) String customerName,
-            @PageableDefault(sort = "quantity") Pageable pageable,
+            @PageableDefault(sort = "id") Pageable pageable,
             @RequestParam(required = false) ProductStatus status
     ) {
         int fixedPageNumber = Math.max(0, pageable.getPageNumber() - 1);
+
         // 페이지 넘버를 -1 한 넘버를 가진 Pageable 생성
         Pageable customPageable = PageRequest.of(
                 fixedPageNumber,
                 pageable.getPageSize(),
                 pageable.getSort()
         );
-        OrderListDetail response = orderService.findAllOrder(orderId, customerName, customPageable, status);
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        GetOrderPageFilter filter = new GetOrderPageFilter(orderId, customerName, status);
+        OrderListDetail response = orderService.findAllOrder(filter, customPageable);
+
+        return CommonResponse
+                .success(HttpStatus.OK, "주문 전체 조회 성공", response)
+                .toResponseEntity();
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderDetail> getOneOrder(
+    public ResponseEntity<CommonResponse<OrderDetail>> getOneOrder(
             @PathVariable Long orderId
     ) {
         OrderDetail response = orderService.getDetailOrder(orderId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return CommonResponse
+                .success(HttpStatus.OK, "주문 단 건 조회 성공", response)
+                .toResponseEntity();
     }
 
     @PatchMapping("/{orderId}")
-    public ResponseEntity<Void> updateOrderStatus(
+    public ResponseEntity<CommonResponse<Void>> updateOrderStatus(
             @Valid @RequestBody UpdateOrderStatusRequest request,
             @PathVariable Long orderId
     ) {
         orderService.updateStatus(request, orderId);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return CommonResponse
+                .success(HttpStatus.OK, "주문 상태 변경 성공")
+                .toResponseEntity();
     }
 
     @DeleteMapping("/{orderId}")
-    public ResponseEntity<Void> deleteOrder(
+    public ResponseEntity<CommonResponse<Void>> deleteOrder(
             @PathVariable Long orderId
     ) {
         orderService.delete(orderId);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return CommonResponse
+                .success(HttpStatus.NO_CONTENT, "주문 삭제 성공")
+                .toResponseEntity();
     }
 
 }

@@ -1,5 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateOrderRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateOrderStatusRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.DeliveryStatus;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -45,17 +47,17 @@ public class Order {
     protected Order() {
     }
 
-    public Order(int quantity, int totalPrice, DeliveryStatus deliveryStatus, Customer customer, Manager manager, Product product) {
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
-        this.deliveryStatus = deliveryStatus;
+    public Order(CreateOrderRequest request, Customer customer, Manager manager, Product product) {
+        this.quantity = request.quantity();
+        this.totalPrice = product.getPrice() * request.quantity();
+        this.deliveryStatus = DeliveryStatus.PENDING;
         this.customer = customer;
         this.manager = manager;
         this.product = product;
     }
 
-    public void updateStatus(DeliveryStatus deliveryStatus) {
-        this.deliveryStatus = deliveryStatus;
+    public void updateStatus(UpdateOrderStatusRequest request) {
+        this.deliveryStatus = request.status();
     }
 
     public Long getId() {

@@ -85,7 +85,7 @@ class OrderServiceTest {
         given(productRepository.findById(productId)).willReturn(Optional.of(product));
         given(managerRepository.findById(managerId)).willReturn(Optional.of(manager));
 
-        given(customerService.validateCustomer(customerId)).willReturn(customer);
+        given(customerService.getCustomerById(customerId)).willReturn(customer);
         given(orderRepository.save(any(Order.class))).willAnswer(invocation -> invocation.getArgument(0));
         OrderDetail response = orderService.createOrder(orderRequest, managerId);
 
