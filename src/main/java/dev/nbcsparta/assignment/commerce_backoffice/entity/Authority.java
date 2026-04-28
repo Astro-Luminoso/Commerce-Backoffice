@@ -19,7 +19,6 @@ public class Authority {
     @OneToMany(mappedBy = "authority", cascade = CascadeType.ALL, orphanRemoval = true)
     List<HasAuthority> toAuthority;
 
-
     protected Authority() {
     }
 
