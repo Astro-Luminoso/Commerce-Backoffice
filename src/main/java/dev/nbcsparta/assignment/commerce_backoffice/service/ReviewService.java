@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ReviewService {
@@ -22,6 +21,13 @@ public class ReviewService {
         this.reviewRepository = reviewRepository;
     }
 
+    @Transactional(readOnly = true)
+    public GetListReviewResponse getAllReview(Pageable pageable, ReviewFilter reviewFilter) {
+        Page<Review> reviewPage = reviewRepository.findAllReview(reviewFilter, pageable);
+
+        return GetListReviewResponse.from(reviewPage);
+    }
+
     @Transactional
     public ReviewDashboard getStatistics() {
         return reviewRepository.getStatistics();
@@ -30,11 +36,5 @@ public class ReviewService {
     @Transactional
     public List<ReviewRatingCount> getRatingCount() {
         return reviewRepository.getRatingCount();
-    }
-    @Transactional(readOnly = true)
-    public GetListReviewResponse getAllReview(Pageable pageable, ReviewFilter reviewFilter) {
-        Page<Review> reviewPage = reviewRepository.findAllReview(reviewFilter, pageable);
-
-        return GetListReviewResponse.from(reviewPage);
     }
 }
