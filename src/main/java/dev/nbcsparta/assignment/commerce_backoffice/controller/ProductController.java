@@ -24,12 +24,14 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    ResponseEntity<CreateProductResponse> createProduct(
+    ResponseEntity<CommonResponse<CreateProductResponse>> createProduct(
             @RequestBody CreateProductRequest request
     ) {
         CreateProductResponse response = productService.create(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return CommonResponse
+                .success(HttpStatus.OK, "상품 등록 성공", response)
+                .toResponseEntity();
     }
 
     /**
@@ -46,10 +48,11 @@ public class ProductController {
             @RequestParam(required = false) String category,
             @RequestParam(required = false) ProductStatus status
     ) {
-        int page = Math.max(pageable.getPageNumber(), 0);
+        int page = Math.max(pageable.getPageNumber() - 1, 0);
         int size = Math.min(Math.max(pageable.getPageSize(), 1), 100);
         pageable = PageRequest.of(page, size, pageable.getSort());
-        GetListProductResponse response = productService.getAllProduct(name, category, status, pageable);
+        ProductFilter productFilter = new ProductFilter(name, category, status);
+        GetListProductResponse response = productService.getAllProduct(pageable, productFilter);
 
         return CommonResponse
                 .success(HttpStatus.OK, "상품 목록 조회 성공", response)
@@ -58,40 +61,48 @@ public class ProductController {
 
 
     @GetMapping("/products/{productId}")
-    ResponseEntity<GetProductResponse> getOneProduct(
+    ResponseEntity<CommonResponse<GetProductResponse>> getOneProduct(
             @PathVariable Long productId
     ) {
         GetProductResponse response = productService.getOne(productId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return CommonResponse
+                .success(HttpStatus.OK, "상품 상세 조회 성공", response)
+                .toResponseEntity();
     }
 
     @PutMapping("/products/{productId}")
-    ResponseEntity<UpdateProductResponse> updateProduct(
+    ResponseEntity<CommonResponse<UpdateProductResponse>> updateProduct(
             @PathVariable Long productId,
             @RequestBody UpdateProductRequest request
     ) {
         UpdateProductResponse response = productService.update(productId, request);
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return CommonResponse
+                .success(HttpStatus.OK, "상품 정보 수정 성공", response)
+                .toResponseEntity();
     }
 
     @PatchMapping("/products/{productId}/status")
-    ResponseEntity<Void> updateProductStatus(
+    ResponseEntity<CommonResponse<Void>> updateProductStatus(
             @PathVariable Long productId,
             @RequestBody UpdateProductStatusRequest request
     ) {
         productService.updateStatus(productId, request);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return CommonResponse
+                .success(HttpStatus.OK, "상품 상태 변경 완료")
+                .toResponseEntity();
     }
 
     @DeleteMapping("/products/{productId}")
-    ResponseEntity<Void> deleteProduct(
+    ResponseEntity<CommonResponse<Void>> deleteProduct(
             @PathVariable Long productId
     ) {
         productService.delete(productId);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return CommonResponse
+                .success(HttpStatus.OK, "상품 삭제 성공")
+                .toResponseEntity();
     }
 }

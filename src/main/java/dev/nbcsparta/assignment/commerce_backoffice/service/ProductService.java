@@ -3,10 +3,9 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
-import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ManagerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ProductNotFoundException;
-import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerAuthRepository;
+import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerRepository;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ProductRepository;
 
 import org.springframework.data.domain.Page;
@@ -18,8 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ManagerAuthRepository managerRepository;
-    public ProductService(ProductRepository productRepository, ManagerAuthRepository managerRepository) {
+    private final ManagerRepository managerRepository;
+
+    public ProductService(ProductRepository productRepository, ManagerRepository managerRepository) {
         this.productRepository = productRepository;
         this.managerRepository = managerRepository;
     }
@@ -47,8 +47,8 @@ public class ProductService {
 
 
     @Transactional(readOnly = true)
-    public GetListProductResponse getAllProduct(String name, String category, ProductStatus status, Pageable pageable) {
-        Page<Product> productPage = productRepository.findAll(name, category, status, pageable);
+    public GetListProductResponse getAllProduct(Pageable pageable, ProductFilter productFilter) {
+        Page<Product> productPage = productRepository.findAll(productFilter, pageable);
 
         return GetListProductResponse.from(productPage);
     }
