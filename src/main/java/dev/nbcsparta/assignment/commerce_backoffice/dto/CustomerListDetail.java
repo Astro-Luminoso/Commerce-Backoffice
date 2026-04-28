@@ -1,6 +1,5 @@
 package dev.nbcsparta.assignment.commerce_backoffice.dto;
 
-import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -15,10 +14,7 @@ public record CustomerListDetail(
         List<CustomerDetail> customers,
         PageInfo pageInfo
 ) {
-    public static CustomerListDetail from(Page<Customer> page) {
-        List<CustomerDetail> customerDetailList = page.getContent().stream()
-                .map(CustomerDetail::from).toList();
-
-        return new CustomerListDetail(customerDetailList, PageInfo.from(page));
+    public static CustomerListDetail from(Page<CustomerDetail> page) {
+        return new CustomerListDetail(page.getContent(), PageInfo.from(page));
     }
 }

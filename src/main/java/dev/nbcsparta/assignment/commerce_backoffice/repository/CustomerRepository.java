@@ -1,7 +1,8 @@
 package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.GetCustomerPageFilter;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
-import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,19 +13,26 @@ import java.util.Optional;
 
 public interface CustomerRepository extends JpaRepository<Customer,Long> {
 
-    @Query("SELECT c FROM Customer c WHERE " +
-            "(:name IS NULL OR c.name LIKE %:name%) AND " +
-            "(:email IS NULL OR c.email LIKE %:email%) AND" +
-            "(:status IS NULL OR c.status = :status)")
-    Page<Customer> findAllByFilters(
-            @Param("name") String name,
-            @Param("email") String email,
-            Pageable pageable,
-            @Param("status") AccountStatus status
+    @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerDetail(" +
+            "c.id, c.name, c.email, c.phoneNumber, COUNT(o), COALESCE(SUM(o.totalPrice), 0L), c.status, c.registrationDate) " +
+            "FROM Customer c LEFT JOIN Order o ON o.customer = c " +
+            "WHERE (:#{#filter.name} IS NULL OR c.name LIKE %:#{#filter.name}%) AND " +
+            "(:#{#filter.email} IS NULL OR c.email LIKE %:#{#filter.email}%) AND " +
+            "(:#{#filter.status} IS NULL OR c.status = :#{#filter.status}) " +
+            "GROUP BY c.id, c.name, c.email, c.phoneNumber, c.status, c.registrationDate")
+    Page<CustomerDetail> findAllCustomerByFilters(
+            @Param("filter") GetCustomerPageFilter filter,
+            Pageable pageable
+    );
+
+    @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerDetail(" +
+            "c.id, c.name, c.email, c.phoneNumber, COUNT(o), COALESCE(SUM(o.totalPrice), 0L), c.status, c.registrationDate) " +
+            "FROM Customer c LEFT JOIN Order o ON o.customer = c " +
+            "WHERE c.id = :customerId " +
+            "GROUP BY c.id, c.name, c.email, c.phoneNumber, c.status, c.registrationDate")
+    Optional<CustomerDetail> findCustomerDetail(
+            @Param("customerId") Long customerId
     );
 
     boolean existsByEmail(String email);
-
-    Optional<Customer> findByEmail(String email);
-
 }

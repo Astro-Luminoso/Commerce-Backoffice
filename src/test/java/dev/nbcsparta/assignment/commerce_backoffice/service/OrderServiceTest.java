@@ -1,5 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
+import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateCustomerRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateOrderRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.OrderDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
@@ -45,7 +46,7 @@ class OrderServiceTest {
     @Test
     @DisplayName("주문 생성 성공")
     void createOrder_Success() {
-        CreateOrderRequest request = new CreateOrderRequest(
+        CreateOrderRequest orderRequest = new CreateOrderRequest(
                 1L,
                 1L,
                 5
@@ -64,12 +65,13 @@ class OrderServiceTest {
                 AccountStatus.ACTIVE
         );
 
-        Customer customer = new Customer(
+        CreateCustomerRequest customerRequest = new CreateCustomerRequest(
                 "양성훈",
                 "asdf@naver.com",
-                "010-1111-1111",
-                AccountStatus.ACTIVE
+                "010-1111-1111"
         );
+
+        Customer customer = Customer.from(customerRequest);
 
         Product product = new Product(
                 "폰",
@@ -83,13 +85,13 @@ class OrderServiceTest {
         given(productRepository.findById(productId)).willReturn(Optional.of(product));
         given(managerRepository.findById(managerId)).willReturn(Optional.of(manager));
 
-        given(customerService.validateCustomer(customerId)).willReturn(customer);
+        given(customerService.getCustomerById(customerId)).willReturn(customer);
         given(orderRepository.save(any(Order.class))).willAnswer(invocation -> invocation.getArgument(0));
-        OrderDetail response = orderService.createOrder(request, managerId);
+        OrderDetail response = orderService.createOrder(orderRequest, managerId);
 
         assertEquals("양성훈", response.customerName());
         assertEquals("홍길동", response.ManagerName());
-        assertEquals(25000L, response.totalPrice());
+        assertEquals(25000, response.totalPrice());
     }
 
 
