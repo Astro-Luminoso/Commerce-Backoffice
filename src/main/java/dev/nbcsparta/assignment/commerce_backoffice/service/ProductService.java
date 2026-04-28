@@ -3,17 +3,13 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
-import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ManagerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ProductNotFoundException;
-import dev.nbcsparta.assignment.commerce_backoffice.exception.SortFailException;
-import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerAuthRepository;
+import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerRepository;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ProductRepository;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ManagerAuthRepository managerRepository;
-    public ProductService(ProductRepository productRepository, ManagerAuthRepository managerRepository) {
+    private final ManagerRepository managerRepository;
+
+    public ProductService(ProductRepository productRepository, ManagerRepository managerRepository) {
         this.productRepository = productRepository;
         this.managerRepository = managerRepository;
     }
@@ -50,21 +47,10 @@ public class ProductService {
 
 
     @Transactional(readOnly = true)
-    public GetListProductResponse<GetPageProductResponse> getAllProduct(String name, int page, int size, String sortName, String sortBy, String category, ProductStatus status) {
+    public GetListProductResponse getAllProduct(Pageable pageable, ProductFilter productFilter) {
+        Page<Product> productPage = productRepository.findAll(productFilter, pageable);
 
-        Pageable pageable;
-        try {
-            pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(sortBy), sortName));
-        } catch (Exception e) {
-            throw new SortFailException("정렬에 실패했습니다");
-        }
-        Page<Product> productPage =
-                productRepository.findAll(name, category, status, pageable);
-
-        Page<GetPageProductResponse> dtoPage =
-                productPage.map(GetPageProductResponse::from);
-
-        return GetListProductResponse.from(dtoPage);
+        return GetListProductResponse.from(productPage);
     }
 
 
