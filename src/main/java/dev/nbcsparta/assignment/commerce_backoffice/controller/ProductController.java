@@ -7,6 +7,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.service.ProductService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -34,27 +35,20 @@ public class ProductController {
     /**
      *
      * @param name     상품 이름
-     * @param page     페이지 번호
-     * @param size     페이지 크기
-     * @param sortName 정렬 항목 이름  ex) createdAt
-     * @param sortBy   정렬 기준, DESC
      * @param category 상품 카테고리
      * @param status   상품 상태
      * @return <GetListProductResponse<GetPageProductResponse>>
      */
     @GetMapping("/products")
     public ResponseEntity<CommonResponse<GetListProductResponse>> getAllPage(
+            @PageableDefault(page = 1, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String name,
-            @RequestParam(required = false, defaultValue = "1") int page,
-            @RequestParam(required = false, defaultValue = "10") int size,
-            @RequestParam(required = false, defaultValue = "createdAt") String sortName,
-            @RequestParam(required = false, defaultValue = "DESC") String sortBy,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) ProductStatus status
     ) {
-        page = Math.max(page, 1);
-
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(sortBy), sortName));
+        int page = Math.max(pageable.getPageNumber(), 0);
+        int size = Math.min(Math.max(pageable.getPageSize(), 1), 100);
+        pageable = PageRequest.of(page, size, pageable.getSort());
         GetListProductResponse response = productService.getAllProduct(name, category, status, pageable);
 
         return CommonResponse
