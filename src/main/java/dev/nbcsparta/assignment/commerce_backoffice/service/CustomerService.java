@@ -20,10 +20,22 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
+    /**
+     * ID에 해당하는 고객을 찾아서 반환해줍니다.
+     *
+     * @param customerId 찾을 고객 고유 번호
+     * @return 찾은 고객 엔티티
+     */
     public Customer validateCustomer(Long customerId) {
         return customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
     }
 
+    /**
+     * 고객을 생성하고 DB에 저장해줍니다.
+     *
+     * @param request 생성할 고객의 정보
+     * @return 생성하고 DB에 저장이된
+     */
     @Transactional
     public CustomerDetail createCustomer(CreateCustomerRequest request) {
         Customer customer = Customer.from(request);
@@ -59,11 +71,19 @@ public class CustomerService {
         return CustomerDetail.from(customer);
     }
 
+    /**
+     * 고객의 정보를 수정합니다.
+     *
+     * @param customerId 수정할 고객의 고유 번호
+     * @param request    수정할 고객의 정보들이 담긴 객체
+     * @return 수정된 고객의 정보가 담긴 객체
+     */
     @Transactional
     public CustomerDetail updateDetail(Long customerId, UpdateMyProfileRequest request) {
+        // 존재하는 고객인지 검사해줍니다.
         Customer customer = validateCustomer(customerId);
 
-        // 수정 요청 이메일과 현재 이메일이 같이 않다면 DB 접근
+        // 수정할 이메일과 현재 이메일이 같지 않다면 DB 접근
         if (!customer.getEmail().equals(request.email())) {
             if (customerRepository.existsByEmail(request.email())) {
                 throw new ConflictUserException("이미 존재하는 사용자입니다.");
@@ -75,6 +95,13 @@ public class CustomerService {
         return CustomerDetail.from(customer);
     }
 
+    /**
+     * 고객의 상태를 수정해줍니다.
+     *
+     * @param customerId 수정할 고객의 고유 번호
+     * @param request    수정할 상태
+     * @return 수정된 고객의 ID와 상태가 담긴 객체
+     */
     @Transactional
     public CustomerStatusResponse updateStatus(Long customerId, UpdateCustomerStatusRequest request) {
         Customer customer = validateCustomer(customerId);
@@ -83,6 +110,11 @@ public class CustomerService {
         return CustomerStatusResponse.from(customer);
     }
 
+    /**
+     * 고객의 삭제 여부를 변경합니다.
+     *
+     * @param customerId 삭제 상태로 만들 고객 고유 번호
+     */
     @Transactional
     public void deleteCustomer(Long customerId) {
         Customer customer = validateCustomer(customerId);
