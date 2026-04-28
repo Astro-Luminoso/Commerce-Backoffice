@@ -40,12 +40,12 @@ public class ManagerAuthController {
     public ResponseEntity<CommonResponse<Void>> login(
             @Valid @RequestBody LoginRequest req
     ) {
-        SessionManager sessionManager = managerAuthService.login(req);
-        authentication.login(sessionManager);
+        String jwt = managerAuthService.login(req);
+//        authentication.login(sessionManager);
 
         return CommonResponse
                 .success(HttpStatus.OK, "로그인 성공")
-                .toResponseEntity();
+                .toResponseEntity(jwt);
     }
 
     @PostMapping("/logout")

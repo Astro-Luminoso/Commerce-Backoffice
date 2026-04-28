@@ -61,7 +61,7 @@ class OrderServiceTest {
                 "qwer@gmail.com",
                 "asdf",
                 "010-4444-4444",
-                Role.Super_MANAGER,
+                Role.SUPER,
                 AccountStatus.ACTIVE
         );
 

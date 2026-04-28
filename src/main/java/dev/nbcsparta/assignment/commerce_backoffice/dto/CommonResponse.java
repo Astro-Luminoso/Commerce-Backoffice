@@ -20,5 +20,12 @@ public record CommonResponse<T>(int statusCode, String message, T data) {
     public ResponseEntity<CommonResponse<T>> toResponseEntity() {
         return ResponseEntity.status(this.statusCode).body(this);
     }
+
+    public ResponseEntity<CommonResponse<T>> toResponseEntity(String authJwt) {
+        return ResponseEntity
+                .status(this.statusCode)
+                .header("Authorization", "Bearer " + authJwt)
+                .body(this);
+    }
 }
 

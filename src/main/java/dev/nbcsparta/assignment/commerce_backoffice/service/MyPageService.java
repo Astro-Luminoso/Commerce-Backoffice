@@ -1,6 +1,5 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
-import dev.nbcsparta.assignment.commerce_backoffice.config.PasswordEncoder;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.MyProfileResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyPasswordRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyProfileRequest;
@@ -9,6 +8,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.exception.ConflictUserExcept
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ManagerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.NotMatchException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerAuthRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MyPageService {
 
     private final ManagerAuthRepository managerAuthRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     public MyPageService(ManagerAuthRepository managerAuthRepository, PasswordEncoder passwordEncoder) {
         this.managerAuthRepository = managerAuthRepository;
