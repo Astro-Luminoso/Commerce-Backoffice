@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     // 커스텀 예외 핸들링
     @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<CommonResponse<String>> handleServiceException(ServiceException ex) {
-        return ResponseEntity
-                .status(ex.getStatus())
-                .body(CommonResponse.fail(ex.getStatus(), ex.getMessage()));
+    public ResponseEntity<CommonResponse<Void>> handleServiceException(ServiceException ex) {
+        return CommonResponse.fail(ex.getStatus(), ex.getMessage()).toResponseEntity();
     }
 
     // Bean Validation 예외 핸들링

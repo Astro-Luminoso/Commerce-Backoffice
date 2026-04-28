@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class ProductController {
 
     private final ProductService productService;
+
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
@@ -23,21 +24,21 @@ public class ProductController {
     @PostMapping("/products")
     ResponseEntity<CreateProductResponse> createProduct(
             @RequestBody CreateProductRequest request
-            ) {
+    ) {
         CreateProductResponse response = productService.create(request);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(response);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     /**
      *
-     * @param name      상품 이름
+     * @param name     상품 이름
      * @param page
      * @param size
-     * @param sortName  정렬 항목 이름  ex) createdAt
-     * @param sortBy    정렬 기준, DESC
-     * @param category  상품 카테고리
-     * @param status    상품 상태
+     * @param sortName 정렬 항목 이름  ex) createdAt
+     * @param sortBy   정렬 기준, DESC
+     * @param category 상품 카테고리
+     * @param status   상품 상태
      * @return <GetListProductResponse<GetPageProductResponse>>
      */
     @GetMapping("/products")
@@ -49,7 +50,7 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "DESC") String sortBy,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) ProductStatus status
-    ){
+    ) {
         GetListProductResponse<GetPageProductResponse> pageable = productService.getAllProduct(
                 name, page, size, sortName, sortBy, category, status
         );
@@ -61,10 +62,10 @@ public class ProductController {
     @GetMapping("/products/{productId}")
     ResponseEntity<GetProductResponse> getOneProduct(
             @PathVariable Long productId
-    ){
+    ) {
         GetProductResponse response = productService.getOne(productId);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(response);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/products/{productId}")
@@ -73,6 +74,7 @@ public class ProductController {
             @RequestBody UpdateProductRequest request
     ) {
         UpdateProductResponse response = productService.update(productId, request);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -82,13 +84,16 @@ public class ProductController {
             @RequestBody UpdateProductStatusRequest request
     ) {
         productService.updateStatus(productId, request);
+
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/products/{productId}")
-    ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+    ResponseEntity<Void> deleteProduct(
+            @PathVariable Long productId
+    ) {
         productService.delete(productId);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }

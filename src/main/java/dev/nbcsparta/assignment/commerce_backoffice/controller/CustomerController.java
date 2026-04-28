@@ -22,11 +22,12 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDetail> createCustomer(@RequestBody CreateCustomerRequest request) {
+    public ResponseEntity<CustomerDetail> createCustomer(
+            @RequestBody CreateCustomerRequest request
+    ) {
         CustomerDetail response = customerService.createCustomer(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
 
     /**
      * 필터에 따라 고객의 전체 정보를 조회합니다.
@@ -38,30 +39,20 @@ public class CustomerController {
      */
     @GetMapping()
     public ResponseEntity<CustomerListDetail> getAllCustomer(
-            @RequestParam(required = false)
-            String name,
-
-            @RequestParam(required = false)
-            String email,
-
-            @PageableDefault(sort = "name")
-            Pageable pageable,
-
-            @RequestParam(required = false)
-            AccountStatus status
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @PageableDefault(sort = "name") Pageable pageable,
+            @RequestParam(required = false) AccountStatus status
     ) {
         // 입력받은 페이지 넘버가 1이라면 백엔드 인덱스에서는 0을 검색해야 하기때문에 -1을 해줍니다.
         int fixedPageNumber = Math.max(0, pageable.getPageNumber() - 1);
-
         // 페이지 넘버를 -1 한 넘버를 가진 Pageable 생성
         Pageable customPageable = PageRequest.of(
                 fixedPageNumber,
                 pageable.getPageSize(),
                 pageable.getSort()
         );
-
-        CustomerListDetail customerResponse =
-                customerService.findAllCustomer(name, email, customPageable, status);
+        CustomerListDetail customerResponse = customerService.findAllCustomer(name, email, customPageable, status);
 
         return ResponseEntity.status(HttpStatus.OK).body(customerResponse);
     }
@@ -76,9 +67,7 @@ public class CustomerController {
     public ResponseEntity<CustomerDetail> getOneCustomer(
             @PathVariable Long customerId
     ) {
-        CustomerDetail customerResponse =
-                customerService.findOneCustomer(customerId);
-
+        CustomerDetail customerResponse = customerService.findOneCustomer(customerId);
         return ResponseEntity.status(HttpStatus.OK).body(customerResponse);
     }
 
@@ -88,7 +77,6 @@ public class CustomerController {
             @Valid @RequestBody UpdateMyProfileRequest request
     ) {
         CustomerDetail response = customerService.updateDetail(customerId, request);
-
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -103,8 +91,11 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{customerId}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Long customerId) {
+    public ResponseEntity<Void> deleteCustomer(
+            @PathVariable Long customerId
+    ) {
         customerService.deleteCustomer(customerId);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

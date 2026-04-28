@@ -26,12 +26,9 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderDetail> createOrder(
-            @Valid
-            @RequestBody
-            CreateOrderRequest request
+            @Valid @RequestBody CreateOrderRequest request
     ) {
         SessionManager sessionManager = authentication.getCurrentManager();
-
         OrderDetail response = orderService.createOrder(request, sessionManager.id());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -39,59 +36,48 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<OrderListDetail> getAllOrder(
-            @RequestParam(required = false)
-            Long orderId,
-
-            @RequestParam(required = false)
-            String customerName,
-
-            @PageableDefault(sort = "quantity")
-            Pageable pageable,
-
-            @RequestParam(required = false)
-            ProductStatus status
+            @RequestParam(required = false) Long orderId,
+            @RequestParam(required = false) String customerName,
+            @PageableDefault(sort = "quantity") Pageable pageable,
+            @RequestParam(required = false) ProductStatus status
     ) {
         int fixedPageNumber = Math.max(0, pageable.getPageNumber() - 1);
-
         // 페이지 넘버를 -1 한 넘버를 가진 Pageable 생성
         Pageable customPageable = PageRequest.of(
                 fixedPageNumber,
                 pageable.getPageSize(),
                 pageable.getSort()
         );
-
-        OrderListDetail response =
-                orderService.findAllOrder(orderId, customerName, customPageable, status);
+        OrderListDetail response = orderService.findAllOrder(orderId, customerName, customPageable, status);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderDetail> getOneOrder(
-            @PathVariable
-            Long orderId
+            @PathVariable Long orderId
     ) {
         OrderDetail response = orderService.getDetailOrder(orderId);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PatchMapping("/{orderId}")
     public ResponseEntity<Void> updateOrderStatus(
-            @Valid
-            @RequestBody
-            UpdateOrderStatusRequest request,
-
-            @PathVariable
-            Long orderId
+            @Valid @RequestBody UpdateOrderStatusRequest request,
+            @PathVariable Long orderId
     ) {
         orderService.updateStatus(request, orderId);
+
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{orderId}")
     public ResponseEntity<Void> deleteOrder(
-            @PathVariable Long orderId) {
+            @PathVariable Long orderId
+    ) {
         orderService.delete(orderId);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

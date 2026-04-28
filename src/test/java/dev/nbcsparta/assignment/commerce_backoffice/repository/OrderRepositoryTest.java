@@ -44,7 +44,7 @@ class OrderRepositoryTest {
         // 💡 핵심: Order 객체를 만들 때 Manager 자리에 'null'을 넣습니다!
         Order order = new Order(
                 5,
-                25000L,
+                25000,
                 DeliveryStatus.PENDING,
                 customer,
                 null, // <--- 매니저가 없는 상태!

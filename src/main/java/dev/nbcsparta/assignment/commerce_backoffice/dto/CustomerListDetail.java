@@ -18,6 +18,7 @@ public record CustomerListDetail(
     public static CustomerListDetail from(Page<Customer> page) {
         List<CustomerDetail> customerDetailList = page.getContent().stream()
                 .map(CustomerDetail::from).toList();
+
         return new CustomerListDetail(customerDetailList, PageInfo.from(page));
     }
 }
