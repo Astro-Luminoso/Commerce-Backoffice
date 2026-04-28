@@ -22,7 +22,7 @@ public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
 
-    @Value("{password-encoder-round}")
+    @Value("${encoder.strenth}")
     private int strength;
 
     public SecurityConfig(JwtProvider jwtProvider) {
