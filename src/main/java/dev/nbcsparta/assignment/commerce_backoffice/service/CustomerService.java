@@ -54,7 +54,7 @@ public class CustomerService {
      */
     @Transactional(readOnly = true)
     public CustomerListDetail findAllCustomer(GetCustomerPageFilter filter, Pageable pageable) {
-        Page<Customer> customerPage = customerRepository.findAllByFilters(filter, pageable);
+        Page<CustomerDetail> customerPage = customerRepository.findAllCustomerByFilters(filter, pageable);
 
         return CustomerListDetail.from(customerPage);
     }
@@ -67,9 +67,7 @@ public class CustomerService {
      */
     @Transactional(readOnly = true)
     public CustomerDetail findOneCustomer(Long customerId) {
-        Customer customer = getCustomerById(customerId);
-
-        return CustomerDetail.from(customer);
+        return customerRepository.findCustomerDetail(customerId).orElseThrow(CustomerNotFoundException::new);
     }
 
     /**
