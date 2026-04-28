@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateOrderRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateOrderResponse;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.OrderDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Order;
@@ -31,8 +31,6 @@ class OrderServiceTest {
 
     @Mock
     private OrderRepository orderRepository;
-    @Mock
-    private CustomerRepository customerRepository;
     @Mock
     private ProductRepository productRepository;
     @Mock
@@ -77,7 +75,7 @@ class OrderServiceTest {
         Product product = new Product(
                 "폰",
                 "전자제품",
-                5000L,
+                5000,
                 50,
                 ProductStatus.SALE,
                 manager
@@ -88,7 +86,7 @@ class OrderServiceTest {
 
         given(customerService.validateCustomer(customerId)).willReturn(customer);
         given(orderRepository.save(any(Order.class))).willAnswer(invocation -> invocation.getArgument(0));
-        CreateOrderResponse response = orderService.createOrder(request, managerId);
+        OrderDetail response = orderService.createOrder(request, managerId);
 
         assertEquals("양성훈", response.customerName());
         assertEquals("홍길동", response.ManagerName());
