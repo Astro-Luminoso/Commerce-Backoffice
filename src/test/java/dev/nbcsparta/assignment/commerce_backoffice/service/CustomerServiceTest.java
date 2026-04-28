@@ -32,12 +32,14 @@ class CustomerServiceTest {
     @DisplayName("존재하는 ID로 조회 시 고객 상세 정보 반환")
     void findCustomer_Success() {
         Long customerId = 1L;
-        Customer customer = new Customer(
+
+        CreateCustomerRequest createCustomerRequest = new CreateCustomerRequest(
                 "홍길동",
                 "asdf@naver.com",
-                "010-0000-0000",
-                AccountStatus.ACTIVE
+                "010-0000-0000"
         );
+
+        Customer customer = Customer.from(createCustomerRequest);
 
         given(customerRepository.findById(customerId)).willReturn(Optional.of(customer));
 
@@ -64,12 +66,14 @@ class CustomerServiceTest {
     void updateCustomer_Success() {
         Long customerId = 1L;
 
-        Customer customer = new Customer(
+        CreateCustomerRequest createCustomerRequest = new CreateCustomerRequest(
                 "홍길동",
                 "asdf@naver.com",
-                "010-0000-0000",
-                AccountStatus.ACTIVE
+                "010-0000-0000"
         );
+
+        Customer customer = Customer.from(createCustomerRequest);
+
 
         given(customerRepository.findById(customerId)).willReturn(Optional.of(customer));
 
@@ -89,12 +93,14 @@ class CustomerServiceTest {
     void updateCustomerStatus_Success() {
         Long customerId = 1L;
 
-        Customer customer = new Customer(
+        CreateCustomerRequest createCustomerRequest = new CreateCustomerRequest(
                 "홍길동",
                 "asdf@naver.com",
-                "010-0000-0000",
-                AccountStatus.ACTIVE
+                "010-0000-0000"
         );
+
+        Customer customer = Customer.from(createCustomerRequest);
+
 
         given(customerRepository.findById(customerId)).willReturn(Optional.of(customer));
 
@@ -115,12 +121,14 @@ class CustomerServiceTest {
     void deleteCustomer_Success() {
         Long customerId = 1L;
 
-        Customer customer = new Customer(
+        CreateCustomerRequest createCustomerRequest = new CreateCustomerRequest(
                 "홍길동",
                 "asdf@naver.com",
-                "010-0000-0000",
-                AccountStatus.ACTIVE
+                "010-0000-0000"
         );
+
+        Customer customer = Customer.from(createCustomerRequest);
+
 
         given(customerRepository.findById(customerId)).willReturn(Optional.of(customer));
 
@@ -131,5 +139,7 @@ class CustomerServiceTest {
 
         assertTrue(findCustomer.isDeleted());
     }
+
+
 
 }
