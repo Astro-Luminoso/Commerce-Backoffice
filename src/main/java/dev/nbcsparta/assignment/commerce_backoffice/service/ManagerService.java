@@ -5,6 +5,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerListDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerRoleUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerStatusUpdate;
+import dev.nbcsparta.assignment.commerce_backoffice.entity.Authority;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
@@ -16,14 +17,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class ManagerService {
 
     private final ManagerRepository managerRepository;
+    private final AuthorityService authorityService;
+    private final AuthorityManagementService authManagementService;
 
-    public ManagerService(ManagerRepository managerRepository) {
+    public ManagerService(
+            ManagerRepository managerRepository,
+            AuthorityService authorityService,
+            AuthorityManagementService authManagementService
+            ) {
         this.managerRepository = managerRepository;
+        this.authorityService = authorityService;
+        this.authManagementService = authManagementService;
     }
 
 
@@ -79,6 +90,9 @@ public class ManagerService {
 
         Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
         manager.updateStatus(reqBody);
+
+        List<Authority> authorities = authorityService.getAuthoritiesByRole(manager.getRole());
+        authManagementService.grantAuthorities(manager, authorities);
     }
 
     public void updateManagerRole(Long managerId, ManagerRoleUpdate reqBody) {
