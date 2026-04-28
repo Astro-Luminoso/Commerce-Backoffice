@@ -16,13 +16,13 @@ import java.time.LocalDateTime;
  * @param registrationDate 고객 가입일
  */
 public record CustomerDetail(
-        Long id, String name, String email, String phoneNumber,
+        Long id, String name, String email, String phoneNumber, Integer totalOrderCount, Integer totalOrderPrice,
         AccountStatus status, LocalDateTime registrationDate
 ) {
     public static CustomerDetail from(Customer customer) {
         return new CustomerDetail(
-                customer.getId(), customer.getName(), customer.getEmail(),
-                customer.getPhoneNumber(), customer.getStatus(),
+                customer.getId(), customer.getName(), customer.getEmail(),customer.getPhoneNumber(),
+                customer.getTotalOrderCount(), customer.getTotalOrderPrice(), customer.getStatus(),
                 customer.getRegistrationDate()
         );
     }
