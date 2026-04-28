@@ -66,7 +66,7 @@ public class SecurityConfig {
                                         .hasRole("SUPER")
                                         .requestMatchers("/products/**")
                                         .hasRole("OPS")
-                                        .requestMatchers("/login", "/register")
+                                        .requestMatchers("/login", "/register", "/error")
                                         .permitAll()
                                         .requestMatchers("/**")
                                         .authenticated()
