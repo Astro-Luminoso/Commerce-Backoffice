@@ -102,3 +102,26 @@ INSERT INTO authority (role) VALUES ('SUPER');
 INSERT INTO authority (role) VALUES ('OPS');
 INSERT INTO authority (role) VALUES ('CS');
 
+-- 1. 어드민 계정 생성 (비밀번호는 반드시 암호화해서 넣으세요)
+INSERT INTO managers (name, email, phone_number, status, registration_date, updated_date, is_deleted, password, status_reason)
+VALUES (
+        'admin',
+        'admin@example.com',
+        '010-0000-0000',
+        'ACTIVE',
+        NOW(),
+        NOW(),
+        0,
+        '$2a$12$tLmc76j3drS.YFeUyVmAQO8l1QtS7Tt2zl1JSBE.zCQvYJP4Z6B5i',
+        NULL);
+
+-- 2. 권한 ID 조회 (SUPER, OPS, CS)
+SELECT id, role FROM authority WHERE role IN ('SUPER', 'OPS', 'CS');
+
+-- 3. 어드민 계정의 id를 확인 (예: 1번이라고 가정)
+SELECT id FROM managers WHERE email = 'admin@example.com';
+
+-- 4. has_authority에 권한 부여 (아래에서 1은 어드민 id, 1/2/3은 authority id 예시)
+INSERT INTO has_authority (manager_id, authority_id) VALUES (1, 1);
+INSERT INTO has_authority (manager_id, authority_id) VALUES (1, 2);
+INSERT INTO has_authority (manager_id, authority_id) VALUES (1, 3);
