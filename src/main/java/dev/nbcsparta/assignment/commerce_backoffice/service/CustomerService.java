@@ -26,6 +26,7 @@ public class CustomerService {
      * @param customerId 찾을 고객 고유 번호
      * @return 찾은 고객 엔티티
      */
+    @Transactional(readOnly = true)
     public Customer validateCustomer(Long customerId) {
         return customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
     }
