@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ProductDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ManagerNotFoundException;
@@ -104,5 +105,10 @@ public class ProductService {
             throw new ProductNotFoundException();
         }
         productRepository.deleteById(id);
+    }
+
+    @Transactional
+    public ProductDashboard getStatistics() {
+        return productRepository.getStatistics();
     }
 }
