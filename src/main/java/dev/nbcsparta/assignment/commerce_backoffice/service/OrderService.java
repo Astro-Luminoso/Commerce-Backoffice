@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.OrderDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Order;
@@ -15,6 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 public class OrderService {
@@ -92,5 +96,14 @@ public class OrderService {
         order.getProduct().addQuantity(cancelledQuantity);
 
         orderRepository.deleteById(orderId);
+    }
+
+    @Transactional
+    public OrderDashboard getStatistics() {
+        LocalDate now = LocalDate.now();
+        LocalDateTime start = now.atStartOfDay();
+        LocalDateTime end = now.plusDays(1).atStartOfDay().minusNanos(1);
+
+        return orderRepository.getStatistics(start, end);
     }
 }
