@@ -27,7 +27,7 @@ public class CustomerService {
      * @return 찾은 고객 엔티티
      */
     @Transactional(readOnly = true)
-    public Customer validateCustomer(Long customerId) {
+    public Customer getCustomerById(Long customerId) {
         return customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
     }
 
@@ -67,7 +67,7 @@ public class CustomerService {
      */
     @Transactional(readOnly = true)
     public CustomerDetail findOneCustomer(Long customerId) {
-        Customer customer = validateCustomer(customerId);
+        Customer customer = getCustomerById(customerId);
 
         return CustomerDetail.from(customer);
     }
@@ -82,7 +82,7 @@ public class CustomerService {
     @Transactional
     public CustomerDetail updateDetail(Long customerId, UpdateMyProfileRequest request) {
         // 존재하는 고객인지 검사해줍니다.
-        Customer customer = validateCustomer(customerId);
+        Customer customer = getCustomerById(customerId);
 
         // 수정할 이메일과 현재 이메일이 같지 않다면 DB 접근
         if (!customer.getEmail().equals(request.email())) {
@@ -105,7 +105,7 @@ public class CustomerService {
      */
     @Transactional
     public CustomerStatusResponse updateStatus(Long customerId, UpdateCustomerStatusRequest request) {
-        Customer customer = validateCustomer(customerId);
+        Customer customer = getCustomerById(customerId);
         customer.updateStatus(request.status());
 
         return CustomerStatusResponse.from(customer);
@@ -118,7 +118,7 @@ public class CustomerService {
      */
     @Transactional
     public void deleteCustomer(Long customerId) {
-        Customer customer = validateCustomer(customerId);
+        Customer customer = getCustomerById(customerId);
 
         if (customer.isDeleted())
             throw new AlreadyDeletedUserException("이미 삭제 상태입니다.");
