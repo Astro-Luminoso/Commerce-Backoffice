@@ -69,6 +69,10 @@ public class Manager extends User{
         return role;
     }
 
+    public List<HasAuthority> getAuthorities() {
+        return authorities;
+    }
+
     public String getStatusReason() {
         return this.statusReason;
     }
