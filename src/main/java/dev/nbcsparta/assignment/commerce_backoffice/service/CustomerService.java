@@ -2,8 +2,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
-import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
-import dev.nbcsparta.assignment.commerce_backoffice.exception.AleadyDeletedUserException;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.AlreadyDeletedUserException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ConflictUserException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.CustomerRepository;
@@ -21,31 +20,28 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    @Transactional
     public Customer validateCustomer(Long customerId) {
         return customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
     }
 
     @Transactional
     public CustomerDetail createCustomer(CreateCustomerRequest request) {
-        Customer customer = new Customer(request.name(),request.email(), request.phoneNumber(), request.status());
-        Customer savedCustomer = customerRepository.save(customer);
+        Customer customer = Customer.from(request);
+        customerRepository.save(customer);
 
-        return CustomerDetail.from(savedCustomer);
+        return CustomerDetail.from(customer);
     }
 
     /**
      * DB에서 필터링 된 고객 정보 DTO에 담아 반환해준다.
      *
-     * @param name     고객 이름 필터용
-     * @param email    고객 이메일 필터용
+     * @param filter   필터링에 필요한 데이터들이 들어이는 객체
      * @param pageable 페이징 정보
-     * @param status   고객 상태 필터용
      * @return 필터링 된 고객 정보 DTO 리스트를 담은 DTO
      */
     @Transactional(readOnly = true)
-    public CustomerListDetail findAllCustomer(String name, String email, Pageable pageable, AccountStatus status) {
-        Page<Customer> customerPage = customerRepository.findAllByFilters(name, email, pageable, status);
+    public CustomerListDetail findAllCustomer(PageFilter filter, Pageable pageable) {
+        Page<Customer> customerPage = customerRepository.findAllByFilters(filter, pageable);
 
         return CustomerListDetail.from(customerPage);
     }
@@ -66,10 +62,14 @@ public class CustomerService {
     @Transactional
     public CustomerDetail updateDetail(Long customerId, UpdateMyProfileRequest request) {
         Customer customer = validateCustomer(customerId);
-        boolean isExistEmail = customerRepository.existsByEmail(request.email());
-        if (isExistEmail) {
-            throw new ConflictUserException("이미 존재하는 사용자입니다.");
+
+        // 수정 요청 이메일과 현재 이메일이 같이 않다면 DB 접근
+        if (!customer.getEmail().equals(request.email())) {
+            if (customerRepository.existsByEmail(request.email())) {
+                throw new ConflictUserException("이미 존재하는 사용자입니다.");
+            }
         }
+
         customer.updateProfile(request);
 
         return CustomerDetail.from(customer);
@@ -78,8 +78,7 @@ public class CustomerService {
     @Transactional
     public CustomerStatusResponse updateStatus(Long customerId, UpdateCustomerStatusRequest request) {
         Customer customer = validateCustomer(customerId);
-        AccountStatus status = request.status();
-        customer.updateStatus(status);
+        customer.updateStatus(request.status());
 
         return CustomerStatusResponse.from(customer);
     }
@@ -87,8 +86,9 @@ public class CustomerService {
     @Transactional
     public void deleteCustomer(Long customerId) {
         Customer customer = validateCustomer(customerId);
+
         if (customer.isDeleted())
-            throw new AleadyDeletedUserException("이미 삭제 상태입니다.");
+            throw new AlreadyDeletedUserException("이미 삭제 상태입니다.");
 
         customer.setAccountDeletion();
     }

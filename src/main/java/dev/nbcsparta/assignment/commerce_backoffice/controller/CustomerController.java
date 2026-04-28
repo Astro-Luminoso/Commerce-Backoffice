@@ -52,7 +52,8 @@ public class CustomerController {
                 pageable.getPageSize(),
                 pageable.getSort()
         );
-        CustomerListDetail customerResponse = customerService.findAllCustomer(name, email, customPageable, status);
+        PageFilter filter = new PageFilter(name, email, status);
+        CustomerListDetail customerResponse = customerService.findAllCustomer(filter, customPageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(customerResponse);
     }
