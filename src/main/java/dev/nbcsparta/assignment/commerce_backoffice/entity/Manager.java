@@ -20,6 +20,7 @@ public class Manager extends User{
     private String password;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     private String statusReason;
