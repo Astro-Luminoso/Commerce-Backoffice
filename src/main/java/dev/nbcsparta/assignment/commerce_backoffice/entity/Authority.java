@@ -14,12 +14,16 @@ public class Authority {
 
     @Column(nullable = false, unique = true)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role roleType;
 
     @OneToMany(mappedBy = "authority", cascade = CascadeType.ALL, orphanRemoval = true)
     List<HasAuthority> toAuthority;
 
 
     protected Authority() {
+    }
+
+    public Role getType() {
+        return this.roleType;
     }
 }

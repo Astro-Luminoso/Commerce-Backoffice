@@ -1,5 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
+import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import jakarta.persistence.*;
 
 @Entity
@@ -22,5 +23,9 @@ public class HasAuthority {
     private Authority authority;
 
     protected HasAuthority() {
+    }
+
+    public Role getAuthority() {
+        return authority.getType();
     }
 }

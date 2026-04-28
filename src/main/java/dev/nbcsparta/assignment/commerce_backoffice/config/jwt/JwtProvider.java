@@ -1,5 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.config.jwt;
 
+import dev.nbcsparta.assignment.commerce_backoffice.entity.HasAuthority;
+import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -39,14 +41,16 @@ public class JwtProvider {
     }
 
     // 2. 토큰 생성: 유저 정보를 받아 JWT 발급
-    public String createToken(String username, List<String> roles) {
+    public String createToken(String username, List<HasAuthority> roles) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + expiration);
+
+        List<String> rolesInStringList = roles.stream().map(role -> role.getAuthority().name()).toList();
 
         return Jwts.builder()
                 .header().add("typ", "JWT").and() // 헤더: 타입 설정
                 .subject(username)               // 내용: 유저 식별값
-                .claim("roles", roles)             // 내용: 권한 정보 (커스텀 클레임)
+                .claim("roles", rolesInStringList)             // 내용: 권한 정보 (커스텀 클레임)
                 .issuedAt(now)                   // 내용: 발행 시간
                 .expiration(validity)            // 내용: 만료 시간
                 .signWith(key)                   // 서명: 우리 서버의 키로 암호화
