@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.OutOfStockException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -58,6 +59,21 @@ public class Product {
         this.name = name;
         this.category = category;
         this.price = price;
+    }
+
+    public void buyProduct(int quantity) {
+        if(this.quantity<quantity){
+            throw new OutOfStockException();
+        }
+        this.quantity -= quantity;
+        if(this.quantity == 0) {
+            this.status = ProductStatus.SOLD_OUT;
+        }
+    }
+
+    public void cancelProduct(int quantity) {
+        this.quantity += quantity;
+        this.status = ProductStatus.SALE;
     }
 
     public Product() {
