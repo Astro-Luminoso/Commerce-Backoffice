@@ -3,7 +3,6 @@ package dev.nbcsparta.assignment.commerce_backoffice.repository;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.GetCustomerPageFilter;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.CustomerDashboard;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ManagerDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

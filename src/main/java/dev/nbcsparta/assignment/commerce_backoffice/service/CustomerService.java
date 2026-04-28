@@ -2,7 +2,6 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.CustomerDashboard;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ManagerDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.AlreadyDeletedUserException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ConflictUserException;
