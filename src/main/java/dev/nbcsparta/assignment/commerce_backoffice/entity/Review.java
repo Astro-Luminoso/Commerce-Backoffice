@@ -51,4 +51,18 @@ public class Review {
         this.customer = customer;
         this.product = product;
     }
+
+    public Long getId() {return id;}
+
+    public Integer getRating() {return rating;}
+
+    public String getContent() {return content;}
+
+    public LocalDateTime getCreatedAt() {return createdAt;}
+
+    public Order getOrder() {return order;}
+
+    public Customer getCustomer() {return customer;}
+
+    public Product getProduct() {return product;}
 }

@@ -55,7 +55,7 @@ public class SecurityConfig {
                                 auth.
                                         requestMatchers("/api/v1/login", "/api/v1/register")
                                         .permitAll()
-                                        .requestMatchers("/api/v1/register/**")
+                                        .requestMatchers("/api/v1/managers/**")
                                         .hasRole("SUPER")
                                         .requestMatchers("/api/v1/products/**")
                                         .hasRole("OPS")
