@@ -2,6 +2,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.config;
 
 import dev.nbcsparta.assignment.commerce_backoffice.config.jwt.JwtAuthenticationFilter;
 import dev.nbcsparta.assignment.commerce_backoffice.config.jwt.JwtProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +22,9 @@ public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
 
+    @Value("{password-encoder-round}")
+    private int strength;
+
     public SecurityConfig(JwtProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
     }
@@ -34,7 +38,7 @@ public class SecurityConfig {
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(strength);
     }
 
     @Bean
