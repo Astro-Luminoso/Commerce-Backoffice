@@ -2,6 +2,8 @@ package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.GetCustomerPageFilter;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.CustomerDashboard;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ManagerDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +35,12 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
     Optional<CustomerDetail> findCustomerDetail(
             @Param("customerId") Long customerId
     );
+
+    @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.CustomerDashboard(" +
+    "COUNT(c)," +
+    "SUM(CASE WHEN c.status = dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus.ACTIVE THEN 1 ELSE 0 END))" +
+    "FROM Customer c")
+    CustomerDashboard getStatistics();
 
     boolean existsByEmail(String email);
 }
