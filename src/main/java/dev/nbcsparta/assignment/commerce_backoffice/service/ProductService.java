@@ -50,21 +50,11 @@ public class ProductService {
 
 
     @Transactional(readOnly = true)
-    public GetListProductResponse<GetPageProductResponse> getAllProduct(String name, int page, int size, String sortName, String sortBy, String category, ProductStatus status) {
+    public GetListProductResponse<GetPageProductResponse> getAllProduct(String name, String category, ProductStatus status, Pageable pageable) {
+        Page<Product> productPage = productRepository.findAll(name, category, status, pageable);
+        Page<GetPageProductResponse> products = productPage.map(GetPageProductResponse::from);
 
-        Pageable pageable;
-        try {
-            pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(sortBy), sortName));
-        } catch (Exception e) {
-            throw new SortFailException("정렬에 실패했습니다");
-        }
-        Page<Product> productPage =
-                productRepository.findAll(name, category, status, pageable);
-
-        Page<GetPageProductResponse> dtoPage =
-                productPage.map(GetPageProductResponse::from);
-
-        return GetListProductResponse.from(dtoPage);
+        return GetListProductResponse.from(products);
     }
 
 

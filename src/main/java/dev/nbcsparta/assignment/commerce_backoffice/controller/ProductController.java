@@ -2,16 +2,19 @@ package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
-import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.service.ProductService;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
+@Validated
 @RestController
 public class ProductController {
 
@@ -42,20 +45,21 @@ public class ProductController {
      * @return <GetListProductResponse<GetPageProductResponse>>
      */
     @GetMapping("/products")
-    public ResponseEntity<GetListProductResponse<GetPageProductResponse>> getAllPage(
+    public ResponseEntity<CommonResponse<GetListProductResponse<GetPageProductResponse>>> getAllPage(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false, defaultValue = "1") int page,
-            @RequestParam(required = false, defaultValue = "10") int size,
+            @RequestParam(required = false, defaultValue = "1") @Min(1) int page,
+            @RequestParam(required = false, defaultValue = "10") @Min(1) @Max(100) int size,
             @RequestParam(required = false, defaultValue = "createdAt") String sortName,
             @RequestParam(required = false, defaultValue = "DESC") String sortBy,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) ProductStatus status
     ) {
-        GetListProductResponse<GetPageProductResponse> pageable = productService.getAllProduct(
-                name, page, size, sortName, sortBy, category, status
-        );
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(sortBy), sortName));
+        GetListProductResponse<GetPageProductResponse> response = productService.getAllProduct(name, category, status, pageable);
 
-        return ResponseEntity.status(HttpStatus.OK).body(pageable);
+        return CommonResponse
+                .success(HttpStatus.OK, "상품 페이지", response)
+                .toResponseEntity();
     }
 
 
