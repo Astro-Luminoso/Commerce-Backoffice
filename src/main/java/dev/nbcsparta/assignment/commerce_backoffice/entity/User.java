@@ -2,9 +2,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyProfileRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,6 +23,7 @@ public class User {
     private String phoneNumber;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
     @CreatedDate
