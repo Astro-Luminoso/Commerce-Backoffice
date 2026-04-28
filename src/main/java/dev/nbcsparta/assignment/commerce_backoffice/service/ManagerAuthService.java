@@ -1,9 +1,9 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
+import dev.nbcsparta.assignment.commerce_backoffice.config.jwt.JwtProvider;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.CreateManagerRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.CreateManagerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.LoginRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.SessionManager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ConflictUserException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.LoginNotAllowedException;
@@ -18,10 +18,16 @@ public class ManagerAuthService {
 
     private final ManagerAuthRepository managerAuthRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
-    public ManagerAuthService(ManagerAuthRepository managerAuthRepository, PasswordEncoder passwordEncoder) {
+    public ManagerAuthService(
+            ManagerAuthRepository managerAuthRepository,
+            PasswordEncoder passwordEncoder,
+            JwtProvider jwtProvider
+    ) {
         this.managerAuthRepository = managerAuthRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtProvider = jwtProvider;
     }
 
     @Transactional
@@ -37,19 +43,40 @@ public class ManagerAuthService {
         return CreateManagerResponse.from(resManager);
     }
 
+//    @Transactional
+//    public SessionManager login(LoginRequest req) {
+//        Manager manager = managerAuthRepository.findByEmail(req.email())
+//                .orElseThrow(() -> new NotMatchException("이메일 또는 비밀번호가 일치하지 않습니다."));
+//
+//        boolean isMatch = manager.isPasswordMatch(passwordEncoder, req.password());
+//        if (!isMatch) {
+//            throw new NotMatchException("이메일 또는 비밀번호가 일치하지 않습니다.");
+//        }
+//
+//        switch (manager.getStatus()) {
+//            case ACTIVE -> {
+//                return SessionManager.from(manager);
+//            }
+//            case INACTIVE -> throw new LoginNotAllowedException("계정 비활성화 상태입니다.");
+//            case SUSPENDED -> throw new LoginNotAllowedException("계정이 정지된 상태입니다.");
+//            case PENDING -> throw new LoginNotAllowedException("계정 승인대기 중입니다.");
+//            case DENIED -> throw new LoginNotAllowedException("계정 신청이 거부된 상태입니다.");
+//            default -> throw new IllegalStateException("유효하지 않은 상태 값: " + manager.getStatus());
+//        }
+//    }
+
     @Transactional
-    public SessionManager login(LoginRequest req) {
+    public String login(LoginRequest req) {
         Manager manager = managerAuthRepository.findByEmail(req.email())
                 .orElseThrow(() -> new NotMatchException("이메일 또는 비밀번호가 일치하지 않습니다."));
-
         boolean isMatch = manager.isPasswordMatch(passwordEncoder, req.password());
-        if (!isMatch) {
+        if(!isMatch) {
             throw new NotMatchException("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
 
         switch (manager.getStatus()) {
             case ACTIVE -> {
-                return SessionManager.from(manager);
+                return jwtProvider.createToken(manager.getName(), manager.getAuthorities());
             }
             case INACTIVE -> throw new LoginNotAllowedException("계정 비활성화 상태입니다.");
             case SUSPENDED -> throw new LoginNotAllowedException("계정이 정지된 상태입니다.");
@@ -58,5 +85,6 @@ public class ManagerAuthService {
             default -> throw new IllegalStateException("유효하지 않은 상태 값: " + manager.getStatus());
         }
     }
+
 
 }
