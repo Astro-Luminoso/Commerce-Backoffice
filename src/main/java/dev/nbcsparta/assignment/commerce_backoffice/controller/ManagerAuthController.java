@@ -31,7 +31,9 @@ public class ManagerAuthController {
     ) {
         CreateManagerResponse res = managerAuthService.register(req);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(CommonResponse.success(HttpStatus.CREATED, "가입 완료", res));
+        return CommonResponse
+                .success(HttpStatus.CREATED, "가입 완료", res)
+                .toResponseEntity();
     }
 
     @PostMapping("/login")
@@ -41,13 +43,17 @@ public class ManagerAuthController {
         SessionManager sessionManager = managerAuthService.login(req);
         authentication.login(sessionManager);
 
-        return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.success(HttpStatus.OK, "로그인 성공"));
+        return CommonResponse
+                .success(HttpStatus.OK, "로그인 성공")
+                .toResponseEntity();
     }
 
     @PostMapping("/logout")
     public ResponseEntity<CommonResponse<Void>> logout(HttpServletResponse res) {
         authentication.logout();
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return CommonResponse
+                .success(HttpStatus.NO_CONTENT, "로그아웃 완료")
+                .toResponseEntity();
     }
 }
