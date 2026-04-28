@@ -27,8 +27,8 @@ public interface ManagerRepository extends JpaRepository<Manager, Long> {
             Pageable pageable);
 
     @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ManagerDashboard(" +
-            "count(m)," +
-            "sum(CASE WHEN m.status = dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus.ACTIVE THEN 1 ELSE 0 END))" +
+            "COUNT(m)," +
+            "SUM(CASE WHEN m.status = dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus.ACTIVE THEN 1 ELSE 0 END))" +
             "FROM Manager m")
     ManagerDashboard getStatistics();
 }
