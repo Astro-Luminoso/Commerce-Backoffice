@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 
 @Entity
+@Table(name = "managers")
 public class Manager extends User{
 
     @Id
