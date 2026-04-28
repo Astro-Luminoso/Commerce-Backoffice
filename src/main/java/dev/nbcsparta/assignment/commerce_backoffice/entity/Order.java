@@ -54,6 +54,10 @@ public class Order {
         this.product = product;
     }
 
+    public void updateStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
     public Long getId() {
         return id;
     }
