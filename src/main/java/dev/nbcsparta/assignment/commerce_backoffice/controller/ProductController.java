@@ -4,8 +4,6 @@ package dev.nbcsparta.assignment.commerce_backoffice.controller;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.service.ProductService;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -36,8 +34,8 @@ public class ProductController {
     /**
      *
      * @param name     상품 이름
-     * @param page
-     * @param size
+     * @param page     페이지 번호
+     * @param size     페이지 크기
      * @param sortName 정렬 항목 이름  ex) createdAt
      * @param sortBy   정렬 기준, DESC
      * @param category 상품 카테고리
@@ -47,13 +45,15 @@ public class ProductController {
     @GetMapping("/products")
     public ResponseEntity<CommonResponse<GetListProductResponse>> getAllPage(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false, defaultValue = "1") @Min(1) int page,
-            @RequestParam(required = false, defaultValue = "10") @Min(1) @Max(100) int size,
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "10") int size,
             @RequestParam(required = false, defaultValue = "createdAt") String sortName,
             @RequestParam(required = false, defaultValue = "DESC") String sortBy,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) ProductStatus status
     ) {
+        page = Math.max(page, 1);
+
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(sortBy), sortName));
         GetListProductResponse response = productService.getAllProduct(name, category, status, pageable);
 

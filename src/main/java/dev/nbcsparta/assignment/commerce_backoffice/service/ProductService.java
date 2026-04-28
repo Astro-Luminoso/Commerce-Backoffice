@@ -6,14 +6,11 @@ import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ManagerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ProductNotFoundException;
-import dev.nbcsparta.assignment.commerce_backoffice.exception.SortFailException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerAuthRepository;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ProductRepository;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +49,6 @@ public class ProductService {
     @Transactional(readOnly = true)
     public GetListProductResponse getAllProduct(String name, String category, ProductStatus status, Pageable pageable) {
         Page<Product> productPage = productRepository.findAll(name, category, status, pageable);
-//        Page<GetPageProductResponse> products = productPage.map(GetPageProductResponse::from);
 
         return GetListProductResponse.from(productPage);
     }
