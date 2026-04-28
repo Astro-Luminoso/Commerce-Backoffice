@@ -58,7 +58,7 @@ public class ProductController {
         GetListProductResponse<GetPageProductResponse> response = productService.getAllProduct(name, category, status, pageable);
 
         return CommonResponse
-                .success(HttpStatus.OK, "상품 페이지", response)
+                .success(HttpStatus.OK, "상품 페이지 조회 완료", response)
                 .toResponseEntity();
     }
 
