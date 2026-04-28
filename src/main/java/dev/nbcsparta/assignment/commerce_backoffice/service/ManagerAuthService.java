@@ -85,6 +85,4 @@ public class ManagerAuthService {
             default -> throw new IllegalStateException("유효하지 않은 상태 값: " + manager.getStatus());
         }
     }
-
-
 }
