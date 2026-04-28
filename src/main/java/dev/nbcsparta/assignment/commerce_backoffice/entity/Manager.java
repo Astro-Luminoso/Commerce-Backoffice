@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 
 @Entity
-@Table(name = "managers")
 public class Manager extends User{
 
     @Id
@@ -24,6 +23,9 @@ public class Manager extends User{
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)          /* comment this property out for apply new validation rule */
     private Role role;
+
+    @OneToMany(mappedBy = "manager", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<HasAuthority> authorities;
 
     private String statusReason;
 
