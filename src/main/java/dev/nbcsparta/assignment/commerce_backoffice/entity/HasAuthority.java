@@ -25,6 +25,11 @@ public class HasAuthority {
     protected HasAuthority() {
     }
 
+    public HasAuthority(Manager manager, Authority authority) {
+        this.manager = manager;
+        this.authority = authority;
+    }
+
     public Role getAuthority() {
         return authority.getRole();
     }
