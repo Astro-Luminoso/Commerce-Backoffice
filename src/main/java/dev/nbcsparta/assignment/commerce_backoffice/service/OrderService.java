@@ -1,15 +1,10 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateOrderRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.OrderDetail;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.OrderListDetail;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateOrderStatusRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Order;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
-import dev.nbcsparta.assignment.commerce_backoffice.enumerate.DeliveryStatus;
-import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ManagerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.OrderNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ProductNotFoundException;
@@ -24,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OrderService {
 
+    // TODO 레포지토리들 전부 서비스로 변경해서 필요한 메서드들 만들어서 사용하기
     private final OrderRepository orderRepository;
     private final ManagerRepository managerRepository;
     private final ProductRepository productRepository;
@@ -42,66 +38,58 @@ public class OrderService {
     }
 
     @Transactional
-    public Order validateOrder(Long orderId) {
+    public Order getOrderById(Long orderId) {
         return orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
     }
 
     @Transactional
     public OrderDetail createOrder(CreateOrderRequest request, Long managerId) {
         Product product = productRepository.findById(request.productId()).orElseThrow(ProductNotFoundException::new);
-        Customer customer = customerService.validateCustomer(request.customerId());
+        Customer customer = customerService.getCustomerById(request.customerId());
         Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
 
         // 재고 차감 진행
         product.buy(request.quantity());
 
-        int totalPrice = product.getPrice() * request.quantity();
+        Order order = new Order(request, customer, manager, product);
 
-        Order order = new Order(
-                request.quantity(),
-                totalPrice,
-                DeliveryStatus.PENDING,
-                customer,
-                manager,
-                product
-        );
+        orderRepository.save(order);
 
-        Order savedOrder = orderRepository.save(order);
-
-        return OrderDetail.from(savedOrder);
+        return OrderDetail.from(order);
     }
 
     @Transactional(readOnly = true)
     public OrderListDetail findAllOrder(
-            Long orderId,
-            String customerName,
-            Pageable customPageable,
-            ProductStatus status
+            GetOrderPageFilter filter,
+            Pageable customPageable
     ) {
-        Page<Order> orderPage = orderRepository.findAllByFilters(orderId, customerName, customPageable, status);
+        Page<Order> orderPage = orderRepository.findAllByFilters(filter, customPageable);
 
         return OrderListDetail.from(orderPage);
     }
 
     @Transactional(readOnly = true)
     public OrderDetail getDetailOrder(Long orderId) {
-        Order order = validateOrder(orderId);
+        Order order = getOrderById(orderId);
 
         return OrderDetail.from(order);
     }
 
     @Transactional
     public void updateStatus(UpdateOrderStatusRequest request, Long orderId) {
-        Order order = validateOrder(orderId);
+        Order order = getOrderById(orderId);
 
-        order.updateStatus(request.status());
+        order.updateStatus(request);
     }
 
     @Transactional
     public void delete(Long orderId) {
-        Order order = validateOrder(orderId);
-        int canceledQuantity = order.getQuantity();
-        order.getProduct().addQuantity(canceledQuantity);
+        Order order = getOrderById(orderId);
+
+        int cancelledQuantity = order.getQuantity();
+
+        // TODO 나중에 상품 서비스로 취소 갯수를 가져가서 갯수 추가해주는 코드 추가해주기
+        order.getProduct().addQuantity(cancelledQuantity);
 
         orderRepository.deleteById(orderId);
     }
