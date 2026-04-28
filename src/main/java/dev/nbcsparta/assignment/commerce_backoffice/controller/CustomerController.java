@@ -22,11 +22,14 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDetail> createCustomer(
+    public ResponseEntity<CommonResponse<CustomerDetail>> createCustomer(
             @RequestBody CreateCustomerRequest request
     ) {
         CustomerDetail response = customerService.createCustomer(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        return CommonResponse
+                .success(HttpStatus.CREATED, "고객 생성 성공", response)
+                .toResponseEntity();
     }
 
     /**
@@ -38,7 +41,7 @@ public class CustomerController {
      * @return 필터링된 고객의 정보, 페이징 정보
      */
     @GetMapping()
-    public ResponseEntity<CustomerListDetail> getAllCustomer(
+    public ResponseEntity<CommonResponse<CustomerListDetail>> getAllCustomer(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email,
             @PageableDefault(sort = "name") Pageable pageable,
@@ -46,15 +49,20 @@ public class CustomerController {
     ) {
         // 입력받은 페이지 넘버가 1이라면 백엔드 인덱스에서는 0을 검색해야 하기때문에 -1을 해줍니다.
         int fixedPageNumber = Math.max(0, pageable.getPageNumber() - 1);
+
         // 페이지 넘버를 -1 한 넘버를 가진 Pageable 생성
         Pageable customPageable = PageRequest.of(
                 fixedPageNumber,
                 pageable.getPageSize(),
                 pageable.getSort()
         );
-        CustomerListDetail customerResponse = customerService.findAllCustomer(name, email, customPageable, status);
 
-        return ResponseEntity.status(HttpStatus.OK).body(customerResponse);
+        GetCustomerPageFilter filter = new GetCustomerPageFilter(name, email, status);
+        CustomerListDetail response = customerService.findAllCustomer(filter, customPageable);
+
+        return CommonResponse
+                .success(HttpStatus.OK, "고객 전체 조회 성공", response)
+                .toResponseEntity();
     }
 
     /**
@@ -64,39 +72,48 @@ public class CustomerController {
      * @return 조회한 고객 정보
      */
     @GetMapping("/{customerId}")
-    public ResponseEntity<CustomerDetail> getOneCustomer(
+    public ResponseEntity<CommonResponse<CustomerDetail>> getOneCustomer(
             @PathVariable Long customerId
     ) {
-        CustomerDetail customerResponse = customerService.findOneCustomer(customerId);
-        return ResponseEntity.status(HttpStatus.OK).body(customerResponse);
+        CustomerDetail response = customerService.findOneCustomer(customerId);
+
+        return CommonResponse
+                .success(HttpStatus.OK, "고객 단 건 조회 성공", response)
+                .toResponseEntity();
     }
 
     @PutMapping("/{customerId}")
-    public ResponseEntity<CustomerDetail> updateCustomerDetails(
+    public ResponseEntity<CommonResponse<CustomerDetail>> updateCustomerDetails(
             @PathVariable Long customerId,
             @Valid @RequestBody UpdateMyProfileRequest request
     ) {
         CustomerDetail response = customerService.updateDetail(customerId, request);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+
+        return CommonResponse
+                .success(HttpStatus.OK, "고객 정보 수정 성공", response)
+                .toResponseEntity();
     }
 
     @PatchMapping("/{customerId}")
-    public ResponseEntity<CustomerStatusResponse> updateCustomerStatus(
+    public ResponseEntity<CommonResponse<CustomerStatusResponse>> updateCustomerStatus(
             @PathVariable Long customerId,
             @Valid @RequestBody UpdateCustomerStatusRequest request
     ) {
         CustomerStatusResponse response = customerService.updateStatus(customerId, request);
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return CommonResponse
+                .success(HttpStatus.OK, "고객 상태 수정 성공", response)
+                .toResponseEntity();
     }
 
     @DeleteMapping("/{customerId}")
-    public ResponseEntity<Void> deleteCustomer(
+    public ResponseEntity<CommonResponse<Void>> deleteCustomer(
             @PathVariable Long customerId
     ) {
         customerService.deleteCustomer(customerId);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return CommonResponse
+                .success(HttpStatus.NO_CONTENT, "고객 삭제 성공")
+                .toResponseEntity();
     }
-
 }
