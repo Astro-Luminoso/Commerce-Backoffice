@@ -37,9 +37,9 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
     );
 
     @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.CustomerDashboard(" +
-    "COUNT(c)," +
-    "SUM(CASE WHEN c.status = dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus.ACTIVE THEN 1 ELSE 0 END))" +
-    "FROM Customer c")
+            "COUNT(c)," +
+            "SUM(CASE WHEN c.status = dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus.ACTIVE THEN 1 ELSE 0 END))" +
+            "FROM Customer c")
     CustomerDashboard getStatistics();
 
     boolean existsByEmail(String email);
