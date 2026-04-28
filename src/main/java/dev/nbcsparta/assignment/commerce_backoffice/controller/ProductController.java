@@ -45,7 +45,7 @@ public class ProductController {
      * @return <GetListProductResponse<GetPageProductResponse>>
      */
     @GetMapping("/products")
-    public ResponseEntity<CommonResponse<GetListProductResponse<GetPageProductResponse>>> getAllPage(
+    public ResponseEntity<CommonResponse<GetListProductResponse>> getAllPage(
             @RequestParam(required = false) String name,
             @RequestParam(required = false, defaultValue = "1") @Min(1) int page,
             @RequestParam(required = false, defaultValue = "10") @Min(1) @Max(100) int size,
@@ -55,7 +55,7 @@ public class ProductController {
             @RequestParam(required = false) ProductStatus status
     ) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(sortBy), sortName));
-        GetListProductResponse<GetPageProductResponse> response = productService.getAllProduct(name, category, status, pageable);
+        GetListProductResponse response = productService.getAllProduct(name, category, status, pageable);
 
         return CommonResponse
                 .success(HttpStatus.OK, "상품 목록 조회 성공", response)

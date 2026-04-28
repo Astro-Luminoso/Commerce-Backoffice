@@ -50,11 +50,11 @@ public class ProductService {
 
 
     @Transactional(readOnly = true)
-    public GetListProductResponse<GetPageProductResponse> getAllProduct(String name, String category, ProductStatus status, Pageable pageable) {
+    public GetListProductResponse getAllProduct(String name, String category, ProductStatus status, Pageable pageable) {
         Page<Product> productPage = productRepository.findAll(name, category, status, pageable);
-        Page<GetPageProductResponse> products = productPage.map(GetPageProductResponse::from);
+//        Page<GetPageProductResponse> products = productPage.map(GetPageProductResponse::from);
 
-        return GetListProductResponse.from(products);
+        return GetListProductResponse.from(productPage);
     }
 
 
