@@ -38,13 +38,13 @@ class OrderRepositoryTest {
                 "상품관리자", "admin@gmail.com", "password", "010-2222-2222", Role.Super_MANAGER, AccountStatus.ACTIVE
         ));
         Product product = productRepository.save(new Product(
-                "폰", "전자제품", 5000L, 50, ProductStatus.SALE, productManager
+                "폰", "전자제품", 5000, 50, ProductStatus.SALE, productManager
         ));
 
         // 💡 핵심: Order 객체를 만들 때 Manager 자리에 'null'을 넣습니다!
         Order order = new Order(
                 5,
-                25000L,
+                25000,
                 DeliveryStatus.PENDING,
                 customer,
                 null, // <--- 매니저가 없는 상태!

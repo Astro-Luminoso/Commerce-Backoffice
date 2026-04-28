@@ -1,4 +1,4 @@
-package dev.nbcsparta.assignment.commerce_backoffice.dto;
+package dev.nbcsparta.assignment.commerce_backoffice.dto.manager;
 
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import org.springframework.data.domain.Page;

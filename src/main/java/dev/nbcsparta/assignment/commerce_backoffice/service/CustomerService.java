@@ -44,9 +44,7 @@ public class CustomerService {
      * @return 필터링 된 고객 정보 DTO 리스트를 담은 DTO
      */
     @Transactional(readOnly = true)
-    public CustomerListDetail findAllCustomer(
-            String name, String email, Pageable pageable, AccountStatus status
-    ) {
+    public CustomerListDetail findAllCustomer(String name, String email, Pageable pageable, AccountStatus status) {
         Page<Customer> customerPage = customerRepository.findAllByFilters(name, email, pageable, status);
 
         return CustomerListDetail.from(customerPage);
@@ -68,13 +66,10 @@ public class CustomerService {
     @Transactional
     public CustomerDetail updateDetail(Long customerId, UpdateMyProfileRequest request) {
         Customer customer = validateCustomer(customerId);
-
         boolean isExistEmail = customerRepository.existsByEmail(request.email());
-
         if (isExistEmail) {
             throw new ConflictUserException("이미 존재하는 사용자입니다.");
         }
-
         customer.updateProfile(request);
 
         return CustomerDetail.from(customer);
@@ -83,9 +78,7 @@ public class CustomerService {
     @Transactional
     public CustomerStatusResponse updateStatus(Long customerId, UpdateCustomerStatusRequest request) {
         Customer customer = validateCustomer(customerId);
-
         AccountStatus status = request.status();
-
         customer.updateStatus(status);
 
         return CustomerStatusResponse.from(customer);
@@ -94,7 +87,6 @@ public class CustomerService {
     @Transactional
     public void deleteCustomer(Long customerId) {
         Customer customer = validateCustomer(customerId);
-
         if (customer.isDeleted())
             throw new AleadyDeletedUserException("이미 삭제 상태입니다.");
 
