@@ -48,6 +48,7 @@ public class ManagerService {
             Pageable pageable
     ) {
         Page<Manager> managerList = managerRepository.findAll(name, email, role, status, pageable);
+
         return ManagerListDetail.from(managerList);
     }
 
@@ -60,6 +61,7 @@ public class ManagerService {
     @Transactional(readOnly = true)
     public ManagerDetail findOneManager(Long managerId) {
         Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
+
         return ManagerDetail.from(manager);
     }
 
@@ -74,6 +76,7 @@ public class ManagerService {
         if (reqBody.status() == AccountStatus.DENIED && reqBody.reason() == null) {
             throw new NullValueException();
         }
+
         Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
         manager.updateStatus(reqBody);
     }
@@ -86,6 +89,7 @@ public class ManagerService {
     public ManagerDetail updateManagerDetail(Long managerId, UpdateMyProfileRequest reqBody) {
         Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
         manager.updateProfile(reqBody);
+
         return ManagerDetail.from(manager);
     }
 
