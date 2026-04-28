@@ -12,7 +12,7 @@ public record OrderDetail(
         String customerEmail,
         String productName,
         Integer quantity,
-        Long totalPrice,
+        Integer totalPrice,
         LocalDateTime orderDate,
         DeliveryStatus status,
         String ManagerName,
