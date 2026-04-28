@@ -12,14 +12,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query("""
-SELECT p
-FROM Product p
-LEFT JOIN FETCH p.manager
-WHERE (:name IS NULL OR p.name LIKE CONCAT('%', :name, '%'))
-  AND (:category IS NULL OR p.category = :category)
-  AND (:status IS NULL OR p.status = :status)
-""")
+    @Query(" SELECT p FROM Product p " +
+            " WHERE (:name IS NULL OR p.name LIKE CONCAT('%', :name, '%')) " +
+            " AND (:category IS NULL OR p.category = :category) " +
+            " AND (:status IS NULL OR p.status = :status) ")
     Page<Product> findAll(
             @Param("name") String name,
             @Param("category") String category,
