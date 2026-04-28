@@ -26,6 +26,6 @@ public class HasAuthority {
     }
 
     public Role getAuthority() {
-        return authority.getType();
+        return authority.getRole();
     }
 }

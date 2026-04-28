@@ -22,7 +22,7 @@ public class Authority {
     protected Authority() {
     }
 
-    public Role getType() {
+    public Role getRole() {
         return this.roleType;
     }
 }
