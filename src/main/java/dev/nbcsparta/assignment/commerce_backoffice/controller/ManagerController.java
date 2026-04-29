@@ -97,7 +97,6 @@ public class ManagerController {
             @PathVariable Long managerId,
             @Valid @RequestBody ManagerStatusUpdate reqBody) {
         logger.info("PATCH /managers/{}/status: Update manager status", managerId);
-        authentication.checkAuthority(Role.SUPER);
         managerService.updateManagerStatus(managerId, reqBody);
 
         return ResponseEntity.status(HttpStatus.OK).build();
