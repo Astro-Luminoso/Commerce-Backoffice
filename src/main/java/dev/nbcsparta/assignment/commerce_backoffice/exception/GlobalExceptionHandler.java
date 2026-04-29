@@ -22,13 +22,13 @@ public class GlobalExceptionHandler {
 
     // Bean Validation 예외 핸들링
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<CommonResponse<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         String errorMessage = ex.getBindingResult().getFieldErrors().stream()
                 .findFirst()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .orElse("입력 값이 올바르지 않습니다.");
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        return CommonResponse.fail(HttpStatus.BAD_REQUEST, errorMessage).toResponseEntity();
     }
 
     // ====================================================================================
