@@ -19,9 +19,6 @@ public record CreateProductRequest(
         int quantity,
 
         @NotNull
-        ProductStatus status,
-
-        @NotNull
-        Long managerId
+        ProductStatus status
 ) {
 }
