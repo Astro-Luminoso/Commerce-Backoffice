@@ -2,6 +2,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.service.ReviewService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -20,12 +21,14 @@ public class ReviewController {
 
     @GetMapping("/reviews")
     ResponseEntity<CommonResponse<GetListReviewResponse>> getListReview(
-            @PageableDefault(page = 1, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @PageableDefault(page = 1, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) int rating
+            @RequestParam(defaultValue = "-1") int rating
     ) {
+        int page = Math.max(pageable.getPageNumber() - 1, 0);
+        Pageable currentPageable = PageRequest.of(page, pageable.getPageSize(), pageable.getSort());
         ReviewFilter reviewFilter = new ReviewFilter(keyword, rating);
-        GetListReviewResponse response = reviewService.getAllReview(pageable, reviewFilter);
+        GetListReviewResponse response = reviewService.getAllReview(currentPageable, reviewFilter);
 
         return CommonResponse
                 .success(HttpStatus.OK, "리뷰 목록 조회 성공", response)

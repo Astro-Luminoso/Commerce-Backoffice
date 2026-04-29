@@ -23,7 +23,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             OR p.name LIKE CONCAT('%', :#{#filter.keyword}, '%')
             OR r.content LIKE CONCAT('%', :#{#filter.keyword}, '%')
         )
-        AND ( :#{#filter.rating} IS NULL OR r.rating = :#{#filter.rating} )
+        AND ( :#{#filter.rating} = -1 OR r.rating = :#{#filter.rating} )
         """)
     Page<Review> findAllReview(
             @Param("filter") ReviewFilter filter,
