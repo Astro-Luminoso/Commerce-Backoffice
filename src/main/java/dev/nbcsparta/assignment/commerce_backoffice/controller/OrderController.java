@@ -1,6 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
-import dev.nbcsparta.assignment.commerce_backoffice.config.Authentication;
+import dev.nbcsparta.assignment.commerce_backoffice.config.CustomUserDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.service.OrderService;
@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,19 +18,18 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final OrderService orderService;
-    private final Authentication authentication;
 
-    public OrderController(OrderService orderService, Authentication authentication) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.authentication = authentication;
     }
 
     @PostMapping
     public ResponseEntity<CommonResponse<OrderDetail>> createOrder(
-            @Valid @RequestBody CreateOrderRequest request
+            @Valid @RequestBody CreateOrderRequest request,
+            @AuthenticationPrincipal CustomUserDetail userDetails
     ) {
-        SessionManager sessionManager = authentication.getCurrentManager();
-        OrderDetail response = orderService.createOrder(request, sessionManager.id());
+        Long managerId = userDetails.getManagerId();
+        OrderDetail response = orderService.createOrder(request, managerId);
 
         return CommonResponse
                 .success(HttpStatus.CREATED, "주문 생성 성공", response)
