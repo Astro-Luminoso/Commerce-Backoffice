@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ManagerDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerListDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerRoleUpdate;
@@ -111,5 +112,9 @@ public class ManagerService {
         Manager manager = managerRepository. findById(managerId).orElseThrow(ManagerNotFoundException::new);
         manager.setAccountDeletion();
         manager.updateStatus(AccountStatus.INACTIVE);
+    }
+
+    public ManagerDashboard getStatistics() {
+        return managerRepository.getStatistics();
     }
 }
