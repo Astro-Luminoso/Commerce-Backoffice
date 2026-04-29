@@ -1,10 +1,11 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.customer.*;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.CustomerStatusCount;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.CustomerDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
-import dev.nbcsparta.assignment.commerce_backoffice.exception.AlreadyDeletedUserException;
+import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ConflictUserException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.CustomerRepository;
@@ -32,7 +33,7 @@ public class CustomerService {
      */
     @Transactional(readOnly = true)
     public Customer getCustomerById(Long customerId) {
-        return customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
+        return customerRepository.findByIdAndIsDeletedFalse(customerId).orElseThrow(CustomerNotFoundException::new);
     }
 
     /**
@@ -114,18 +115,15 @@ public class CustomerService {
     }
 
     /**
-     * 고객의 삭제 여부를 변경합니다.
+     * 고객을 소프트 삭제 합니다.
      *
      * @param customerId 삭제 상태로 만들 고객 고유 번호
      */
     @Transactional
     public void deleteCustomer(Long customerId) {
         Customer customer = getCustomerById(customerId);
-
-        if (customer.isDeleted())
-            throw new AlreadyDeletedUserException("이미 삭제 상태입니다.");
-
         customer.setAccountDeletion();
+        customer.updateStatus(AccountStatus.INACTIVE);
     }
 
     public CustomerDashboard getStatistics() {
