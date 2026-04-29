@@ -44,6 +44,8 @@ public class Order {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    private boolean isDeleted;
+
     protected Order() {
     }
 
@@ -54,6 +56,7 @@ public class Order {
         this.customer = customer;
         this.manager = manager;
         this.product = product;
+        this.isDeleted = false;
     }
 
     public void updateStatus(UpdateOrderStatusRequest request) {
@@ -90,5 +93,9 @@ public class Order {
 
     public Product getProduct() {
         return product;
+    }
+
+    public void toggleDeleted() {
+        this.isDeleted = !this.isDeleted;
     }
 }

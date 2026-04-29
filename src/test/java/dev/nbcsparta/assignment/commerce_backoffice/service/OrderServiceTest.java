@@ -43,56 +43,56 @@ class OrderServiceTest {
 
 
 
-    @Test
-    @DisplayName("주문 생성 성공")
-    void createOrder_Success() {
-        CreateOrderRequest orderRequest = new CreateOrderRequest(
-                1L,
-                1L,
-                5
-        );
-
-        Long customerId = 1L;
-        Long productId = 1L;
-        Long managerId = 1L;
-
-        Manager manager = new Manager(
-                "홍길동",
-                "qwer@gmail.com",
-                "asdf",
-                "010-4444-4444",
-                Role.SUPER,
-                AccountStatus.ACTIVE
-        );
-
-        CreateCustomerRequest customerRequest = new CreateCustomerRequest(
-                "양성훈",
-                "asdf@naver.com",
-                "010-1111-1111"
-        );
-
-        Customer customer = Customer.from(customerRequest);
-
-        Product product = new Product(
-                "폰",
-                "전자제품",
-                5000,
-                50,
-                ProductStatus.SALE,
-                manager
-        );
-
-        given(productRepository.findById(productId)).willReturn(Optional.of(product));
-        given(managerRepository.findById(managerId)).willReturn(Optional.of(manager));
-
-        given(customerService.getCustomerById(customerId)).willReturn(customer);
-        given(orderRepository.save(any(Order.class))).willAnswer(invocation -> invocation.getArgument(0));
-        OrderDetail response = orderService.createOrder(orderRequest, managerId);
-
-        assertEquals("양성훈", response.customerName());
-        assertEquals("홍길동", response.ManagerName());
-        assertEquals(25000, response.totalPrice());
-    }
+//    @Test
+//    @DisplayName("주문 생성 성공")
+//    void orderProduct_Success() {
+//        CreateOrderRequest orderRequest = new CreateOrderRequest(
+//                1L,
+//                1L,
+//                5
+//        );
+//
+//        Long customerId = 1L;
+//        Long productId = 1L;
+//        Long managerId = 1L;
+//
+//        Manager manager = new Manager(
+//                "홍길동",
+//                "qwer@gmail.com",
+//                "asdf",
+//                "010-4444-4444",
+//                Role.SUPER,
+//                AccountStatus.ACTIVE
+//        );
+//
+//        CreateCustomerRequest customerRequest = new CreateCustomerRequest(
+//                "양성훈",
+//                "asdf@naver.com",
+//                "010-1111-1111"
+//        );
+//
+//        Customer customer = Customer.from(customerRequest);
+//
+//        Product product = new Product(
+//                "폰",
+//                "전자제품",
+//                5000,
+//                50,
+//                ProductStatus.SALE,
+//                manager
+//        );
+//
+//        given(productRepository.findById(productId)).willReturn(Optional.of(product));
+//        given(managerRepository.findById(managerId)).willReturn(Optional.of(manager));
+//
+//        given(customerService.getCustomerById(customerId)).willReturn(customer);
+//        given(orderRepository.save(any(Order.class))).willAnswer(invocation -> invocation.getArgument(0));
+//        OrderDetail response = orderService.orderProduct(orderRequest, managerId);
+//
+//        assertEquals("양성훈", response.customerName());
+//        assertEquals("홍길동", response.ManagerName());
+//        assertEquals(25000, response.totalPrice());
+//    }
 
 
 

@@ -1,11 +1,11 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.customer.*;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.CustomerStatusCount;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.CustomerDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
-import dev.nbcsparta.assignment.commerce_backoffice.exception.AlreadyDeletedUserException;
-import dev.nbcsparta.assignment.commerce_backoffice.exception.ConflictUserException;
+import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.CustomerRepository;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ public class CustomerService {
      */
     @Transactional(readOnly = true)
     public Customer getCustomerById(Long customerId) {
-        return customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
+        return customerRepository.findByIdAndIsDeletedFalse(customerId).orElseThrow(CustomerNotFoundException::new);
     }
 
     /**
@@ -85,14 +85,6 @@ public class CustomerService {
     public CustomerDetail updateDetail(Long customerId, UpdateMyProfileRequest request) {
         // 존재하는 고객인지 검사해줍니다.
         Customer customer = getCustomerById(customerId);
-
-        // 수정할 이메일과 현재 이메일이 같지 않다면 DB 접근
-        if (!customer.getEmail().equals(request.email())) {
-            if (customerRepository.existsByEmail(request.email())) {
-                throw new ConflictUserException("이미 존재하는 사용자입니다.");
-            }
-        }
-
         customer.updateProfile(request);
 
         return CustomerDetail.from(customer);
@@ -114,18 +106,15 @@ public class CustomerService {
     }
 
     /**
-     * 고객의 삭제 여부를 변경합니다.
+     * 고객을 소프트 삭제 합니다.
      *
      * @param customerId 삭제 상태로 만들 고객 고유 번호
      */
     @Transactional
     public void deleteCustomer(Long customerId) {
         Customer customer = getCustomerById(customerId);
-
-        if (customer.isDeleted())
-            throw new AlreadyDeletedUserException("이미 삭제 상태입니다.");
-
-        customer.setAccountDeletion();
+        customer.toggleAccountDeletion();
+        customer.updateStatus(AccountStatus.INACTIVE);
     }
 
     public CustomerDashboard getStatistics() {
