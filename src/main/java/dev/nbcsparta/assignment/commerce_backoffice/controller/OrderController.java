@@ -4,7 +4,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.config.CustomUserDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.order.*;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
-import dev.nbcsparta.assignment.commerce_backoffice.service.OrderService;
+import dev.nbcsparta.assignment.commerce_backoffice.facade.OrderAction;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/orders")
 public class OrderController {
 
-    private final OrderService orderService;
+    private final OrderAction orderAction;
 
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
+    public OrderController(OrderAction orderAction) {
+        this.orderAction = orderAction;
     }
 
     @PostMapping
@@ -30,7 +30,7 @@ public class OrderController {
             @AuthenticationPrincipal CustomUserDetail userDetails
     ) {
         Long managerId = userDetails.getManagerId();
-        OrderDetail response = orderService.createOrder(request, managerId);
+        OrderDetail response = orderAction.createOrder(request, managerId);
 
         return CommonResponse
                 .success(HttpStatus.CREATED, "주문 생성 성공", response)
@@ -54,7 +54,7 @@ public class OrderController {
         );
 
         GetOrderPageFilter filter = new GetOrderPageFilter(orderId, customerName, status);
-        OrderListDetail response = orderService.findAllOrder(filter, customPageable);
+        OrderListDetail response = orderAction.getOrderListDetail(filter, customPageable);
 
         return CommonResponse
                 .success(HttpStatus.OK, "주문 전체 조회 성공", response)
@@ -65,7 +65,7 @@ public class OrderController {
     public ResponseEntity<CommonResponse<OrderDetail>> getOneOrder(
             @PathVariable Long orderId
     ) {
-        OrderDetail response = orderService.getDetailOrder(orderId);
+        OrderDetail response = orderAction.getOrderDetail(orderId);
 
         return CommonResponse
                 .success(HttpStatus.OK, "주문 단 건 조회 성공", response)
@@ -73,14 +73,14 @@ public class OrderController {
     }
 
     @PatchMapping("/{orderId}")
-    public ResponseEntity<CommonResponse<Void>> updateOrderStatus(
+    public ResponseEntity<CommonResponse<OrderDetail>> updateOrderStatus(
             @Valid @RequestBody UpdateOrderStatusRequest request,
             @PathVariable Long orderId
     ) {
-        orderService.updateStatus(request, orderId);
+        OrderDetail response = orderAction.updateOrderDetail(orderId, request);
 
         return CommonResponse
-                .success(HttpStatus.OK, "주문 상태 변경 성공")
+                .success(HttpStatus.OK, "주문 상태 변경 성공", response)
                 .toResponseEntity();
     }
 
@@ -89,8 +89,8 @@ public class OrderController {
             @PathVariable Long orderId,
             @RequestBody CancelOrderRequest request
     ) {
-        orderService.cancel(orderId, request);
-
+        // orderService.cancel(orderId, request);
+        orderAction.delete(orderId);
         return CommonResponse
                 .success(HttpStatus.NO_CONTENT, "주문 삭제 성공")
                 .toResponseEntity();

@@ -23,77 +23,54 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final ManagerService managerService;
-    private final ProductService productService;
-    private final CustomerService customerService;
 
-    public OrderService(
-            OrderRepository orderRepository,
-            ManagerService managerService,
-            ProductService productService,
-            CustomerService customerService
-    ) {
+    public OrderService( OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-        this.managerService = managerService;
-        this.productService = productService;
-        this.customerService = customerService;
     }
 
+    @Transactional(readOnly = true)
     public Order getOrderById(Long orderId) {
         return orderRepository.findByIdAndIsDeletedFalse(orderId).orElseThrow(OrderNotFoundException::new);
     }
 
     @Transactional
-    public OrderDetail createOrder(CreateOrderRequest request, Long managerId) {
-        Product product = productService.getProductById(request.productId());
-        product.checkStatus();
-
-        Customer customer = customerService.getCustomerById(request.customerId());
-        Manager manager = managerService.getManagerById(managerId);
-
+    public Order orderProduct(
+            Customer customer,
+            Manager manager,
+            Product product,
+            CreateOrderRequest request
+    ) {
+      
+        // Product product = productService.getProductById(request.productId());
+        // product.checkStatus();
+      
         // 재고 차감 진행
         product.buy(request.quantity());
-
         Order order = new Order(request, customer, manager, product);
 
-        orderRepository.save(order);
-
-        return OrderDetail.from(order);
+        return orderRepository.save(order);
     }
 
     @Transactional(readOnly = true)
-    public OrderListDetail findAllOrder(
+    public Page<Order> findAllOrder(
             GetOrderPageFilter filter,
             Pageable customPageable
     ) {
-        Page<Order> orderPage = orderRepository.findAllByFilters(filter, customPageable);
-
-        return OrderListDetail.from(orderPage);
-    }
-
-    @Transactional(readOnly = true)
-    public OrderDetail getDetailOrder(Long orderId) {
-        Order order = getOrderById(orderId);
-
-        return OrderDetail.from(order);
+        return orderRepository.findAllByFilters(filter, customPageable);
     }
 
     @Transactional
-    public void updateStatus(UpdateOrderStatusRequest request, Long orderId) {
+    public Order updateStatus(UpdateOrderStatusRequest request, Long orderId) {
         Order order = getOrderById(orderId);
-
         order.updateStatus(request);
+
+        return order;
     }
 
     @Transactional
-    public void cancel(Long orderId, CancelOrderRequest request) {
-        Order order = getOrderById(orderId);
+    public void softDelete(Order order) {
         order.cancelOrder(request);
-
-        Long productId = order.getProduct().getId();
-        int cancelledQuantity = order.getQuantity();
-
-        productService.addQuantity(productId, cancelledQuantity);
+        order.toggleDeleted();
     }
 
     public OrderDashboard getStatistics() {

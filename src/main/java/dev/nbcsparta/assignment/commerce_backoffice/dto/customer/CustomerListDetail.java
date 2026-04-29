@@ -1,5 +1,6 @@
-package dev.nbcsparta.assignment.commerce_backoffice.dto;
+package dev.nbcsparta.assignment.commerce_backoffice.dto.customer;
 
+import dev.nbcsparta.assignment.commerce_backoffice.dto.PageInfo;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

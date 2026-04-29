@@ -1,8 +1,8 @@
 package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateCustomerRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CustomerDetail;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.GetCustomerPageFilter;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.customer.CreateCustomerRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.customer.CustomerDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.customer.GetCustomerPageFilter;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyProfileRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;

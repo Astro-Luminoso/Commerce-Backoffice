@@ -1,6 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateCustomerRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.customer.CreateCustomerRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import jakarta.persistence.*;
 
