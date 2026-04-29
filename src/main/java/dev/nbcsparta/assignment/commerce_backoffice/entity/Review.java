@@ -66,9 +66,11 @@ public class Review {
 
     public Product getProduct() {return product;}
 
-    public Long getOrderId() { return this.order.getId(); }
+    public Long getOrderId() {return this.order.getId();}
 
-    public String getCustomerName() { return this.customer.getName(); }
+    public String getCustomerName() {return this.customer.getName();}
 
-    public String getProductName() { return this.product.getName(); }
+    public String getCustomerEmail() {return this.customer.getEmail();}
+
+    public String getProductName() {return this.product.getName();}
 }

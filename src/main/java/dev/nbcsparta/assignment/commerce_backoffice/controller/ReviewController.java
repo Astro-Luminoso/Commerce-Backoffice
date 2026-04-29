@@ -31,4 +31,15 @@ public class ReviewController {
                 .success(HttpStatus.OK, "리뷰 목록 조회 성공", response)
                 .toResponseEntity();
     }
+
+    @GetMapping("/reviews/{reviewId}")
+    ResponseEntity<CommonResponse<GetDetailReviewResponse>> getDetailReview(
+            @PathVariable Long reviewId
+    ) {
+        GetDetailReviewResponse response = reviewService.getOneReview(reviewId);
+
+        return CommonResponse
+                .success(HttpStatus.OK, "리뷰 상세 조회 성공", response)
+                .toResponseEntity();
+    }
 }

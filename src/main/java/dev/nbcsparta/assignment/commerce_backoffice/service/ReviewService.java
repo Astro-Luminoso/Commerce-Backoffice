@@ -4,6 +4,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ReviewR
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Review;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.ReviewNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ReviewRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +22,23 @@ public class ReviewService {
         this.reviewRepository = reviewRepository;
     }
 
+    public Review getReviewById(Long reviewId) {
+        return reviewRepository.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
+    }
+
+
     @Transactional(readOnly = true)
     public GetListReviewResponse getAllReview(Pageable pageable, ReviewFilter reviewFilter) {
         Page<Review> reviewPage = reviewRepository.findAllReview(reviewFilter, pageable);
 
         return GetListReviewResponse.from(reviewPage);
+    }
+
+    @Transactional(readOnly = true)
+    public GetDetailReviewResponse getOneReview(Long reviewId) {
+        Review review = getReviewById(reviewId);
+
+        return GetDetailReviewResponse.from(review);
     }
 
     public ReviewDashboard getStatistics() {
