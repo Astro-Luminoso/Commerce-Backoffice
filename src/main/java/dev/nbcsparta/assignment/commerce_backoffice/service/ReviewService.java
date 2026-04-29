@@ -26,7 +26,6 @@ public class ReviewService {
         return reviewRepository.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
     }
 
-
     @Transactional(readOnly = true)
     public GetListReviewResponse getAllReview(Pageable pageable, ReviewFilter reviewFilter) {
         Page<Review> reviewPage = reviewRepository.findAllReview(reviewFilter, pageable);
@@ -41,9 +40,13 @@ public class ReviewService {
         return GetDetailReviewResponse.from(review);
     }
 
-    public ReviewDashboard getStatistics() {
-        return reviewRepository.getStatistics();
+    @Transactional
+    public void delete(Long reviewId) {
+        Review review = getReviewById(reviewId);
+        reviewRepository.delete(review);
     }
+
+    public ReviewDashboard getStatistics() { return reviewRepository.getStatistics(); }
 
     public List<ReviewRatingCount> getRatingCount() {
         return reviewRepository.getRatingCount();
