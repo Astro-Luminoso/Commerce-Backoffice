@@ -110,12 +110,10 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    @Transactional
     public ProductDashboard getStatistics() {
         return productRepository.getStatistics();
     }
 
-    @Transactional
     public List<ProductCategoryCount> getCategoryCount() {
         return productRepository.getCategoryCount();
     }

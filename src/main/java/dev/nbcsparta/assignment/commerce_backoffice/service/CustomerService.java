@@ -128,12 +128,10 @@ public class CustomerService {
         customer.setAccountDeletion();
     }
 
-    @Transactional
     public CustomerDashboard getStatistics() {
         return customerRepository.getStatistics();
     }
 
-    @Transactional
     public List<CustomerStatusCount> getStatusCount() {
         return customerRepository.getStatusCount();
     }

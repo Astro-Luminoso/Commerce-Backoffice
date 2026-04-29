@@ -28,12 +28,10 @@ public class ReviewService {
         return GetListReviewResponse.from(reviewPage);
     }
 
-    @Transactional
     public ReviewDashboard getStatistics() {
         return reviewRepository.getStatistics();
     }
 
-    @Transactional
     public List<ReviewRatingCount> getRatingCount() {
         return reviewRepository.getRatingCount();
     }

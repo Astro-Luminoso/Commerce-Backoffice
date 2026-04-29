@@ -101,7 +101,6 @@ public class OrderService {
         orderRepository.deleteById(orderId);
     }
 
-    @Transactional
     public OrderDashboard getStatistics() {
         LocalDate now = LocalDate.now();
         LocalDateTime start = now.atStartOfDay();
@@ -110,7 +109,6 @@ public class OrderService {
         return orderRepository.getStatistics(start, end);
     }
 
-    @Transactional
     public List<RecentOrderItem> getRecentOrder() {
         return orderRepository.getRecentOrder(PageRequest.of(0,10));
     }
