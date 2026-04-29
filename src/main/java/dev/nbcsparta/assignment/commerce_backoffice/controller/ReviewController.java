@@ -45,4 +45,15 @@ public class ReviewController {
                 .success(HttpStatus.OK, "리뷰 상세 조회 성공", response)
                 .toResponseEntity();
     }
+
+    @DeleteMapping("/reviews/{reviewId}")
+    ResponseEntity<CommonResponse<Void>> deleteReview(
+            @PathVariable Long reviewId
+    ){
+        reviewService.delete(reviewId);
+
+        return CommonResponse
+                .success(HttpStatus.NO_CONTENT, "리뷰가 삭제되었습니다")
+                .toResponseEntity();
+    }
 }
