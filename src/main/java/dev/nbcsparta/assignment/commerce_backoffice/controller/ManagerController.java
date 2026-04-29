@@ -95,9 +95,9 @@ public class ManagerController {
             @Valid @RequestBody ManagerStatusUpdate reqBody) {
         logger.info("PATCH /managers/{}/status: Update manager status", managerId);
 
-        ManagerDetail resBody = superAdminAction.updateManagerStatus(managerId, reqBody);
+        ManagerDetail managerDetail = superAdminAction.updateManagerStatus(managerId, reqBody);
 
-        return CommonResponse.success(HttpStatus.OK, "상태 업데이트 성공", resBody).toResponseEntity();
+        return CommonResponse.success(HttpStatus.OK, "상태 업데이트 성공", managerDetail).toResponseEntity();
     }
 
     /**
@@ -114,13 +114,13 @@ public class ManagerController {
     ) {
         logger.info("PATCH /managers/{}/role: Update manager role", managerId);
 
-        ManagerDetail resData = superAdminAction.updateManagerAuthority(managerId, reqBody);
+        ManagerDetail managerDetail = superAdminAction.updateManagerAuthority(managerId, reqBody);
 
-        return CommonResponse.success(HttpStatus.OK, "권한 업데이트 성공", resData).toResponseEntity();
+        return CommonResponse.success(HttpStatus.OK, "권한 업데이트 성공", managerDetail).toResponseEntity();
     }
 
     @PutMapping("/{managerId}")
-    public ResponseEntity<ManagerDetail> updateMangerDetail(
+    public ResponseEntity<CommonResponse<ManagerDetail>> updateMangerDetail(
             @PathVariable Long managerId,
             @RequestBody UpdateMyProfileRequest reqBody
     ) {
