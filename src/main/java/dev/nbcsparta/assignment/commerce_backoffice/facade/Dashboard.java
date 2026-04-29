@@ -1,22 +1,23 @@
-package dev.nbcsparta.assignment.commerce_backoffice.service;
+package dev.nbcsparta.assignment.commerce_backoffice.facade;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.DashboardResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.DashboardSummary;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.DashboardWidgets;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.DashboardCharts;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.*;
+import dev.nbcsparta.assignment.commerce_backoffice.service.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class DashboardService {
+public class Dashboard {
     private final ManagerService managerService;
     private final CustomerService customerService;
     private final ProductService productService;
     private final OrderService orderService;
     private final ReviewService reviewService;
 
-    public DashboardService(
+    public Dashboard(
             ManagerService managerService,
             CustomerService customerService,
             ProductService productService,
