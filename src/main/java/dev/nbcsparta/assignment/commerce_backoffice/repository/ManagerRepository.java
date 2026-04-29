@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ManagerRepository extends JpaRepository<Manager, Long> {
 
@@ -25,6 +27,21 @@ public interface ManagerRepository extends JpaRepository<Manager, Long> {
             @Param("role")Role role,
             @Param("status")AccountStatus status,
             Pageable pageable);
+
+    @Query("SELECT m FROM Manager m " +
+            "WHERE (:name IS NULL OR m.name = :name) AND " +
+            "(:email IS NULL OR m.email = :email) AND " +
+            "(:role IS NULL OR m.role = :role) AND " +
+            "(:status IS NULL OR m.status = :status)")
+    Page<Manager> findAllByIsDeletedFalse(
+            @Param("name") String name,
+            @Param("email")String email,
+            @Param("role")Role role,
+            @Param("status")AccountStatus status,
+            Pageable pageable
+    );
+
+    Optional<Manager> findByIdAndIsDeletedFalse(long id);
 
     @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ManagerDashboard(" +
             "COUNT(m)," +

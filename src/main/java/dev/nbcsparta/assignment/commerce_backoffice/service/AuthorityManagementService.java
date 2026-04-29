@@ -26,4 +26,8 @@ public class AuthorityManagementService {
 
         repository.saveAll(hasAuthorities);
     }
+
+    public void removeAllAuthorities(Manager manager) {
+        repository.removeAllByManager(manager);
+    }
 }
