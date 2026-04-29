@@ -10,7 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/managers/mypages")
+@RequestMapping("/mypages")
 public class MyPageController {
 
     private final MyPageService myPageService;
