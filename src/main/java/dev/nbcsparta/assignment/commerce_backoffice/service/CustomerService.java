@@ -125,7 +125,7 @@ public class CustomerService {
         if (customer.isDeleted())
             throw new AlreadyDeletedUserException("이미 삭제 상태입니다.");
 
-        customer.setAccountDeletion();
+        customer.toggleAccountDeletion();
     }
 
     public CustomerDashboard getStatistics() {
