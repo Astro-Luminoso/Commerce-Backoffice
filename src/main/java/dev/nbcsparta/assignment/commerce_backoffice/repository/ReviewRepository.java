@@ -65,5 +65,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 """)
     List<ReviewRatingCount> getProductRatingCount(@Param("productId") Long productId);
 
-    List<Review> findTop3ByProductIdOrderByCreatedAtDesc(Long productId);
+    List<Review> findTop3ByProduct_IdOrderByCreatedAtDesc(Long productId);
 }
