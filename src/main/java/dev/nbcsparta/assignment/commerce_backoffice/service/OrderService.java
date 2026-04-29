@@ -40,7 +40,7 @@ public class OrderService {
     }
 
     public Order getOrderById(Long orderId) {
-        return orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        return orderRepository.findByIdAndIsDeletedFalse(orderId).orElseThrow(OrderNotFoundException::new);
     }
 
     @Transactional
@@ -86,14 +86,14 @@ public class OrderService {
     }
 
     @Transactional
-    public void delete(Long orderId) {
+    public void cancel(Long orderId, CancelOrderRequest request) {
         Order order = getOrderById(orderId);
+        order.cancelOrder(request);
+
         Long productId = order.getProduct().getId();
         int cancelledQuantity = order.getQuantity();
 
         productService.addQuantity(productId, cancelledQuantity);
-
-        orderRepository.deleteById(orderId);
     }
 
     public OrderDashboard getStatistics() {

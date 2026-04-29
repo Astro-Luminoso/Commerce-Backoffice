@@ -84,11 +84,12 @@ public class OrderController {
                 .toResponseEntity();
     }
 
-    @DeleteMapping("/{orderId}")
+    @PostMapping("/{orderId}/delete")
     public ResponseEntity<CommonResponse<Void>> deleteOrder(
-            @PathVariable Long orderId
+            @PathVariable Long orderId,
+            @RequestBody CancelOrderRequest request
     ) {
-        orderService.delete(orderId);
+        orderService.cancel(orderId, request);
 
         return CommonResponse
                 .success(HttpStatus.NO_CONTENT, "주문 삭제 성공")

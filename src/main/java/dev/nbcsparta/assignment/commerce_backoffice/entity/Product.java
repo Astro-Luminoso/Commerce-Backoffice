@@ -77,7 +77,9 @@ public class Product {
 
     public void addQuantity(int quantity) {
         this.quantity += quantity;
-        this.status = ProductStatus.SALE;
+        if (this.status != ProductStatus.DISCONTINUED) {
+            this.status = ProductStatus.SALE;
+        }
     }
 
     public void checkStatus() {
