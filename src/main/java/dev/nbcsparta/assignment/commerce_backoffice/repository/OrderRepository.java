@@ -1,6 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.GetOrderPageFilter;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.order.GetOrderPageFilter;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.RecentOrderItem;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.OrderDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Order;

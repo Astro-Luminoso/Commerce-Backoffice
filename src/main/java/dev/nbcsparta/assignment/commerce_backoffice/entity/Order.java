@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateOrderRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateOrderStatusRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.order.CreateOrderRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.order.UpdateOrderStatusRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.DeliveryStatus;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
