@@ -5,9 +5,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.Product
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ProductDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
-import dev.nbcsparta.assignment.commerce_backoffice.exception.ManagerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ProductNotFoundException;
-import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerRepository;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ProductRepository;
 
 import org.springframework.data.domain.Page;
@@ -21,18 +19,27 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ManagerRepository managerRepository;
+    private final ManagerService managerService;
 
-    public ProductService(ProductRepository productRepository, ManagerRepository managerRepository) {
+    public ProductService(ProductRepository productRepository, ManagerService managerService) {
         this.productRepository = productRepository;
-        this.managerRepository = managerRepository;
+        this.managerService = managerService;
+    }
+
+    public Product getProductById(Long productId) {
+        return productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+    }
+
+    @Transactional
+    public void addQuantity(Long productId, Integer quantity) {
+        Product product = getProductById(productId);
+
+        product.addQuantity(quantity);
     }
 
     @Transactional
     public CreateProductResponse create(CreateProductRequest request) {
-        Manager manager = managerRepository.findById(request.managerId()).orElseThrow(
-                ManagerNotFoundException::new
-        );
+        Manager manager = managerService.getManagerById(request.managerId());
 
         Product product = productRepository.save(
                 new Product(
@@ -60,9 +67,7 @@ public class ProductService {
 
     @Transactional()
     public GetProductResponse getOne(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(
-                ProductNotFoundException::new
-        );
+        Product product = getProductById(id);
 
         return GetProductResponse.from(product);
     }
@@ -79,9 +84,7 @@ public class ProductService {
      */
     @Transactional
     public UpdateProductResponse update(Long id, UpdateProductRequest request) {
-        Product product = productRepository.findById(id).orElseThrow(
-                ProductNotFoundException::new
-        );
+        Product product = getProductById(id);
         product.update(request.name(), request.category(), request.price());
 
         return UpdateProductResponse.from(product);
@@ -94,9 +97,8 @@ public class ProductService {
      */
     @Transactional
     public void updateStatus(Long id, UpdateProductStatusRequest request) {
-        Product product = productRepository.findById(id).orElseThrow(
-                ProductNotFoundException::new
-        );
+        Product product = getProductById(id);
+
         product.setStatus(request.status());
     }
 

@@ -38,6 +38,9 @@ public class ManagerService {
         this.authManagementService = authManagementService;
     }
 
+    public Manager getManagerById(Long managerId) {
+        return managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
+    }
 
     /**
      * 관리자 전체 조회 서비스.
@@ -72,7 +75,7 @@ public class ManagerService {
      */
     @Transactional(readOnly = true)
     public ManagerDetail findOneManager(Long managerId) {
-        Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
+        Manager manager = getManagerById(managerId);
 
         return ManagerDetail.from(manager);
     }
@@ -89,7 +92,7 @@ public class ManagerService {
             throw new NullValueException();
         }
 
-        Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
+        Manager manager = getManagerById(managerId);
         manager.updateStatus(reqBody);
 
         List<Authority> authorities = authorityService.getAuthoritiesByRole(manager.getRole());
@@ -97,19 +100,19 @@ public class ManagerService {
     }
 
     public void updateManagerRole(Long managerId, ManagerRoleUpdate reqBody) {
-        Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
+        Manager manager = getManagerById(managerId);
         manager.updateRole(reqBody);
     }
 
     public ManagerDetail updateManagerDetail(Long managerId, UpdateMyProfileRequest reqBody) {
-        Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
+        Manager manager = getManagerById(managerId);
         manager.updateProfile(reqBody);
 
         return ManagerDetail.from(manager);
     }
 
     public void deleteManager(Long managerId) {
-        Manager manager = managerRepository. findById(managerId).orElseThrow(ManagerNotFoundException::new);
+        Manager manager = getManagerById(managerId);
         manager.setAccountDeletion();
         manager.updateStatus(AccountStatus.INACTIVE);
     }
