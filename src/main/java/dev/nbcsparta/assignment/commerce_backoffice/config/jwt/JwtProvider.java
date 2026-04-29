@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.config.jwt;
 
-import dev.nbcsparta.assignment.commerce_backoffice.entity.HasAuthority;
-import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
+import dev.nbcsparta.assignment.commerce_backoffice.config.CustomUserDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -41,16 +40,20 @@ public class JwtProvider {
     }
 
     // 2. 토큰 생성: 유저 정보를 받아 JWT 발급
-    public String createToken(String username, List<HasAuthority> roles) {
+    public String createToken(Manager manager) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + expiration);
 
-        List<String> rolesInStringList = roles.stream().map(role -> role.getAuthority().name()).toList();
+        List<String> rolesInStringList = manager.getAuthorities()
+                .stream()
+                .map(role -> role.getAuthority().name())
+                .toList();
 
         return Jwts.builder()
                 .header().add("typ", "JWT").and() // 헤더: 타입 설정
-                .subject(username)               // 내용: 유저 식별값
+                .subject(manager.getName())               // 내용: 유저 식별값
                 .claim("roles", rolesInStringList)             // 내용: 권한 정보 (커스텀 클레임)
+                .claim("managerId", manager.getId())
                 .issuedAt(now)                   // 내용: 발행 시간
                 .expiration(validity)            // 내용: 만료 시간
                 .signWith(key)                   // 서명: 우리 서버의 키로 암호화
@@ -67,13 +70,14 @@ public class JwtProvider {
 
         @SuppressWarnings("unchecked")
         List<String> roles = claims.get("roles", List.class);
+        Long managerId = claims.get("managerId", Long.class);
 
         // 토큰에 담긴 권한 정보 추출 (예: "ROLE_SUPER")
         List<SimpleGrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.startsWith("ROLE_") ? role : "ROLE_" + role))
                 .toList();
 
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        UserDetails principal = new CustomUserDetail(claims.getSubject(), managerId, authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
