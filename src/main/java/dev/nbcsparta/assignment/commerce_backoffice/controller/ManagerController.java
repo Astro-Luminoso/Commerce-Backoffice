@@ -128,7 +128,7 @@ public class ManagerController {
 
         ManagerDetail managerDetail = superAdminAction.updateManagerDetail(managerId, reqBody);
 
-        return ResponseEntity.status(HttpStatus.OK).body(managerDetail);
+        return CommonResponse.success(HttpStatus.OK, "상세 정보 업데이트 성공", managerDetail).toResponseEntity();
     }
 
     @DeleteMapping("/{managerId}")
