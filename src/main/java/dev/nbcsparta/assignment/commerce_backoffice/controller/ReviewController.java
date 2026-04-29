@@ -23,7 +23,7 @@ public class ReviewController {
     ResponseEntity<CommonResponse<GetListReviewResponse>> getListReview(
             @PageableDefault(page = 1, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String keyword,
-            @RequestParam(defaultValue = "-1") int rating
+            @RequestParam(defaultValue = "0") int rating
     ) {
         int page = Math.max(pageable.getPageNumber() - 1, 0);
         Pageable currentPageable = PageRequest.of(page, pageable.getPageSize(), pageable.getSort());
