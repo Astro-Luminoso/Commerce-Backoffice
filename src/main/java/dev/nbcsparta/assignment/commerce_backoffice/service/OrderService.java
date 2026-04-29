@@ -7,9 +7,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Order;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
-import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.OrderNotFoundException;
-import dev.nbcsparta.assignment.commerce_backoffice.exception.OutOfStockException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.OrderRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -48,10 +46,7 @@ public class OrderService {
     @Transactional
     public OrderDetail createOrder(CreateOrderRequest request, Long managerId) {
         Product product = productService.getProductById(request.productId());
-
-        if (product.getStatus() == ProductStatus.SOLD_OUT && product.getStatus() == ProductStatus.DISCONTINUED) {
-            throw new OutOfStockException();
-        }
+        product.checkStatus();
 
         Customer customer = customerService.getCustomerById(request.customerId());
         Manager manager = managerService.getManagerById(managerId);
