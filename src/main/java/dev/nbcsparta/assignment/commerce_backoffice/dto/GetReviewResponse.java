@@ -14,11 +14,12 @@ public record GetReviewResponse(
         LocalDateTime createdAt
 ) {
     public static GetReviewResponse from(Review review) {
+
         return new GetReviewResponse(
                 review.getId(),
-                review.getOrder().getId(),
-                review.getCustomer().getName(),
-                review.getProduct().getName(),
+                review.getOrderId(),
+                review.getCustomerName(),
+                review.getProductName(),
                 review.getRating(),
                 review.getContent(),
                 review.getCreatedAt()
