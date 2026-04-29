@@ -7,12 +7,8 @@ import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Order;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
-import dev.nbcsparta.assignment.commerce_backoffice.exception.ManagerNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.OrderNotFoundException;
-import dev.nbcsparta.assignment.commerce_backoffice.exception.ProductNotFoundException;
-import dev.nbcsparta.assignment.commerce_backoffice.repository.ManagerRepository;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.OrderRepository;
-import dev.nbcsparta.assignment.commerce_backoffice.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,34 +22,32 @@ import java.util.List;
 @Service
 public class OrderService {
 
-    // TODO 레포지토리들 전부 서비스로 변경해서 필요한 메서드들 만들어서 사용하기
     private final OrderRepository orderRepository;
-    private final ManagerRepository managerRepository;
-    private final ProductRepository productRepository;
+    private final ManagerService managerService;
+    private final ProductService productService;
     private final CustomerService customerService;
 
     public OrderService(
             OrderRepository orderRepository,
-            ManagerRepository managerRepository,
-            ProductRepository productRepository,
+            ManagerService managerService,
+            ProductService productService,
             CustomerService customerService
     ) {
         this.orderRepository = orderRepository;
-        this.managerRepository = managerRepository;
-        this.productRepository = productRepository;
+        this.managerService = managerService;
+        this.productService = productService;
         this.customerService = customerService;
     }
 
-    @Transactional
     public Order getOrderById(Long orderId) {
         return orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
     }
 
     @Transactional
     public OrderDetail createOrder(CreateOrderRequest request, Long managerId) {
-        Product product = productRepository.findById(request.productId()).orElseThrow(ProductNotFoundException::new);
+        Product product = productService.getProductById(request.productId());
         Customer customer = customerService.getCustomerById(request.customerId());
-        Manager manager = managerRepository.findById(managerId).orElseThrow(ManagerNotFoundException::new);
+        Manager manager = managerService.getManagerById(managerId);
 
         // 재고 차감 진행
         product.buy(request.quantity());
@@ -92,11 +86,10 @@ public class OrderService {
     @Transactional
     public void delete(Long orderId) {
         Order order = getOrderById(orderId);
-
+        Long productId = order.getProduct().getId();
         int cancelledQuantity = order.getQuantity();
 
-        // TODO 나중에 상품 서비스로 취소 갯수를 가져가서 갯수 추가해주는 코드 추가해주기
-        order.getProduct().addQuantity(cancelledQuantity);
+        productService.addQuantity(productId, cancelledQuantity);
 
         orderRepository.deleteById(orderId);
     }

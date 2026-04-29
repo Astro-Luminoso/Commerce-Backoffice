@@ -76,7 +76,7 @@ public class ManagerAuthService {
 
         switch (manager.getStatus()) {
             case ACTIVE -> {
-                return jwtProvider.createToken(manager.getName(), manager.getAuthorities());
+                return jwtProvider.createToken(manager);
             }
             case INACTIVE -> throw new LoginNotAllowedException("계정 비활성화 상태입니다.");
             case SUSPENDED -> throw new LoginNotAllowedException("계정이 정지된 상태입니다.");
