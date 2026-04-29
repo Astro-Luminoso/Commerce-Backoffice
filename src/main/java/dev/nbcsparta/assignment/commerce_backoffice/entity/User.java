@@ -83,7 +83,7 @@ public class User {
         return this.isDeleted;
     }
 
-    public void setAccountDeletion() {
+    public void toggleAccountDeletion() {
         this.isDeleted = !this.isDeleted;
     }
 
