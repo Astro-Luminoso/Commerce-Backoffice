@@ -1,8 +1,8 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateCustomerRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateOrderRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.OrderDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.customer.CreateCustomerRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.order.CreateOrderRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.order.OrderDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Order;
