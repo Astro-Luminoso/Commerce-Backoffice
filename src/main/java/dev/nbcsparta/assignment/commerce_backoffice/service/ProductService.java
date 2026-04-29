@@ -38,8 +38,8 @@ public class ProductService {
     }
 
     @Transactional
-    public CreateProductResponse create(CreateProductRequest request) {
-        Manager manager = managerService.getManagerById(request.managerId());
+    public CreateProductResponse create(CreateProductRequest request, Long managerId) {
+        Manager manager = managerService.getManagerById(managerId);
 
         Product product = productRepository.save(
                 new Product(

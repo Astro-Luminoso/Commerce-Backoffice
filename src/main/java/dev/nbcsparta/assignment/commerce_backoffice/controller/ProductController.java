@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
 
+import dev.nbcsparta.assignment.commerce_backoffice.config.CustomUserDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.service.ProductService;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +27,11 @@ public class ProductController {
 
     @PostMapping("/products")
     ResponseEntity<CommonResponse<CreateProductResponse>> createProduct(
-            @RequestBody CreateProductRequest request
+            @RequestBody CreateProductRequest request,
+            @AuthenticationPrincipal CustomUserDetail userDetails
     ) {
-        CreateProductResponse response = productService.create(request);
+        Long managerId = userDetails.getManagerId();
+        CreateProductResponse response = productService.create(request, managerId);
 
         return CommonResponse
                 .success(HttpStatus.OK, "상품 등록 성공", response)
@@ -43,7 +47,7 @@ public class ProductController {
      */
     @GetMapping("/products")
     public ResponseEntity<CommonResponse<GetListProductResponse>> getAllPage(
-            @PageableDefault(page = 1, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @PageableDefault(page = 1, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) ProductStatus status
