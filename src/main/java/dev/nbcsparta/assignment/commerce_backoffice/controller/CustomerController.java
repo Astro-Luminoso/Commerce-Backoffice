@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.customer.*;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.service.CustomerService;
 import jakarta.validation.Valid;
@@ -23,7 +24,7 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<CommonResponse<CustomerDetail>> createCustomer(
-            @RequestBody CreateCustomerRequest request
+            @Valid @RequestBody CreateCustomerRequest request
     ) {
         CustomerDetail response = customerService.createCustomer(request);
 
@@ -35,7 +36,8 @@ public class CustomerController {
     /**
      * 필터에 따라 고객의 전체 정보를 조회합니다.
      *
-     * @param name     이름 검색시 필요한 단어
+     * @param name     이름 필터시 필요한 정보
+     * @param email    이메일 필터시 필요한 정보
      * @param pageable 이메일 검색시 필요한 정보
      * @param status   상태 필터링 시 필요한 정보
      * @return 필터링된 고객의 정보, 페이징 정보
