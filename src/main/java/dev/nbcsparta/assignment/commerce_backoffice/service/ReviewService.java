@@ -27,7 +27,7 @@ public class ReviewService {
     }
 
     public List<Review> getRecent3Review(Long productId) {
-        return reviewRepository.findTop3ByOrderByCreatedAtDesc(productId);
+        return reviewRepository.findTop3ByProductIdOrderByCreatedAtDesc(productId);
     }
 
     public ReviewDashboard getProductStatistics(Long id) { return reviewRepository.getProductStatistics(id); }
