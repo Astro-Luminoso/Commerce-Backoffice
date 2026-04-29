@@ -1,6 +1,10 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.customer.CreateCustomerRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.customer.CustomerDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.customer.CustomerStatusResponse;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.customer.UpdateCustomerStatusRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
