@@ -139,6 +139,6 @@ public class ManagerController {
 
         superAdminAction.deleteManager(managerId);
 
-        return CommonResponse.success(HttpStatus.NO_CONTENT, "삭제 성공").toResponseEntity();
+        return CommonResponse.success(HttpStatus.OK, "삭제 성공").toResponseEntity();
     }
 }
