@@ -1,8 +1,8 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.RecentOrderItem;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.OrderDashboard;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.order.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Order;
@@ -30,7 +30,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public Order getOrderById(Long orderId) {
-        return orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        return orderRepository.findByIdAndIsDeletedFalse(orderId).orElseThrow(OrderNotFoundException::new);
     }
 
     @Transactional
@@ -40,8 +40,6 @@ public class OrderService {
             Product product,
             CreateOrderRequest request
     ) {
-        // 재고 차감 진행
-        product.buy(request.quantity());
         Order order = new Order(request, customer, manager, product);
 
         return orderRepository.save(order);
@@ -64,7 +62,8 @@ public class OrderService {
     }
 
     @Transactional
-    public void softDelete(Order order) {
+    public void softDelete(Order order, CancelOrderRequest request) {
+        order.cancelOrder(request);
         order.toggleDeleted();
     }
 
@@ -77,6 +76,6 @@ public class OrderService {
     }
 
     public List<RecentOrderItem> getRecentOrder() {
-        return orderRepository.getRecentOrder(PageRequest.of(0,10));
+        return orderRepository.getRecentOrder(PageRequest.of(0, 10));
     }
 }

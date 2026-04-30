@@ -2,6 +2,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.OutOfStockException;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.TryBuyNotAllowedProductException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -46,7 +47,8 @@ public class Product {
     @JoinColumn(name = "manager_id", nullable = false)
     private Manager manager;
 
-    public Product() {}
+    public Product() {
+    }
 
     public Product(String name, String category, int price, int quantity, ProductStatus status, Manager manager) {
         this.name = name;
@@ -64,38 +66,67 @@ public class Product {
     }
 
     public void buy(int quantity) {
-        if(this.quantity<quantity){
+        checkStatus();
+        if (this.quantity < quantity) {
             throw new OutOfStockException();
         }
         this.quantity -= quantity;
-        if(this.quantity == 0) {
+        if (this.quantity == 0) {
             this.status = ProductStatus.SOLD_OUT;
         }
     }
 
     public void addQuantity(int quantity) {
         this.quantity += quantity;
-        this.status = ProductStatus.SALE;
+        if (this.status == ProductStatus.SOLD_OUT) {
+            this.status = ProductStatus.SALE;
+        }
     }
 
-    public Long getId() { return id; }
+    private void checkStatus() {
+        if (this.status == ProductStatus.SOLD_OUT || this.status == ProductStatus.DISCONTINUED) {
+            throw new TryBuyNotAllowedProductException();
+        }
+    }
 
-    public String getName() { return name; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getCategory() { return category; }
+    public String getName() {
+        return name;
+    }
 
-    public int getPrice() { return price; }
+    public String getCategory() {
+        return category;
+    }
 
-    public int getQuantity() { return quantity; }
+    public int getPrice() {
+        return price;
+    }
 
-    public ProductStatus getStatus() { return status; }
+    public int getQuantity() {
+        return quantity;
+    }
 
-    public Manager getManager() { return manager; }
+    public ProductStatus getStatus() {
+        return status;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public Manager getManager() {
+        return manager;
+    }
 
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-    public void setStatus(ProductStatus status) { this.status = status; }
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setStatus(ProductStatus status) {
+        this.status = status;
+    }
 
 }

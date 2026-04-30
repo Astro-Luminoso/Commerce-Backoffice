@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.usecase;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.order.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Order;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Component
+@Transactional
 public class OrderAction {
 
     private final ManagerService managerService;
@@ -35,6 +37,7 @@ public class OrderAction {
         this.orderService = orderService;
     }
 
+    @Transactional(readOnly = true)
     public OrderListDetail getOrderListDetail(GetOrderPageFilter filter, Pageable pageable) {
         Page<Order> order = orderService.findAllOrder(filter, pageable);
         return OrderListDetail.from(order);
@@ -42,6 +45,7 @@ public class OrderAction {
 
     public OrderDetail createOrder(CreateOrderRequest request, Long managerId) {
         Product product = productService.getProductById(request.productId());
+        productService.deductQuantity(product, request.quantity());
         Customer customer = customerService.getCustomerById(request.customerId());
         Manager manager = managerService.getManagerById(managerId);
 
@@ -50,6 +54,7 @@ public class OrderAction {
         return OrderDetail.from(order);
     }
 
+    @Transactional(readOnly = true)
     public OrderDetail getOrderDetail(Long orderId) {
         Order order = orderService.getOrderById(orderId);
         return OrderDetail.from(order);
@@ -60,10 +65,9 @@ public class OrderAction {
         return OrderDetail.from(order);
     }
 
-    @Transactional
-    public void delete(Long orderId) {
+    public void delete(Long orderId, CancelOrderRequest request) {
         Order order = orderService.getOrderById(orderId);
         productService.addQuantity(order.getProduct().getId(), order.getQuantity());
-        orderService.softDelete(order);
+        orderService.softDelete(order, request);
     }
 }

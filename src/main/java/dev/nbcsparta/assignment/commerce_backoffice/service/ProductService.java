@@ -43,6 +43,11 @@ public class ProductService {
     }
 
     @Transactional
+    public void deductQuantity(Product product, Integer quantity) {
+        product.buy(quantity);
+    }
+
+    @Transactional
     public CreateProductResponse create(CreateProductRequest request, Long managerId) {
         Manager manager = managerService.getManagerById(managerId);
 

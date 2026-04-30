@@ -2,6 +2,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
 import dev.nbcsparta.assignment.commerce_backoffice.config.CustomUserDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.order.*;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.usecase.OrderAction;
 import jakarta.validation.Valid;
@@ -83,11 +84,13 @@ public class OrderController {
                 .toResponseEntity();
     }
 
-    @DeleteMapping("/{orderId}")
+    @PostMapping("/{orderId}/delete")
     public ResponseEntity<CommonResponse<Void>> deleteOrder(
-            @PathVariable Long orderId
+            @PathVariable Long orderId,
+            @RequestBody CancelOrderRequest request
     ) {
-        orderAction.delete(orderId);
+        orderAction.delete(orderId, request);
+
         return CommonResponse
                 .success(HttpStatus.NO_CONTENT, "주문 삭제 성공")
                 .toResponseEntity();

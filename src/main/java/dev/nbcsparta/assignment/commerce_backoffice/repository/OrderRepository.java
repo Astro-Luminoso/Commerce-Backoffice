@@ -1,6 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.GetOrderPageFilter;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.order.GetOrderPageFilter;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.RecentOrderItem;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.OrderDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Order;
@@ -12,17 +12,21 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT o FROM Order o WHERE " +
             "(:#{#filter.orderId} IS NULL OR o.id = :#{#filter.orderId}) AND " +
             "(:#{#filter.customerName} IS NULL OR o.customer.name LIKE %:#{#filter.customerName}%) AND" +
-            "(:#{#filter.status} IS NULL OR o.deliveryStatus = :#{#filter.status})")
+            "(:#{#filter.status} IS NULL OR o.deliveryStatus = :#{#filter.status}) AND" +
+            "(o.isDeleted = false)")
     Page<Order> findAllByFilters(
             @Param("filter") GetOrderPageFilter filter,
             Pageable pageable
     );
+
+    Optional<Order> findByIdAndIsDeletedFalse(Long id);
 
     @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.OrderDashboard(" +
             "COUNT(o)," +
