@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class JwtProvider {
@@ -25,11 +26,15 @@ public class JwtProvider {
     private final String secret;
     private final long expiration;
     private SecretKey key;
+    private final BlackListManager blackList;
+
 
     public JwtProvider(@Value("${jwt.secret}") String secret,
-                       @Value("${jwt.expire-time}") long expiration) {
+                       @Value("${jwt.expire-time}") long expiration,
+                       BlackListManager blackList) {
         this.secret = secret;
         this.expiration = expiration;
+        this.blackList = blackList;
     }
 
     // 1. 객체 초기화: Secret Key를 암호화 알고리즘에 적합한 형태로 변환
@@ -43,6 +48,7 @@ public class JwtProvider {
     public String createToken(Manager manager) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + expiration);
+        String uuid = UUID.randomUUID().toString();
 
         List<String> rolesInStringList = manager.getAuthorities()
                 .stream()
@@ -50,10 +56,11 @@ public class JwtProvider {
                 .toList();
 
         return Jwts.builder()
-                .header().add("typ", "JWT").and() // 헤더: 타입 설정
-                .subject(manager.getName())               // 내용: 유저 식별값
-                .claim("roles", rolesInStringList)             // 내용: 권한 정보 (커스텀 클레임)
+                .header().add("typ", "JWT").and()            // 헤더: 타입 설정
+                .id(uuid)
+                .subject(manager.getName())                  // 내용: 유저 식별값
                 .claim("managerId", manager.getId())
+                .claim("roles", rolesInStringList)     // 내용: 권한 정보 (커스텀 클레임)
                 .issuedAt(now)                   // 내용: 발행 시간
                 .expiration(validity)            // 내용: 만료 시간
                 .signWith(key)                   // 서명: 우리 서버의 키로 암호화
@@ -71,23 +78,32 @@ public class JwtProvider {
         @SuppressWarnings("unchecked")
         List<String> roles = claims.get("roles", List.class);
         Long managerId = claims.get("managerId", Long.class);
+        String uuid = claims.getId();
+        Date exp = claims.getExpiration();
 
         // 토큰에 담긴 권한 정보 추출 (예: "ROLE_SUPER")
         List<SimpleGrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.startsWith("ROLE_") ? role : "ROLE_" + role))
                 .toList();
 
-        UserDetails principal = new CustomUserDetail(claims.getSubject(), managerId, authorities);
+        UserDetails principal = new CustomUserDetail(claims.getSubject(), managerId, uuid, authorities, exp);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
     // 4. 토큰 검증: 유효한 토큰인지, 변조되진 않았는지 확인
     public boolean validateToken(String token) {
         try {
-            Jwts.parser()
+//            Jwts.parser()
+//                    .verifyWith(key)
+//                    .build()
+//                    .parseSignedClaims(token);
+
+            Claims claims = Jwts.parser()
                     .verifyWith(key)
                     .build()
-                    .parseSignedClaims(token);
+                    .parseSignedClaims(token)
+                    .getPayload();
+            blackList.checkBlackListed(claims);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             // 토큰이 변조되었거나, 만료되었거나, 형식이 잘못된 경우
