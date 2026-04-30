@@ -62,9 +62,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth ->
                                 auth
-                                        .requestMatchers("/managers/**")
+                                        .requestMatchers("/managers", "/managers/**")
                                         .hasRole("SUPER")
-                                        .requestMatchers("/products/**")
+                                        .requestMatchers("/products","/products/**")
                                         .hasRole("OPS")
                                         .requestMatchers("/login", "/register", "/error")
                                         .permitAll()
