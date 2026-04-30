@@ -28,12 +28,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.OrderStatistics(" +
             "COUNT(o)," +
-            "SUM(CASE WHEN o.orderDate BETWEEN :start AND :end THEN 1 ELSE 0 END)," +
+            "COALESCE(SUM(CASE WHEN o.orderDate BETWEEN :start AND :end THEN 1 ELSE 0 END),0)," +
             "COALESCE(SUM(o.totalPrice), 0)," +
             "COALESCE(SUM(CASE WHEN o.orderDate BETWEEN :start AND :end THEN o.totalPrice ELSE 0 END), 0)," +
-            "SUM(CASE WHEN o.deliveryStatus = dev.nbcsparta.assignment.commerce_backoffice.enumerate.DeliveryStatus.PENDING THEN 1 ELSE 0 END)," +
-            "SUM(CASE WHEN o.deliveryStatus = dev.nbcsparta.assignment.commerce_backoffice.enumerate.DeliveryStatus.PROCESSING THEN 1 ELSE 0 END)," +
-            "SUM(CASE WHEN o.deliveryStatus = dev.nbcsparta.assignment.commerce_backoffice.enumerate.DeliveryStatus.PROCESSED THEN 1 ELSE 0 END))" +
+            "COALESCE(SUM(CASE WHEN o.deliveryStatus = dev.nbcsparta.assignment.commerce_backoffice.enumerate.DeliveryStatus.PENDING THEN 1 ELSE 0 END), 0)," +
+            "COALESCE(SUM(CASE WHEN o.deliveryStatus = dev.nbcsparta.assignment.commerce_backoffice.enumerate.DeliveryStatus.PROCESSING THEN 1 ELSE 0 END), 0)," +
+            "COALESCE(SUM(CASE WHEN o.deliveryStatus = dev.nbcsparta.assignment.commerce_backoffice.enumerate.DeliveryStatus.PROCESSED THEN 1 ELSE 0 END), 0))" +
             "FROM Order o")
     OrderStatistics getStatistics(
             @Param("start")LocalDateTime start,
