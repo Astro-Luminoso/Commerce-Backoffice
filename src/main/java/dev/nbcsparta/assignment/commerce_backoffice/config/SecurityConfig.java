@@ -1,0 +1,87 @@
+package dev.nbcsparta.assignment.commerce_backoffice.config;
+
+import dev.nbcsparta.assignment.commerce_backoffice.config.handler.CustomAccessDeniedHandler;
+import dev.nbcsparta.assignment.commerce_backoffice.config.jwt.JwtAuthenticationFilter;
+import dev.nbcsparta.assignment.commerce_backoffice.config.jwt.JwtProvider;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    private final JwtProvider jwtProvider;
+    private final CustomAccessDeniedHandler deniedHandler;
+
+    @Value("${encoder.strenth}")
+    private int strength;
+
+    public SecurityConfig(
+            JwtProvider jwtProvider,
+            CustomAccessDeniedHandler deniedHandler
+    ) {
+        this.jwtProvider = jwtProvider;
+        this.deniedHandler = deniedHandler;
+    }
+
+    /**
+     * Password Encoder from Spring Security, using BCrypt algorithm.
+     * we will now use this instead of our custom PasswordEncoder class,
+     * as Spring Security provides a robust and widely used implementation.
+     *
+     * @return a new object of BCryptPasswordEncoder, which implements the PasswordEncoder interface.
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(strength);
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) {
+        http
+                .csrf(CsrfConfigurer<HttpSecurity>::disable)
+                .formLogin(FormLoginConfigurer<HttpSecurity>::disable)
+                .httpBasic(HttpBasicConfigurer<HttpSecurity>::disable)
+                .logout(AbstractHttpConfigurer::disable)
+                .sessionManagement(
+                        session ->
+                                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(
+                        exception -> exception
+                                .accessDeniedHandler(this.deniedHandler))
+                .authorizeHttpRequests(
+                        auth ->
+                                auth
+                                        .requestMatchers("/managers", "/managers/**")
+                                        .hasRole("SUPER")
+                                        .requestMatchers(HttpMethod.DELETE, "/customers/**")
+                                        .hasRole("SUPER")
+                                        .requestMatchers(HttpMethod.POST, "/api/v1/products")
+                                        .hasRole("OPS")
+                                        .requestMatchers(HttpMethod.DELETE, "/reviews/**")
+                                        .hasRole("OPS")
+                                        .requestMatchers("/login", "/register", "/error")
+                                        .permitAll()
+                                        .requestMatchers("/**")
+                                        .authenticated()
+                                        .anyRequest()
+                                        .permitAll()
+                )
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+}

@@ -1,0 +1,57 @@
+package dev.nbcsparta.assignment.commerce_backoffice.controller;
+
+import dev.nbcsparta.assignment.commerce_backoffice.config.CustomUserDetail;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.CreateManagerRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.CreateManagerResponse;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.service.ManagerAuthService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class ManagerAuthController {
+
+    private final ManagerAuthService managerAuthService;
+
+    public ManagerAuthController(ManagerAuthService managerAuthService) {
+        this.managerAuthService = managerAuthService;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<CommonResponse<CreateManagerResponse>> register(
+            @Valid @RequestBody CreateManagerRequest req
+    ) {
+        CreateManagerResponse res = managerAuthService.register(req);
+
+        return CommonResponse
+                .success(HttpStatus.CREATED, "가입 완료", res)
+                .toResponseEntity();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<CommonResponse<Void>> login(
+            @Valid @RequestBody LoginRequest req
+    ) {
+        String jwt = managerAuthService.login(req);
+
+        return CommonResponse
+                .success(HttpStatus.OK, "로그인 성공")
+                .toResponseEntity(jwt);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<CommonResponse<Void>> logout(
+            @AuthenticationPrincipal CustomUserDetail userDetails
+    ) {
+        managerAuthService.logout(userDetails);
+
+        return CommonResponse
+                .success(HttpStatus.NO_CONTENT, "로그아웃 완료")
+                .toResponseEntity();
+    }
+}
