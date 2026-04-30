@@ -40,12 +40,6 @@ public class OrderService {
             Product product,
             CreateOrderRequest request
     ) {
-      
-        // Product product = productService.getProductById(request.productId());
-        // product.checkStatus();
-      
-        // 재고 차감 진행
-        product.buy(request.quantity());
         Order order = new Order(request, customer, manager, product);
 
         return orderRepository.save(order);
@@ -68,7 +62,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void softDelete(Order order) {
+    public void softDelete(Order order, CancelOrderRequest request) {
         order.cancelOrder(request);
         order.toggleDeleted();
     }

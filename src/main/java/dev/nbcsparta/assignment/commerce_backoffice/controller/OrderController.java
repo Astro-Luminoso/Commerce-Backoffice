@@ -89,8 +89,8 @@ public class OrderController {
             @PathVariable Long orderId,
             @RequestBody CancelOrderRequest request
     ) {
-        // orderService.cancel(orderId, request);
-        orderAction.delete(orderId);
+        orderAction.delete(orderId, request);
+
         return CommonResponse
                 .success(HttpStatus.NO_CONTENT, "주문 삭제 성공")
                 .toResponseEntity();

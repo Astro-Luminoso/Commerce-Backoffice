@@ -50,8 +50,6 @@ public class Order {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    private boolean isDeleted;
-
     protected Order() {
     }
 
@@ -74,7 +72,7 @@ public class Order {
         if (this.deliveryStatus != DeliveryStatus.PENDING) {
             throw new AlreadyProcessingOrderException();
         }
-        this.isDeleted = true;
+        this.deliveryStatus = DeliveryStatus.CANCELLED;
         this.cancelReason = request.reason();
     }
 
