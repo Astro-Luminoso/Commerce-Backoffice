@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ManagerDashboard;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ManagerStatistics;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerListDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerRoleUpdate;
@@ -110,7 +110,7 @@ public class ManagerService {
         return manager;
     }
 
-    public ManagerDashboard getStatistics() {
+    public ManagerStatistics getStatistics() {
         return managerRepository.getStatistics();
     }
 }

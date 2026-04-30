@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ReviewRatingCount;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewDashboard;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewStatistics;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.ReviewFilter;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Review;
 import org.springframework.data.domain.Page;
@@ -30,11 +30,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             Pageable pageable
     );
 
-    @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewDashboard(" +
+    @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewStatistics(" +
             "COUNT(r)," +
             "COALESCE(AVG(r.rating), 0))" +
             "FROM Review r")
-    ReviewDashboard getStatistics();
+    ReviewStatistics getStatistics();
 
     @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ReviewRatingCount( " +
             "r.rating, COUNT(r)) " +
@@ -44,14 +44,14 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<ReviewRatingCount> getRatingCount();
 
     @Query("""
-    SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewDashboard(
+    SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewStatistics(
         COUNT(r),
         COALESCE(AVG(r.rating), 0)
     )
     FROM Review r
     WHERE r.product.id = :productId
 """)
-    ReviewDashboard getProductStatistics(@Param("productId") Long productId);
+    ReviewStatistics getStatisticsByProductId(@Param("productId") Long productId);
 
     @Query("""
     SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ReviewRatingCount(
@@ -63,7 +63,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     GROUP BY r.rating
     ORDER BY r.rating
 """)
-    List<ReviewRatingCount> getProductRatingCount(@Param("productId") Long productId);
+    List<ReviewRatingCount> getRatingCountByProductId(@Param("productId") Long productId);
 
     List<Review> findTop3ByProduct_IdOrderByCreatedAtDesc(Long productId);
 }

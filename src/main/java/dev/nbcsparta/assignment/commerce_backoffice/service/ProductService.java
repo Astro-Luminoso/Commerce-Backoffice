@@ -3,8 +3,8 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ProductCategoryCount;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ReviewRatingCount;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ProductDashboard;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewDashboard;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewStatistics;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ProductStatistics;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Review;
@@ -74,7 +74,7 @@ public class ProductService {
      *
      * @param id            상품 아이디
      *
-     * ReviewDashboard:     상품 평점 평균 및 리뷰 총 개수
+     * ReviewStatistics:     상품 평점 평균 및 리뷰 총 개수
      * ReviewRatingCount:   상품의 평점별 리뷰 개수 리스트
      * recentReviews:       최신 리뷰 3개 리스트
      *
@@ -83,13 +83,13 @@ public class ProductService {
     @Transactional(readOnly = true)
     public GetProductReviewResponse getOne(Long id) {
         Product product = getProductById(id);
-        ReviewDashboard reviewDashboard = reviewService.getProductStatistics(id);
-        List<ReviewRatingCount> ratingCounts = reviewService.getProductRatingCount(id);
+        ReviewStatistics reviewStatistics = reviewService.getProductStatistics(id);
+        List<ReviewRatingCount> ratingCounts = reviewService.getRatingCountByProductId(id);
         List<Review> recentReviews = reviewService.getRecent3Review(id);
 
         return GetProductReviewResponse.from(
                 product,
-                reviewDashboard,
+                reviewStatistics,
                 ratingCounts,
                 recentReviews
         );
@@ -134,7 +134,7 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public ProductDashboard getStatistics() {
+    public ProductStatistics getStatistics() {
         return productRepository.getStatistics();
     }
 
