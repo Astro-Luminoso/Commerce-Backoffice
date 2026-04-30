@@ -39,7 +39,7 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
 
     @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.CustomerStatistics(" +
             "COUNT(c)," +
-            "SUM(CASE WHEN c.status = dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus.ACTIVE THEN 1 ELSE 0 END))" +
+            "COALESCE(SUM(CASE WHEN c.status = dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus.ACTIVE THEN 1 ELSE 0 END), 0))" +
             "FROM Customer c")
     CustomerStatistics getStatistics();
 

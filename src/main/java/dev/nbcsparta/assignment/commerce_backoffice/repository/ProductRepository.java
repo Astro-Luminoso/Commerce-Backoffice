@@ -28,8 +28,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ProductStatistics(" +
             "COUNT(p)," +
-            "SUM(CASE WHEN p.quantity <= 5 THEN 1 ELSE 0 END)," +
-            "SUM(CASE WHEN p.status = dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus.SOLD_OUT THEN 1 ELSE 0 END))" +
+            "COALESCE(SUM(CASE WHEN p.quantity <= 5 THEN 1 ELSE 0 END), 0)," +
+            "COALESCE(SUM(CASE WHEN p.status = dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus.SOLD_OUT THEN 1 ELSE 0 END), 0))" +
             "FROM Product p")
     ProductStatistics getStatistics();
 

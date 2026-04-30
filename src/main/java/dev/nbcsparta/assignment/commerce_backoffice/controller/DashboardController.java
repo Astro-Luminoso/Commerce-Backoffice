@@ -1,6 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
 import dev.nbcsparta.assignment.commerce_backoffice.config.Authentication;
+import dev.nbcsparta.assignment.commerce_backoffice.config.CustomUserDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CommonResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.DashboardResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.usecase.Dashboard;
@@ -13,16 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class DashboardController {
 
     private final Dashboard dashboard;
-    private final Authentication authentication;
 
-    public DashboardController(Dashboard dashboard, Authentication authentication) {
+    public DashboardController(Dashboard dashboard) {
         this.dashboard = dashboard;
-        this.authentication = authentication;
     }
 
     @GetMapping("/dashboard")
     public ResponseEntity<CommonResponse<DashboardResponse>> getDashboard() {
-        authentication.getCurrentManager();
         DashboardResponse res = dashboard.getDashboard();
 
         return CommonResponse
