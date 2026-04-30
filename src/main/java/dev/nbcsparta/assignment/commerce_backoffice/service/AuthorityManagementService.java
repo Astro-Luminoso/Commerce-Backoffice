@@ -3,6 +3,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Authority;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.HasAuthority;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
+import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.AuthorityManagementRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,9 @@ public class AuthorityManagementService {
         List<HasAuthority> hasAuthorities = authorities.stream()
                 .map(authority -> new HasAuthority(manager, authority))
                 .toList();
-
+        if (!manager.isActive()) {
+            return;
+        }
         repository.saveAll(hasAuthorities);
     }
 
