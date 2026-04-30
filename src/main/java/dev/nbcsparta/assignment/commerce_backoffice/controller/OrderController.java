@@ -4,7 +4,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.config.CustomUserDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.order.*;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
-import dev.nbcsparta.assignment.commerce_backoffice.facade.OrderAction;
+import dev.nbcsparta.assignment.commerce_backoffice.usecase.OrderAction;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
