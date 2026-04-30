@@ -190,3 +190,9 @@ src/main/java/dev/nbcsparta/assignment/commerce_backoffice
 | GET | `/reviews` | 리뷰 목록 조회(필터/페이징) |
 | GET | `/reviews/{reviewId}` | 리뷰 상세 조회 |
 | DELETE | `/reviews/{reviewId}` | 리뷰 삭제 |
+
+### 대시보드
+
+| Method | Endpoint     | 설명      |
+|--------|--------------|---------|
+| GET    | `/dashboard` | 대시보드 조회 |
