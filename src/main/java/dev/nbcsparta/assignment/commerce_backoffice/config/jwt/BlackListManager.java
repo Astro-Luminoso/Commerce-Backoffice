@@ -40,7 +40,7 @@ public class BlackListManager {
             Date exp = claims.getExpiration();
             registerTokenDetail(Map.of(uuid, exp));
 
-            managerIdBlackList.remove(managerId);
+            this.removeManagerId(managerId);
             throw new JwtException("블랙리스트에 등록된 사용자입니다. 토큰 정보가 블랙리스트에 등록됩니다.");
         }
 
@@ -52,10 +52,13 @@ public class BlackListManager {
     @PostConstruct
     public void evictExpiredTokens() {
         Date now = new Date();
-        Runnable removeOutdatedTokenDetail = () -> {
-            blackList.entrySet().removeIf(entry -> entry.getValue().before(now));
-        };
+        Runnable removeOutdatedTokenDetail = () ->
+                blackList.entrySet().removeIf(entry -> entry.getValue().before(now));
 
         scheduler.scheduleAtFixedRate(removeOutdatedTokenDetail, 0, 1, TimeUnit.DAYS);
+    }
+
+    public void removeManagerId(long id) {
+        managerIdBlackList.remove(id);
     }
 }
