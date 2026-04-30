@@ -66,6 +66,7 @@ public class Product {
     }
 
     public void buy(int quantity) {
+        checkStatus();
         if (this.quantity < quantity) {
             throw new OutOfStockException();
         }
@@ -77,12 +78,12 @@ public class Product {
 
     public void addQuantity(int quantity) {
         this.quantity += quantity;
-        if (this.status != ProductStatus.DISCONTINUED) {
+        if (this.status == ProductStatus.SOLD_OUT) {
             this.status = ProductStatus.SALE;
         }
     }
 
-    public void checkStatus() {
+    private void checkStatus() {
         if (this.status == ProductStatus.SOLD_OUT) {
             throw new OutOfStockException();
         }
