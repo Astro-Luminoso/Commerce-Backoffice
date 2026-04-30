@@ -4,7 +4,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
 import jakarta.validation.constraints.NotNull;
 
 public record ManagerRoleUpdate(
-        @NotNull
+        @NotNull(message = "역할은 필수입니다.")
         Role role
 ) {
 }
