@@ -1,4 +1,4 @@
-package dev.nbcsparta.assignment.commerce_backoffice.dto;
+package dev.nbcsparta.assignment.commerce_backoffice.dto.myprofile;
 
 
 import jakarta.validation.constraints.NotBlank;

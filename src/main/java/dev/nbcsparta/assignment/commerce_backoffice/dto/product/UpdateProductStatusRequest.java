@@ -1,4 +1,4 @@
-package dev.nbcsparta.assignment.commerce_backoffice.dto;
+package dev.nbcsparta.assignment.commerce_backoffice.dto.product;
 
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 

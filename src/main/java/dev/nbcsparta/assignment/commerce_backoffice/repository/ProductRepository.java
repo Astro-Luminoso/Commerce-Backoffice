@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.ProductFilter;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.product.ProductFilter;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ProductCategoryCount;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ProductStatistics;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;

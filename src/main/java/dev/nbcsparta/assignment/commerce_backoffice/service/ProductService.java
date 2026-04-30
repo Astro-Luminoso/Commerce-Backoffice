@@ -1,10 +1,10 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ProductCategoryCount;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ReviewRatingCount;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewStatistics;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ProductStatistics;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.product.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Review;

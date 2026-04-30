@@ -2,6 +2,8 @@ package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
 import dev.nbcsparta.assignment.commerce_backoffice.config.CustomUserDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.myprofile.MyProfileResponse;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.myprofile.UpdateMyPasswordRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.service.MyPageService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

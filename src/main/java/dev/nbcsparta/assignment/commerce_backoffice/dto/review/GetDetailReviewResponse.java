@@ -1,4 +1,4 @@
-package dev.nbcsparta.assignment.commerce_backoffice.dto;
+package dev.nbcsparta.assignment.commerce_backoffice.dto.review;
 
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Review;
 

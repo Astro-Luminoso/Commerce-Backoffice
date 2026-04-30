@@ -1,11 +1,11 @@
-package dev.nbcsparta.assignment.commerce_backoffice.dto;
-
+package dev.nbcsparta.assignment.commerce_backoffice.dto.product;
 
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
+
 import java.time.LocalDateTime;
 
-public record CreateProductResponse(
+public record GetPageProductResponse(
         Long id,
         String name,
         String category,
@@ -13,10 +13,11 @@ public record CreateProductResponse(
         int quantity,
         ProductStatus status,
         LocalDateTime createdAt,
-        Long managerId
+        String managerName
 ) {
-    public static CreateProductResponse from(Product product) {
-        return new CreateProductResponse(
+
+    public static GetPageProductResponse from(Product product) {
+        return new GetPageProductResponse(
                 product.getId(),
                 product.getName(),
                 product.getCategory(),
@@ -24,7 +25,7 @@ public record CreateProductResponse(
                 product.getQuantity(),
                 product.getStatus(),
                 product.getCreatedAt(),
-                product.getManager().getId()
+                product.getManager().getName()
         );
     }
 }

@@ -1,5 +1,6 @@
-package dev.nbcsparta.assignment.commerce_backoffice.dto;
+package dev.nbcsparta.assignment.commerce_backoffice.dto.product;
 
+import dev.nbcsparta.assignment.commerce_backoffice.dto.PageInfo;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
 import org.springframework.data.domain.Page;
 
