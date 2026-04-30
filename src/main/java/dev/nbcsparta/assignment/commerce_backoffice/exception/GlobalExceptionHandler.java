@@ -1,13 +1,12 @@
 package dev.nbcsparta.assignment.commerce_backoffice.exception;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CommonResponse;
+import io.jsonwebtoken.JwtException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,5 +44,8 @@ public class GlobalExceptionHandler {
         return CommonResponse.fail(HttpStatus.CONFLICT, "데이터 무결성 위반").toResponseEntity();
     }
 
-
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<CommonResponse<Void>> handleJwtException(JwtException ex) {
+        return CommonResponse.fail(HttpStatus.UNAUTHORIZED, ex.getMessage()).toResponseEntity();
+    }
 }
