@@ -2,7 +2,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ReviewRatingCount;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewStatistics;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.ReviewFilter;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.review.ReviewFilter;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

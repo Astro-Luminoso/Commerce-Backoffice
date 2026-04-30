@@ -1,5 +1,6 @@
-package dev.nbcsparta.assignment.commerce_backoffice.dto;
+package dev.nbcsparta.assignment.commerce_backoffice.dto.product;
 
+import dev.nbcsparta.assignment.commerce_backoffice.dto.review.GetRecentReviewResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ReviewRatingCount;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewStatistics;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;

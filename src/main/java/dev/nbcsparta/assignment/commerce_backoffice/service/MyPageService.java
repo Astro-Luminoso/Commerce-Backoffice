@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.MyProfileResponse;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyPasswordRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.myprofile.MyProfileResponse;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.myprofile.UpdateMyPasswordRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyProfileRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ConflictUserException;
