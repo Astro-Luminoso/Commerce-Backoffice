@@ -82,6 +82,10 @@ public class Manager extends User{
         return passwordEncoder.matches(password, this.password);
     }
 
+    public boolean isActive() {
+        return this.getStatus() == AccountStatus.ACTIVE;
+    }
+
     public void updateStatus(ManagerStatusUpdate reqBody) {
         super.updateStatus(reqBody.status());
         this.statusReason = (reqBody.status() == AccountStatus.ACTIVE) ? null : reqBody.reason();

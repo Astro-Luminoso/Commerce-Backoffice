@@ -24,7 +24,9 @@ public class AuthorityManagementService {
                 .map(authority -> new HasAuthority(manager, authority))
                 .toList();
 
-        repository.saveAll(hasAuthorities);
+        if (manager.isActive()) {
+            repository.saveAll(hasAuthorities);
+        }
     }
 
     public void removeAllAuthorities(Manager manager) {
