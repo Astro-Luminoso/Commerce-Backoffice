@@ -9,7 +9,7 @@ public record UpdateMyPasswordRequest (
         String password,
 
         @NotBlank(message = "새 비밀번호는 필수입니다.")
-        @Size(min = 8)
+        @Size(min = 8, message = "새 비밀번호는 8자 이상 입력해야 합니다.")
         String newPassword
 ){
 }
