@@ -26,9 +26,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             Pageable pageable
     );
 
-    Optional<Order> findByIdAndIsDeletedFalse(Long id);
-
-    @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.OrderDashboard(" +
     @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.OrderStatistics(" +
             "COUNT(o)," +
             "SUM(CASE WHEN o.orderDate BETWEEN :start AND :end THEN 1 ELSE 0 END)," +
@@ -50,4 +47,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "JOIN o.product p " +
             "ORDER BY o.orderDate DESC, o.id DESC ")
     List<RecentOrderItem> getRecentOrder(Pageable pageable);
+
+    Optional<Order> findByIdAndIsDeletedFalse(Long id);
 }
