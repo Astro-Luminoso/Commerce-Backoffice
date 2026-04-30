@@ -2,7 +2,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.OutOfStockException;
-import dev.nbcsparta.assignment.commerce_backoffice.exception.TryBuyDiscontinuedProductException;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.TryBuyNotAllowedProductException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -84,12 +84,8 @@ public class Product {
     }
 
     private void checkStatus() {
-        if (this.status == ProductStatus.SOLD_OUT) {
-            throw new OutOfStockException();
-        }
-
-        if (this.status == ProductStatus.DISCONTINUED) {
-            throw new TryBuyDiscontinuedProductException();
+        if (this.status == ProductStatus.SOLD_OUT || this.status == ProductStatus.DISCONTINUED) {
+            throw new TryBuyNotAllowedProductException();
         }
     }
 
