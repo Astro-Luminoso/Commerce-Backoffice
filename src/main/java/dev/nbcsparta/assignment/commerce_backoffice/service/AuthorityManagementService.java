@@ -23,10 +23,10 @@ public class AuthorityManagementService {
         List<HasAuthority> hasAuthorities = authorities.stream()
                 .map(authority -> new HasAuthority(manager, authority))
                 .toList();
-        if (!manager.isActive()) {
-            return;
+
+        if (manager.isActive()) {
+            repository.saveAll(hasAuthorities);
         }
-        repository.saveAll(hasAuthorities);
     }
 
     public void removeAllAuthorities(Manager manager) {
