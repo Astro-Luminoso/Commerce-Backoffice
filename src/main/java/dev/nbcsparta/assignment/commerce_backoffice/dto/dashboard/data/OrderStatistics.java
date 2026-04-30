@@ -1,6 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data;
 
-public record OrderDashboard(
+public record OrderStatistics(
         long totalOrders,
         long todayOrders,
         long totalRevenue,

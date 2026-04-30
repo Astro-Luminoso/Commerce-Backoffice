@@ -33,33 +33,33 @@ public class Dashboard {
 
     @Transactional(readOnly = true)
     public DashboardResponse getDashboard() {
-        ManagerDashboard managerDashboard = managerService.getStatistics();
-        CustomerDashboard customerDashboard = customerService.getStatistics();
-        ProductDashboard productDashboard = productService.getStatistics();
-        OrderDashboard orderDashboard = orderService.getStatistics();
-        ReviewDashboard reviewDashboard = reviewService.getStatistics();
+        ManagerStatistics managerStatistics = managerService.getStatistics();
+        CustomerStatistics customerStatistics = customerService.getStatistics();
+        ProductStatistics productStatistics = productService.getStatistics();
+        OrderStatistics orderStatistics = orderService.getStatistics();
+        ReviewStatistics reviewStatistics = reviewService.getStatistics();
 
         DashboardSummary dashboardSummary = new DashboardSummary(
-                managerDashboard.totalManagers(),
-                managerDashboard.activeManagers(),
-                customerDashboard.totalCustomers(),
-                customerDashboard.activeCustomers(),
-                productDashboard.totalProducts(),
-                productDashboard.outOfStockProducts(),
-                orderDashboard.totalOrders(),
-                orderDashboard.todayOrders(),
-                reviewDashboard.totalReviews(),
-                reviewDashboard.averageRating()
+                managerStatistics.totalManagers(),
+                managerStatistics.activeManagers(),
+                customerStatistics.totalCustomers(),
+                customerStatistics.activeCustomers(),
+                productStatistics.totalProducts(),
+                productStatistics.outOfStockProducts(),
+                orderStatistics.totalOrders(),
+                orderStatistics.todayOrders(),
+                reviewStatistics.totalReviews(),
+                reviewStatistics.averageRating()
         );
 
         DashboardWidgets dashboardWidgets = new DashboardWidgets(
-                orderDashboard.totalRevenue(),
-                orderDashboard.todayRevenue(),
-                orderDashboard.preparingOrders(),
-                orderDashboard.shippingOrders(),
-                orderDashboard.completedOrders(),
-                productDashboard.lowStockProducts(),
-                productDashboard.outOfStockProducts()
+                orderStatistics.totalRevenue(),
+                orderStatistics.todayRevenue(),
+                orderStatistics.preparingOrders(),
+                orderStatistics.shippingOrders(),
+                orderStatistics.completedOrders(),
+                productStatistics.lowStockProducts(),
+                productStatistics.outOfStockProducts()
         );
 
         DashboardCharts dashboardCharts = new DashboardCharts(

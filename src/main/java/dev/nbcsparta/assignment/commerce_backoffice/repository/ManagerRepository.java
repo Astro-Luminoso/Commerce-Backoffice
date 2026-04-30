@@ -1,6 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ManagerDashboard;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ManagerStatistics;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
@@ -43,9 +43,9 @@ public interface ManagerRepository extends JpaRepository<Manager, Long> {
 
     Optional<Manager> findByIdAndIsDeletedFalse(long id);
 
-    @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ManagerDashboard(" +
+    @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ManagerStatistics(" +
             "COUNT(m)," +
             "SUM(CASE WHEN m.status = dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus.ACTIVE THEN 1 ELSE 0 END))" +
             "FROM Manager m")
-    ManagerDashboard getStatistics();
+    ManagerStatistics getStatistics();
 }
