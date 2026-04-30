@@ -1,6 +1,5 @@
 package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

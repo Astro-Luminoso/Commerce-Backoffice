@@ -36,7 +36,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "COALESCE(SUM(CASE WHEN o.deliveryStatus = dev.nbcsparta.assignment.commerce_backoffice.enumerate.DeliveryStatus.PROCESSED THEN 1 ELSE 0 END), 0))" +
             "FROM Order o")
     OrderStatistics getStatistics(
-            @Param("start")LocalDateTime start,
+            @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );
 

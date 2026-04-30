@@ -1,6 +1,5 @@
 package dev.nbcsparta.assignment.commerce_backoffice.dto.product;
 
-
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.ProductStatus;
 import java.time.LocalDateTime;
