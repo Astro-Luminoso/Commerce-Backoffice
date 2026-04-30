@@ -50,6 +50,4 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
     List<CustomerStatusCount> getStatusCount();
 
     Optional<Customer> findByIdAndIsDeletedFalse(Long id);
-
-    boolean existsByEmail(String email);
 }
