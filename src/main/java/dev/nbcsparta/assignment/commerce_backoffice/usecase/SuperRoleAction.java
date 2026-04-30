@@ -1,4 +1,4 @@
-package dev.nbcsparta.assignment.commerce_backoffice.facade;
+package dev.nbcsparta.assignment.commerce_backoffice.usecase;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyProfileRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerDetail;
@@ -15,11 +15,11 @@ import dev.nbcsparta.assignment.commerce_backoffice.service.ManagerService;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Service
+@Component
 public class SuperRoleAction {
 
     private final ManagerService managerService;

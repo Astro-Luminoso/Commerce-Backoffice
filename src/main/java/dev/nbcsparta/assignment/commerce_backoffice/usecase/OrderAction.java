@@ -1,4 +1,4 @@
-package dev.nbcsparta.assignment.commerce_backoffice.facade;
+package dev.nbcsparta.assignment.commerce_backoffice.usecase;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
@@ -11,11 +11,11 @@ import dev.nbcsparta.assignment.commerce_backoffice.service.OrderService;
 import dev.nbcsparta.assignment.commerce_backoffice.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@Service
+@Component
 public class OrderAction {
 
     private final ManagerService managerService;

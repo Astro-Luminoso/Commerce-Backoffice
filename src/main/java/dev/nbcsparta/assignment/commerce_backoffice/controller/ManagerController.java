@@ -7,7 +7,7 @@ import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerRoleUpdat
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerStatusUpdate;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.Role;
-import dev.nbcsparta.assignment.commerce_backoffice.facade.SuperRoleAction;
+import dev.nbcsparta.assignment.commerce_backoffice.usecase.SuperRoleAction;
 
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
