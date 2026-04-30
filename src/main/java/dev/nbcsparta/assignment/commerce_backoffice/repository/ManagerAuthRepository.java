@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ManagerAuthRepository extends JpaRepository<Manager, Long> {
+
     boolean existsByEmail(String email);
+
     Optional<Manager> findByEmail(String email);
 }

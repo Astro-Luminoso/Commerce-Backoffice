@@ -23,9 +23,9 @@ public interface ManagerRepository extends JpaRepository<Manager, Long> {
             "(:status IS NULL OR m.status = :status)")
     Page<Manager> findAll(
             @Param("name") String name,
-            @Param("email")String email,
-            @Param("role")Role role,
-            @Param("status")AccountStatus status,
+            @Param("email") String email,
+            @Param("role") Role role,
+            @Param("status") AccountStatus status,
             Pageable pageable);
 
     @Query("SELECT m FROM Manager m " +
@@ -35,9 +35,9 @@ public interface ManagerRepository extends JpaRepository<Manager, Long> {
             "(:status IS NULL OR m.status = :status)")
     Page<Manager> findAllByIsDeletedFalse(
             @Param("name") String name,
-            @Param("email")String email,
-            @Param("role")Role role,
-            @Param("status")AccountStatus status,
+            @Param("email") String email,
+            @Param("role") Role role,
+            @Param("status") AccountStatus status,
             Pageable pageable
     );
 

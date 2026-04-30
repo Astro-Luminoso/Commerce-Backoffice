@@ -1,7 +1,5 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
-import dev.nbcsparta.assignment.commerce_backoffice.config.Authentication;
-import dev.nbcsparta.assignment.commerce_backoffice.config.CustomUserDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.CommonResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.DashboardResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.usecase.Dashboard;

@@ -1,6 +1,5 @@
 package dev.nbcsparta.assignment.commerce_backoffice.repository;
 
-
 import dev.nbcsparta.assignment.commerce_backoffice.dto.product.ProductFilter;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ProductCategoryCount;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ProductStatistics;
@@ -15,12 +14,10 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query("""
-        SELECT p FROM Product p
-        WHERE (:#{#filter.name()} IS NULL OR p.name LIKE CONCAT('%', :#{#filter.name()}, '%'))
-          AND (:#{#filter.category()} IS NULL OR p.category = :#{#filter.category()})
-          AND (:#{#filter.status()} IS NULL OR p.status = :#{#filter.status()})
-        """)
+    @Query("SELECT p FROM Product p " +
+            "WHERE (:#{#filter.name()} IS NULL OR p.name LIKE CONCAT('%', :#{#filter.name()}, '%'))" +
+            "AND (:#{#filter.category()} IS NULL OR p.category = :#{#filter.category()})" +
+            "AND (:#{#filter.status()} IS NULL OR p.status = :#{#filter.status()})")
     Page<Product> findAll(
             @Param("filter") ProductFilter filter,
             Pageable pageable
