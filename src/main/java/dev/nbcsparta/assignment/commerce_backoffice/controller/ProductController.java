@@ -65,10 +65,10 @@ public class ProductController {
 
 
     @GetMapping("/products/{productId}")
-    ResponseEntity<CommonResponse<GetProductResponse>> getOneProduct(
+    ResponseEntity<CommonResponse<GetProductReviewResponse>> getOneProduct(
             @PathVariable Long productId
     ) {
-        GetProductResponse response = productService.getOne(productId);
+        GetProductReviewResponse response = productService.getOne(productId);
 
         return CommonResponse
                 .success(HttpStatus.OK, "상품 상세 조회 성공", response)
