@@ -1,6 +1,5 @@
 package dev.nbcsparta.assignment.commerce_backoffice.dto.myprofile;
 
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
