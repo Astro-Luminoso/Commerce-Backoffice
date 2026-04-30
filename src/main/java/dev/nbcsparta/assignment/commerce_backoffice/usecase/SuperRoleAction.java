@@ -1,5 +1,6 @@
 package dev.nbcsparta.assignment.commerce_backoffice.usecase;
 
+import dev.nbcsparta.assignment.commerce_backoffice.config.jwt.BlackListManager;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateMyProfileRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.ManagerListDetail;
@@ -25,21 +26,25 @@ public class SuperRoleAction {
     private final ManagerService managerService;
     private final AuthorityService authorityService;
     private final AuthorityManagementService authorityManagementService;
+    private final BlackListManager blackListManager;
 
     public SuperRoleAction(
             ManagerService managerService,
             AuthorityService authorityService,
-            AuthorityManagementService authorityManagementService
+            AuthorityManagementService authorityManagementService,
+            BlackListManager blackListManager
     ) {
         this.managerService = managerService;
         this.authorityService = authorityService;
         this.authorityManagementService = authorityManagementService;
+        this.blackListManager = blackListManager;
     }
 
     private void updateManagerRole(Manager manager) {
         this.authorityManagementService.removeAllAuthorities(manager);
         List<Authority> authorities = authorityService.getAuthoritiesByRole(manager.getRole());
         authorityManagementService.grantAuthorities(manager, authorities);
+        blackListManager.registerManagerId(manager.getId());
     }
 
     public ManagerListDetail getAllExistManagers(
@@ -79,5 +84,6 @@ public class SuperRoleAction {
     public void deleteManager(Long managerId) {
         Manager manager = managerService.softDelete(managerId);
         authorityManagementService.removeAllAuthorities(manager);
+        blackListManager.registerManagerId(manager.getId());
     }
 }

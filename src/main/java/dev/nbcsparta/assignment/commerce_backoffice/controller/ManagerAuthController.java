@@ -1,14 +1,14 @@
 package dev.nbcsparta.assignment.commerce_backoffice.controller;
 
-import dev.nbcsparta.assignment.commerce_backoffice.config.Authentication;
+import dev.nbcsparta.assignment.commerce_backoffice.config.CustomUserDetail;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.CreateManagerRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.manager.CreateManagerResponse;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.service.ManagerAuthService;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,12 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class ManagerAuthController {
 
     private final ManagerAuthService managerAuthService;
-    private final Authentication authentication;
 
-    public ManagerAuthController(ManagerAuthService managerAuthService,
-                                 Authentication authentication) {
+    public ManagerAuthController(ManagerAuthService managerAuthService) {
         this.managerAuthService = managerAuthService;
-        this.authentication = authentication;
     }
 
     @PostMapping("/register")
@@ -41,7 +38,6 @@ public class ManagerAuthController {
             @Valid @RequestBody LoginRequest req
     ) {
         String jwt = managerAuthService.login(req);
-//        authentication.login(sessionManager);
 
         return CommonResponse
                 .success(HttpStatus.OK, "로그인 성공")
@@ -49,8 +45,10 @@ public class ManagerAuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<CommonResponse<Void>> logout(HttpServletResponse res) {
-        authentication.logout();
+    public ResponseEntity<CommonResponse<Void>> logout(
+            @AuthenticationPrincipal CustomUserDetail userDetails
+    ) {
+        managerAuthService.logout(userDetails);
 
         return CommonResponse
                 .success(HttpStatus.NO_CONTENT, "로그아웃 완료")
