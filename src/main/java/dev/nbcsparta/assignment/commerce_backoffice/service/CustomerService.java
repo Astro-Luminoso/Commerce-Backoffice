@@ -3,7 +3,7 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.customer.*;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.CustomerStatusCount;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.CustomerDashboard;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.CustomerStatistics;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.AccountStatus;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.CustomerNotFoundException;
@@ -117,7 +117,7 @@ public class CustomerService {
         customer.updateStatus(AccountStatus.INACTIVE);
     }
 
-    public CustomerDashboard getStatistics() {
+    public CustomerStatistics getStatistics() {
         return customerRepository.getStatistics();
     }
 

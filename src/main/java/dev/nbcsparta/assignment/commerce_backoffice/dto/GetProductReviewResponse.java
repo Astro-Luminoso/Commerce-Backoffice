@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.dto;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ReviewRatingCount;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewDashboard;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewStatistics;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Review;
 
@@ -24,17 +24,18 @@ public record GetProductReviewResponse(
 ) {
     /**
      *
-     * @param reviewDashboard   상품의 평점 평균, 리뷰 갯수를 담은 DTO
+     * @param reviewStatistics   상품의 평점 평균, 리뷰 갯수를 담은 DTO
      */
     public static GetProductReviewResponse from(
             Product product,
-            ReviewDashboard reviewDashboard,
+            ReviewStatistics reviewStatistics,
             List<ReviewRatingCount> ratingCounts,
-            List<Review> reviews ) {
+            List<Review> reviews
+    ) {
         return new GetProductReviewResponse(
                 GetProductResponse.from(product),
-                reviewDashboard.averageRating(),
-                reviewDashboard.totalReviews(),
+                reviewStatistics.averageRating(),
+                reviewStatistics.totalReviews(),
                 ratingCounts,
                 reviews.stream().map(GetRecentReviewResponse::from).toList()
         );

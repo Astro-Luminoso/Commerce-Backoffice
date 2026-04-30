@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.RecentOrderItem;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.OrderDashboard;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.OrderStatistics;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.order.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Customer;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
@@ -67,7 +67,7 @@ public class OrderService {
         order.toggleDeleted();
     }
 
-    public OrderDashboard getStatistics() {
+    public OrderStatistics getStatistics() {
         LocalDate now = LocalDate.now();
         LocalDateTime start = now.atStartOfDay();
         LocalDateTime end = now.plusDays(1).atStartOfDay().minusNanos(1);

@@ -1,7 +1,7 @@
 package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ReviewRatingCount;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewDashboard;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewStatistics;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Review;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ReviewNotFoundException;
@@ -30,10 +30,12 @@ public class ReviewService {
         return reviewRepository.findTop3ByProduct_IdOrderByCreatedAtDesc(productId);
     }
 
-    public ReviewDashboard getProductStatistics(Long id) { return reviewRepository.getProductStatistics(id); }
+    public ReviewStatistics getProductStatistics(Long id) {
+        return reviewRepository.getStatisticsByProductId(id);
+    }
 
-    public List<ReviewRatingCount> getProductRatingCount(Long id) {
-        return reviewRepository.getProductRatingCount(id);
+    public List<ReviewRatingCount> getRatingCountByProductId(Long id) {
+        return reviewRepository.getRatingCountByProductId(id);
     }
 
     @Transactional(readOnly = true)
@@ -56,7 +58,9 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
-    public ReviewDashboard getStatistics() { return reviewRepository.getStatistics(); }
+    public ReviewStatistics getStatistics() {
+        return reviewRepository.getStatistics();
+    }
 
     public List<ReviewRatingCount> getRatingCount() {
         return reviewRepository.getRatingCount();
