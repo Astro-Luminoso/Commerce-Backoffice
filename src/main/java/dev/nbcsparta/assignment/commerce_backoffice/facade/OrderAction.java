@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class OrderAction {
 
     private final ManagerService managerService;
@@ -37,12 +37,12 @@ public class OrderAction {
         this.orderService = orderService;
     }
 
+    @Transactional(readOnly = true)
     public OrderListDetail getOrderListDetail(GetOrderPageFilter filter, Pageable pageable) {
         Page<Order> order = orderService.findAllOrder(filter, pageable);
         return OrderListDetail.from(order);
     }
 
-    @Transactional
     public OrderDetail createOrder(CreateOrderRequest request, Long managerId) {
         Product product = productService.getProductById(request.productId());
         productService.deductQuantity(product, request.quantity());
@@ -54,18 +54,17 @@ public class OrderAction {
         return OrderDetail.from(order);
     }
 
+    @Transactional(readOnly = true)
     public OrderDetail getOrderDetail(Long orderId) {
         Order order = orderService.getOrderById(orderId);
         return OrderDetail.from(order);
     }
 
-    @Transactional
     public OrderDetail updateOrderDetail(Long orderId, UpdateOrderStatusRequest request) {
         Order order = orderService.updateStatus(request, orderId);
         return OrderDetail.from(order);
     }
 
-    @Transactional
     public void delete(Long orderId, CancelOrderRequest request) {
         Order order = orderService.getOrderById(orderId);
         productService.addQuantity(order.getProduct().getId(), order.getQuantity());
