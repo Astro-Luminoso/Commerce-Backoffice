@@ -62,6 +62,7 @@ public class ManagerAuthService {
 
         switch (manager.getStatus()) {
             case ACTIVE -> {
+                blackListManager.removeManagerId(manager.getId());
                 return jwtProvider.createToken(manager);
             }
             case INACTIVE -> throw new LoginNotAllowedException("계정 비활성화 상태입니다.");
