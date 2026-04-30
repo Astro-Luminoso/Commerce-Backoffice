@@ -2,9 +2,12 @@ package dev.nbcsparta.assignment.commerce_backoffice.service;
 
 import dev.nbcsparta.assignment.commerce_backoffice.dto.*;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ProductCategoryCount;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ReviewRatingCount;
 import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ProductDashboard;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewDashboard;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Manager;
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Product;
+import dev.nbcsparta.assignment.commerce_backoffice.entity.Review;
 import dev.nbcsparta.assignment.commerce_backoffice.exception.ProductNotFoundException;
 import dev.nbcsparta.assignment.commerce_backoffice.repository.ProductRepository;
 
@@ -20,10 +23,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ManagerService managerService;
+    private final ReviewService reviewService;
 
-    public ProductService(ProductRepository productRepository, ManagerService managerService) {
+    public ProductService(ProductRepository productRepository, ManagerService managerService, ReviewService reviewService) {
         this.productRepository = productRepository;
         this.managerService = managerService;
+        this.reviewService = reviewService;
     }
 
     public Product getProductById(Long productId) {
@@ -64,14 +69,31 @@ public class ProductService {
         return GetListProductResponse.from(productPage);
     }
 
-
-    @Transactional()
-    public GetProductResponse getOne(Long id) {
+    /**
+     * 상품 상세 조회 시 상품 정보와 리뷰 관련 데이터를 함께 반환한다.
+     *
+     * @param id            상품 아이디
+     *
+     * ReviewDashboard:     상품 평점 평균 및 리뷰 총 개수
+     * ReviewRatingCount:   상품의 평점별 리뷰 개수 리스트
+     * recentReviews:       최신 리뷰 3개 리스트
+     *
+     * @return 상품 정보, 리뷰 통계, 평점 분포, 최신 리뷰 3개를 포함한 응답
+     */
+    @Transactional(readOnly = true)
+    public GetProductReviewResponse getOne(Long id) {
         Product product = getProductById(id);
+        ReviewDashboard reviewDashboard = reviewService.getProductStatistics(id);
+        List<ReviewRatingCount> ratingCounts = reviewService.getProductRatingCount(id);
+        List<Review> recentReviews = reviewService.getRecent3Review(id);
 
-        return GetProductResponse.from(product);
+        return GetProductReviewResponse.from(
+                product,
+                reviewDashboard,
+                ratingCounts,
+                recentReviews
+        );
     }
-
 
     /**
      *

@@ -42,4 +42,28 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "GROUP BY r.rating " +
             "ORDER BY r.rating")
     List<ReviewRatingCount> getRatingCount();
+
+    @Query("""
+    SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.data.ReviewDashboard(
+        COUNT(r),
+        COALESCE(AVG(r.rating), 0)
+    )
+    FROM Review r
+    WHERE r.product.id = :productId
+""")
+    ReviewDashboard getProductStatistics(@Param("productId") Long productId);
+
+    @Query("""
+    SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.dashboard.charts.ReviewRatingCount(
+        r.rating,
+        COUNT(r)
+    )
+    FROM Review r
+    WHERE r.product.id = :productId
+    GROUP BY r.rating
+    ORDER BY r.rating
+""")
+    List<ReviewRatingCount> getProductRatingCount(@Param("productId") Long productId);
+
+    List<Review> findTop3ByProduct_IdOrderByCreatedAtDesc(Long productId);
 }

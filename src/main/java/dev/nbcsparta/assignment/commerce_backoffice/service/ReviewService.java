@@ -26,6 +26,16 @@ public class ReviewService {
         return reviewRepository.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
     }
 
+    public List<Review> getRecent3Review(Long productId) {
+        return reviewRepository.findTop3ByProduct_IdOrderByCreatedAtDesc(productId);
+    }
+
+    public ReviewDashboard getProductStatistics(Long id) { return reviewRepository.getProductStatistics(id); }
+
+    public List<ReviewRatingCount> getProductRatingCount(Long id) {
+        return reviewRepository.getProductRatingCount(id);
+    }
+
     @Transactional(readOnly = true)
     public GetListReviewResponse getAllReview(Pageable pageable, ReviewFilter reviewFilter) {
         Page<Review> reviewPage = reviewRepository.findAllReview(reviewFilter, pageable);
