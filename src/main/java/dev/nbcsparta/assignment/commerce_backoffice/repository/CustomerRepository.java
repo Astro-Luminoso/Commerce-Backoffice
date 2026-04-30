@@ -14,7 +14,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface CustomerRepository extends JpaRepository<Customer,Long> {
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query("SELECT new dev.nbcsparta.assignment.commerce_backoffice.dto.customer.CustomerDetail(" +
             "c.id, c.name, c.email, c.phoneNumber, COUNT(o), COALESCE(SUM(o.totalPrice), 0L), c.status, c.registrationDate) " +
