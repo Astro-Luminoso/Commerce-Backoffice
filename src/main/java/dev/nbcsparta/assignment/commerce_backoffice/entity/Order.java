@@ -1,8 +1,10 @@
 package dev.nbcsparta.assignment.commerce_backoffice.entity;
 
-import dev.nbcsparta.assignment.commerce_backoffice.dto.CreateOrderRequest;
-import dev.nbcsparta.assignment.commerce_backoffice.dto.UpdateOrderStatusRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.order.CancelOrderRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.order.CreateOrderRequest;
+import dev.nbcsparta.assignment.commerce_backoffice.dto.order.UpdateOrderStatusRequest;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.DeliveryStatus;
+import dev.nbcsparta.assignment.commerce_backoffice.exception.AlreadyProcessingOrderException;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -32,6 +34,10 @@ public class Order {
     @Column(updatable = false)
     private LocalDateTime orderDate;
 
+    private String cancelReason;
+
+    private boolean isDeleted;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
@@ -44,8 +50,6 @@ public class Order {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    private boolean isDeleted;
-
     protected Order() {
     }
 
@@ -53,6 +57,7 @@ public class Order {
         this.quantity = request.quantity();
         this.totalPrice = product.getPrice() * request.quantity();
         this.deliveryStatus = DeliveryStatus.PENDING;
+        this.isDeleted = false;
         this.customer = customer;
         this.manager = manager;
         this.product = product;
@@ -61,6 +66,14 @@ public class Order {
 
     public void updateStatus(UpdateOrderStatusRequest request) {
         this.deliveryStatus = request.status();
+    }
+
+    public void cancelOrder(CancelOrderRequest request) {
+        if (this.deliveryStatus != DeliveryStatus.PENDING) {
+            throw new AlreadyProcessingOrderException();
+        }
+        this.deliveryStatus = DeliveryStatus.CANCELLED;
+        this.cancelReason = request.reason();
     }
 
     public Long getId() {
@@ -81,6 +94,10 @@ public class Order {
 
     public LocalDateTime getOrderDate() {
         return orderDate;
+    }
+
+    public boolean getIsDeleted() {
+        return isDeleted;
     }
 
     public Customer getCustomer() {

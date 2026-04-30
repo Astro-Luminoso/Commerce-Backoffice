@@ -82,6 +82,8 @@ create table orders
     total_price     integer      not null,
     delivery_status varchar(255) not null,
     order_date      datetime(6),
+    cancel_reason   varchar(255),
+    is_deleted      bit,
     customer_id     bigint       not null,
     manager_id      bigint,
     product_id      bigint       not null,

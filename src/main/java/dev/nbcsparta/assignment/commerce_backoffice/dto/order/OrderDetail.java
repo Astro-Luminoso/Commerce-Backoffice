@@ -1,4 +1,4 @@
-package dev.nbcsparta.assignment.commerce_backoffice.dto;
+package dev.nbcsparta.assignment.commerce_backoffice.dto.order;
 
 import dev.nbcsparta.assignment.commerce_backoffice.entity.Order;
 import dev.nbcsparta.assignment.commerce_backoffice.enumerate.DeliveryStatus;
